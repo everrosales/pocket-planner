@@ -16,8 +16,8 @@ var User = (function User() {
 
 //PRIVATE METHODS
 
-    var _ifUserExists = function(username, callback) {
-        _model.count({username:username}, function(err, count) {
+    var _ifUserExists = function(email, callback) {
+        _model.count({'email':email}, function(err, count) {
             if (count == 1) {
                 callback(null, true);
             } else {
@@ -29,7 +29,7 @@ var User = (function User() {
     var _getUser = function(email, callback) {
         _ifUserExists(email, function(err, exists) {
             if (exists) {
-                _model.findById(username, callback);
+                _model.findById(email, callback);
             } else {
                 callback({msg: "No such user."});
             }
@@ -37,7 +37,7 @@ var User = (function User() {
     };
 
     var _usernameToEmail = function(username, callback) {
-        _model.findOne({username:username}, function(err, user) {
+        _model.findOne({'username':username}, function(err, user) {
             if (err) {
                 callback(err);
             } else {
@@ -54,7 +54,7 @@ var User = (function User() {
 
     var _findByUsername = function(username, callback) {
         //assuming usernames are unique
-        _model.findOne({username:username}, callback);
+        _model.findOne({'username':username}, callback);
     };
 
     var _verifyPasswordWithUsername = function(username, candidatepw, callback) {
@@ -83,13 +83,13 @@ var User = (function User() {
         });
     };
 
-    var _createNewUser = function(username, email, password, callback) {
-        _ifUserExists(username, function(err, exists) {
+    var _createNewUser = function(email, password, callback, username) { //username optional
+        _ifUserExists(email, function(err, exists) {
             if (exists) {
                 callback({ taken: true});
             } else {
                 _model.create({
-                    '_id' : username,
+                    '_id' : email,
                     'username' : username,
                     'email'    : email,
                     'password' : password,
@@ -103,20 +103,22 @@ var User = (function User() {
         _model.remove({}, callback);
     };
 
-    var _getEvents = function(username, callback) {
-        _ifUserExists(username, function(err, exists) {
+    var _getEvents = function(email, callback) {
+        _ifUserExists(email, function(err, exists) {
             if (exists) {
-                Event.getEventsByUser(username, callback);
+                _getUser(email, function(err, user) {
+                    Event.getEventsByUser(user._id, callback);
+                });
             } else {
                 callback({msg: 'Invalid user.'});
             }
         });
     };
 
-    var _addEvent = function(username, new_event, callback) {
-        _ifUserExists(username, function(err, exists) {
+    var _addEvent = function(email, new_event, callback) {
+        _ifUserExists(email, function(err, exists) {
             if (exists) {
-                Event.createNewEvent(username, new_event, callback);
+                Event.createNewEvent(email, new_event, callback);
             } else {
                 callback({msg: "Invalid user."});
             }
