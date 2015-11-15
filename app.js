@@ -57,7 +57,8 @@ app.use(function(req, res, next) {
 //Map to imported route handlers
 app.use('/', index);
 app.use('/users', users);
-app.use('/tweets', tweets);
+app.use('/events', events);
+//app.use('/tweets', tweets);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
