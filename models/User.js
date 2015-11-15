@@ -1,18 +1,20 @@
-var Tweet = require("../models/Tweet");
+var Event = require("../models/Event");
 
-// Model code for a User object. Each User stores a username and a password, as
-// well as a list of other users this user is subscribed to.
+//Model code for a User object.
 var User = (function User() {
     var mongoose = require('mongoose');
     var Schema = require('mongoose').Schema;
 
     var userSchema = new Schema({
-        _id        : String, //stores username. using _id allows us to use findById (a nice feature).
-        username   : String, //copy of username here, to maintain backwards functionality.
-        password   : String,
-        subscribes : [String]
+        _id         : String, //same as email of user
+        username    : String,
+        password    : String,
+        email       : String,
     }, {versionKey: false});
+
     var _model = mongoose.model('user', userSchema);
+
+//PRIVATE METHODS
 
     var _ifUserExists = function(username, callback) {
         _model.count({username:username}, function(err, count) {
@@ -24,24 +26,51 @@ var User = (function User() {
         });
     };
 
-    var _getUser = function(username, callback) {
-        _ifUserExists(username, function(err, exists) {
+    var _getUser = function(email, callback) {
+        _ifUserExists(email, function(err, exists) {
             if (exists) {
                 _model.findById(username, callback);
             } else {
-                callback({msg: "No such user!"});
+                callback({msg: "No such user."});
             }
         });
     };
 
-    var _findByUsername = function(username, callback) {
-        _getUser(username, callback);
+    var _usernameToEmail = function(username, callback) {
+        _model.findOne({username:username}, function(err, user) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(err, user.email);
+            }
+        });
     };
 
-    var _verifyPassword = function(username, candidatepw, callback) {
-        _ifUserExists(username, function(err, exists) {
-            if (exists) {
-                _getUser(username, function(err, user) {
+//PUBLIC METHODS
+
+    var _findByEmail = function(email, callback) {
+        _getUser(email, callback);
+    };
+
+    var _findByUsername = function(username, callback) {
+        //assuming usernames are unique
+        _model.findOne({username:username}, callback);
+    };
+
+    var _verifyPasswordWithUsername = function(username, candidatepw, callback) {
+        _usernameToEmail(username, function(err, email) {
+            if (err) {
+                callback({msg: "No such user."});
+            } else {
+                _verifyPassword(email, candidatepw, callback);
+            }
+        });
+    };
+
+    var _verifyPassword = function(email, candidatepw, callback) {
+        _ifUserExists(email, function(err, exists) {
+            if(exists) {
+                _getUser(email, function(err, user) {
                     if (user.password === candidatepw) {
                         callback(null, true);
                     } else {
@@ -49,12 +78,12 @@ var User = (function User() {
                     }
                 });
             } else {
-                callback({msg: "No such user!"});
+                callback({msg: "No such user."});
             }
         });
     };
 
-    var _createNewUser = function(username, password, callback) {
+    var _createNewUser = function(username, email, password, callback) {
         _ifUserExists(username, function(err, exists) {
             if (exists) {
                 callback({ taken: true});
@@ -62,44 +91,9 @@ var User = (function User() {
                 _model.create({
                     '_id' : username,
                     'username' : username,
+                    'email'    : email,
                     'password' : password,
-                    'subscribes' : []
                 }, callback);
-            }
-        });
-    };
-
-    var _addSubscribe = function(subscriber, subscribee, callback) {
-        _ifUserExists(subscribee, function(err, exists) {
-            if (exists) {
-                _model.findByIdAndUpdate(subscriber,
-                    {$push: {subscribes: subscribee}},
-                    {safe: true, upsert: true}, callback);
-            } else {
-                callback({msg: "invalid subscribee user."});
-            }
-        });
-    };
-
-    var _removeSubscribe = function(subscriber, subscribee, callback) {
-        _ifUserExists(subscribee, function(err, exists) {
-            if (exists) {
-                _model.findByIdAndUpdate(subscriber,
-                    {$pull: {subscribes: subscribee}}, callback);
-            } else {
-                callback({msg: "invalid subscribee user."});
-            }
-        });
-    };
-
-    var _getSubscribes = function(username, callback) {
-        _ifUserExists(username, function(err, exists) {
-            if (exists) {
-                _getUser(username, function(err, user) {
-                    callback(null, user.subscribes);
-                });
-            } else {
-                callback({msg: "Invalid user."});
             }
         });
     };
@@ -109,59 +103,30 @@ var User = (function User() {
         _model.remove({}, callback);
     };
 
-    var _getTweet = function(username, tweetId, callback) {
+    var _getEvents = function(username, callback) {
         _ifUserExists(username, function(err, exists) {
             if (exists) {
-                Tweet.findById(tweetId, function(err, tweet) {
-                    if (err === null && tweet.author === username) {
-                        callback(null, tweet);
-                    } else {
-                        callback({ msg: 'Invalid tweet.'});
-                    }
-                });
+                Event.getEventsByUser(username, callback);
             } else {
                 callback({msg: 'Invalid user.'});
             }
         });
     };
 
-    var _getTweets = function(username, callback) {
+    var _addEvent = function(username, new_event, callback) {
         _ifUserExists(username, function(err, exists) {
             if (exists) {
-                Tweet.getTweetsByUser(username, callback);
-            } else {
-                callback({msg: 'Invalid user.'});
-            }
-        });
-    };
-
-    var _getSubscribedTweets = function(username, callback) {
-        _ifUserExists(username, function(err, exists) {
-            if(exists) {
-                _getUser(username, function(err, user){
-                    var subscribes = user.subscribes;
-                    Tweet.getSubscribedTweets(subscribes, callback);
-                });
+                Event.createNewEvent(username, new_event, callback);
             } else {
                 callback({msg: "Invalid user."});
             }
         });
     };
 
-    var _addTweet = function(username, tweet, callback) {
+    var _removeEvent = function(username, eventId, callback) {
         _ifUserExists(username, function(err, exists) {
             if (exists) {
-                Tweet.createNewTweet(username, tweet, callback);
-            } else {
-                callback({msg: "Invalid user."});
-            }
-        });
-    };
-
-    var _removeTweet = function(username, tweetId, callback) {
-        _ifUserExists(username, function(err, exists) {
-            if (exists) {
-                Tweet.deleteTweet(username, tweetId, callback);
+                Event.deleteEvent(username, tweetId, callback);
             } else {
                 callback({msg: "Invalid user."});
             }
@@ -169,18 +134,15 @@ var User = (function User() {
     };
 
     return {
-        findByUsername : _findByUsername,
-        verifyPassword : _verifyPassword,
-        createNewUser : _createNewUser,
-        addSubscribe : _addSubscribe,
-        removeSubscribe: _removeSubscribe,
-        getSubscribes : _getSubscribes,
-        clearAllUsers : _clearAllUsers,
-        getTweet : _getTweet,
-        getTweets : _getTweets,
-        getSubscribedTweets : _getSubscribedTweets,
-        addTweet : _addTweet,
-        removeTweet : _removeTweet,
+        findByEmail                     : _findByEmail,
+        findByUsername                  : _findByUsername,
+        verifyPasswordWithUsername      : _verifyPasswordWithUsername,
+        verifyPassword                  : _verifyPassword,
+        createNewUser                   : _createNewUser,
+        clearAllUsers                   : _clearAllUsers,
+        getEvents                       : _getEvents,
+        addEvent                        : _addEvent,
+        removeEvent                     : _removeEvent,
     };
 
 })();
