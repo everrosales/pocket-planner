@@ -1,3 +1,50 @@
+//Model code for Event object
+
+var Event = (function Event() {
+    var mongoose = require('mongoose');
+    var Schema = require('mongoose').Schema;
+
+    var todoSchema = new Schema({
+        name            : String,
+        deadline        : Date,
+        priority        : Number
+    });
+
+    var categorySchema = new Schema({
+        name            : String,
+        todos           : [todoSchema],
+    });
+
+    var costSchema = new Schema({
+        name            : String,
+        amount          : Number,
+        description     : String,
+    });
+
+    var eventSchema = new Schema({
+        name            : String,
+        description     : String,
+        host            : ObjectId,     //link to user database
+        otherPlanners   : [ObjectId],   // ^
+
+        date            : Date,
+        location        : String,
+        budget          : String,
+        cost            : [costSchema],
+
+        attendees       : [String],
+
+        categories      : [categorySchema],
+    });
+});
+
+
+
+
+
+
+
+
 // Model code for a Tweet object. Each Tweet stores its author's username,
 // some content, some tags, and a unique ID number.
 var Tweet = (function Tweet() {
