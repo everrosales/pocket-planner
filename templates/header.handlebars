@@ -1,0 +1,11 @@
+<div id="header">
+    <p> 6.170 Fritter</p>
+    <button id="signin-btn">Home</button>
+    {{#if currentUser}}
+        <button class="currentUser" id="logout-link">Log out</button>
+        <p class="currentUser">Welcome, {{currentUser}}</p>
+    {{else}}
+        <button class="currentUser" id="signin-btn">Sign in</button>
+        <button class="currentUser" id="register-btn">Register</button>
+    {{/if}}
+</div>

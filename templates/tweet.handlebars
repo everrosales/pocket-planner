@@ -1,0 +1,14 @@
+<div class="tweet" data-tweet-id={{_id}} data-author-id="{{author}}">
+  <p>{{content}}</p>
+  <p class="tweet_tags">{{tags}}</p>
+  {{#if old_author}}
+    <p class="author"><em>~{{author}} (orig. {{old_author}})</em></p>
+  {{else}}
+    <p class="author"><em>~{{author}}</em></p>
+  {{/if}}
+  {{#if is_mine}}
+    <a href="#" class="delete-tweet">Delete</a>
+  {{else}}
+    <a href="#" class="retweet-tweet">Retweet</a>
+  {{/if}}
+</div>
