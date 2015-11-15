@@ -10,7 +10,9 @@ require('handlebars/runtime');
 // Import route handlers
 var index = require('./routes/index');
 var users = require('./routes/users');
-var tweets = require('./routes/tweets');
+//var tweets = require('./routes/tweets');
+var events = require('./routes/event');
+var attend = require('./routes/attend');
 
 // Import Tweet User Model
 var User = require('./models/User');
@@ -36,7 +38,7 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-app.use(session({ secret : 'erosolar6170', resave : true, saveUninitialized : true }));
+app.use(session({ secret : 'pocketplanner6170', resave : true, saveUninitialized : true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(function(req, res, next) {
@@ -57,7 +59,7 @@ app.use(function(req, res, next) {
 //Map to imported route handlers
 app.use('/', index);
 app.use('/users', users);
-app.use('/events', event);
+app.use('/events', events);
 app.use('/attend', attend);
 //app.use('/tweets', tweets);
 
