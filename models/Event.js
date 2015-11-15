@@ -21,8 +21,8 @@ var Event = (function Event() {
         description     : {type:String, default:""},
     });
     var attendeeSchema = new Schema({
-        userId          : ObjectId, //link to user database
-        name            : String,   //required
+        userId          : ObjectId, //link to user database (default = nonexistent)
+        name            : {type:String, default: ""},
         email           : String,   //required
         attending       : {type:Number, default:0}
         //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
@@ -32,14 +32,14 @@ var Event = (function Event() {
         description     : {type:String, default:""},
         host            : ObjectId,     //required, link to user database
         hostEmail       : String,       //required (in database)
-        otherPlanners   : {type:[ObjectId], default:[]},   //       ^
+        planners        : {type:[ObjectId], default:[]},   //       ^
 
         date            : Date,         //required
         location        : {type:String, default:""},
         budget          : {type:Number, default:0},
         cost            : {type:[costSchema], default:[]},
 
-        attendees       : {type:[String], default:[]},
+        attendees       : {type:[attendeeSchema], default:[]},
 
         categories      : {type:[categorySchema], default:[]},
     });
@@ -84,9 +84,7 @@ var Event = (function Event() {
                     'date' : event_time,
                     'hostEmail' : host_email,
                     'host' : user._id,
-                }, function(err, result) {
-                    callback(err, result._id);
-                });
+                }, callback);
             }
         });
     };
@@ -96,28 +94,60 @@ var Event = (function Event() {
     };
 
     var _getEventsByUser = function(userid, callback) {
-        _model.find({});
+        _model.find({$or:[{'host':userid}, {'planners':userid}]}, callback);
     };
 
     var _deleteEvent = function(eventid, callback) {
-        //blah
+        _model.findByIdAndRemove(eventid);
     };
 
     // information is an object with keys in the schemas above
-    var _addInformation = function(information, callback) {
-        //blah
+    // CANNOT USE THIS METHOD TO ADD PLANNERS OR COSTS OR INVITEES
+    //      (OR ANYTHING IN A LIST)
+    var _addInformation = function(eventid, information, callback) {
+        _model.findByIdAndUpdate(eventid, information, callback);
     };
 
-    var _addInvite = function(attendee_email, callback) {
-        //blah
+    var _addPlanner = function(eventid, planner_email, callback) {
+        Users.findByEmail(planner_email, function(err, user) {
+            if (err) {
+                callback(err);
+            } else {
+                _model.findByIdAndUpdate(eventid, {$push: {planners:user._id}}, callback);
+            }
+        });
     };
 
-    var _markAttending = function(attendee, callback) {
-        //blah
+    //description is optional
+    var _addCost = function(eventid, name, amount, callback, description) {
+        var cost = {
+            'name': name,
+            'amount': amount,
+            'description':description || "",
+        };
+        _model.findByIdAndUpdate(eventid, {$push:{cost: cost}}, callback);
     };
 
-    var _markNotAttending = function(attendee, callback) {
-        //blah
+    var _addInvite = function(eventid, attendee_email, callback) {
+        Users.findByEmail(attendee_email, function(err, user) {
+            if (err) {//no such user, create attendee
+                _model.findByIdAndUpdate(eventid,
+                    {$push:{attendees:{'email': email}}}, callback);
+            } else { //user exists, attach userid to attendee
+                _model.findByIdAndUpdate(eventid,
+                    {$push:{attendees:{'email': email, 'userId': user._id}}}, callback);
+            }
+        });
+    };
+
+    var _markAttending = function(eventid, attendee_email, callback) {
+        _model.update({'_id':eventid, 'attendees.email':attendee_email},
+                      {$set: {'attendees.$.attending':1}}, callback);
+    };
+
+    var _markNotAttending = function(eventid, attendee, callback) {
+        _model.update({'_id':eventid, 'attendees.email':attendee_email},
+                      {$set: {'attendees.$.attending':2}}, callback);
     };
 
     return {
