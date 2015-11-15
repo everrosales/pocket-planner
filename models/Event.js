@@ -21,18 +21,19 @@ var Event = (function Event() {
         description     : {type:String, default:""},
     });
     var attendeeSchema = new Schema({
-        userId          : ObjectId, //link to user database (default = nonexistent)
-        name            : {type:String, default: ""},
+        userId          : Schema.Types.ObjectId, //link to user database (default = nonexistent)
+        name            : {type:String, default:""},
         email           : String,   //required
-        attending       : {type:Number, default:0}
+        attending       : {type:Number, default:0},
+        note            : {type:String, default:""},
         //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
     });
     var eventSchema = new Schema({
         name            : String,       //required
         description     : {type:String, default:""},
-        host            : ObjectId,     //required, link to user database
+        host            : Schema.Types.ObjectId,     //required, link to user database
         hostEmail       : String,       //required (in database)
-        planners        : {type:[ObjectId], default:[]},   //       ^
+        planners        : {type:[Schema.Types.ObjectId], default:[]},   //       ^
 
         date            : Date,         //required
         location        : {type:String, default:""},
@@ -140,14 +141,20 @@ var Event = (function Event() {
         });
     };
 
-    var _markAttending = function(eventid, attendee_email, callback) {
+    //note from attendee is optional
+    var _markAttending = function(eventid, attendee_email, attendee_name, callback, note_from_attendee) {
         _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                      {$set: {'attendees.$.attending':1}}, callback);
+                      {$set: {'attendees.$.attending':1,
+                              'attendees.$.name':attendee_name,
+                              'attendees.$.note':note_from_attendee || ""}},
+                       callback);
     };
 
-    var _markNotAttending = function(eventid, attendee, callback) {
+    var _markNotAttending = function(eventid, attendee_email, callback, note_from_attendee) {
         _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                      {$set: {'attendees.$.attending':2}}, callback);
+                      {$set: {'attendees.$.attending':2,
+                              'attendees.$.note':note_from_attendee || ""}},
+                       callback);
     };
 
     return {

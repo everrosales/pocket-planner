@@ -115,10 +115,10 @@ var User = (function User() {
         });
     };
 
-    var _addEvent = function(email, new_event, callback) {
+    var _addEvent = function(email, event_name, event_date, callback) {
         _ifUserExists(email, function(err, exists) {
             if (exists) {
-                Event.createNewEvent(email, new_event, callback);
+                Event.createNewEvent(email, event_name, event_date, callback);
             } else {
                 callback({msg: "Invalid user."});
             }
