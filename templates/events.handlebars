@@ -1,19 +1,14 @@
 {{> header currentUser=currentUser title=title}}
 
-<div id="tweets">
+<div id="events">
   {{#each my_events}}
     {{> event}}
   {{else}}
     <p><em>No events yet!</em></p>
   {{/each}}
-  
-    <div class="column" id="input-new-tweet">
-        <div class="error"></div>
-        <label for="new-tweet-input">Post a tweet:</label>
-        <textarea type="text" id="new-tweet-input" placeholder="Write stuff here!"/>
-        <textarea type="text" id="new-tweet-tags" placeholder="Put your tags here!"/>
-        <button id="submit-new-tweet">Post</button>
 
+    <div class="column btn btn-default" id="new_event">
+      <p>+ Add a new event</p>
     </div>
 
 
