@@ -1,12 +1,9 @@
-var Event = require("../models/Event");
-
 //Model code for a User object.
 var User = (function User() {
     var mongoose = require('mongoose');
     var Schema = require('mongoose').Schema;
 
     var userSchema = new Schema({
-        _id         : String, //same as email of user
         username    : String,
         password    : String,
         email       : String,
@@ -26,10 +23,30 @@ var User = (function User() {
         });
     };
 
+    var _ifUserExists_username = function(username, callback) {
+        _model.count({'username':username}, function(err, count) {
+            if (count == 1) {
+                callback(null, true);
+            } else {
+                callback(null, false);
+            }
+        });
+    };
+
     var _getUser = function(email, callback) {
         _ifUserExists(email, function(err, exists) {
             if (exists) {
-                _model.findById(email, callback);
+                _model.findOne({'email':email}, callback);
+            } else {
+                callback({msg: "No such user."});
+            }
+        });
+    };
+
+    var _getUser_username = function(username, callback) {
+        _ifUserExists_username(username, function(err, exists) {
+            if (exists) {
+                _model.findOne({'username':username}, callback);
             } else {
                 callback({msg: "No such user."});
             }
@@ -37,8 +54,8 @@ var User = (function User() {
     };
 
     var _usernameToEmail = function(username, callback) {
-        _model.findOne({'username':username}, function(err, user) {
-            if (err) {
+        _getUser_username(username, function(err, user) {
+            if(err) {
                 callback(err);
             } else {
                 callback(err, user.email);
@@ -54,7 +71,7 @@ var User = (function User() {
 
     var _findByUsername = function(username, callback) {
         //assuming usernames are unique
-        _model.findOne({'username':username}, callback);
+        _getUser_username(username, callback);
     };
 
     var _verifyPasswordWithUsername = function(username, candidatepw, callback) {
@@ -83,13 +100,12 @@ var User = (function User() {
         });
     };
 
-    var _createNewUser = function(email, password, callback, username) { //username optional
+    var _createNewUser = function(email, password, username, callback) { //username optional
         _ifUserExists(email, function(err, exists) {
             if (exists) {
                 callback({ taken: true});
             } else {
                 _model.create({
-                    '_id' : email,
                     'username' : username,
                     'email'    : email,
                     'password' : password,
@@ -103,38 +119,6 @@ var User = (function User() {
         _model.remove({}, callback);
     };
 
-    var _getEvents = function(email, callback) {
-        _ifUserExists(email, function(err, exists) {
-            if (exists) {
-                _getUser(email, function(err, user) {
-                    Event.getEventsByUser(user._id, callback);
-                });
-            } else {
-                callback({msg: 'Invalid user.'});
-            }
-        });
-    };
-
-    var _addEvent = function(email, event_name, event_date, callback) {
-        _ifUserExists(email, function(err, exists) {
-            if (exists) {
-                Event.createNewEvent(email, event_name, event_date, callback);
-            } else {
-                callback({msg: "Invalid user."});
-            }
-        });
-    };
-
-    var _removeEvent = function(username, eventId, callback) {
-        _ifUserExists(username, function(err, exists) {
-            if (exists) {
-                Event.deleteEvent(username, tweetId, callback);
-            } else {
-                callback({msg: "Invalid user."});
-            }
-        });
-    };
-
     return {
         findByEmail                     : _findByEmail,
         findByUsername                  : _findByUsername,
@@ -142,11 +126,7 @@ var User = (function User() {
         verifyPassword                  : _verifyPassword,
         createNewUser                   : _createNewUser,
         clearAllUsers                   : _clearAllUsers,
-        getEvents                       : _getEvents,
-        addEvent                        : _addEvent,
-        removeEvent                     : _removeEvent,
     };
-
 })();
 
 module.exports = User;

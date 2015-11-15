@@ -46,7 +46,7 @@ var Event = (function Event() {
     });
 
     var _model = mongoose.model('event', eventSchema);
-
+//PRIVATE METHODS
     var _ifEventExists = function(id, callback) {
         _model.count({_id : id}, function(err, count) {
             if (count == 1) {
@@ -67,6 +67,11 @@ var Event = (function Event() {
         });
     };
 
+    var _getEventsByUserId = function(userid, callback) {
+        _model.find({$or:[{'host':userid}, {'planners':userid}]}, callback);
+    };
+
+//PUBLIC METHODS
     var _findById = function(id, callback) {
         _getEvent(id, callback);
     };
@@ -94,12 +99,30 @@ var Event = (function Event() {
         _model.remove({}, callback);
     };
 
-    var _getEventsByUser = function(userid, callback) {
-        _model.find({$or:[{'host':userid}, {'planners':userid}]}, callback);
+    var _getEventsByUser = function(email, callback) {
+        User.findByEmail(email, function(err, user) {
+            if (err) {
+                callback(err);
+            } else {
+                _getEventsByUserId(user._id, callback);
+            }
+        });
     };
 
-    var _deleteEvent = function(eventid, callback) {
-        _model.findByIdAndRemove(eventid);
+    var _deleteEvent = function(userid, eventid, callback) {
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                _getEvent(eventid, function(err, found_event) {
+                    if (found_event.host.equals(userid)) {
+                        _model.findByIdAndRemove(eventid, callback);
+                    } else {
+                        callback({msg:"You do not have the authority to delete this Event."});
+                    }
+                });
+            } else {
+                callback({msg:"No such event."});
+            }
+        });
     };
 
     // information is an object with keys in the schemas above
@@ -120,7 +143,7 @@ var Event = (function Event() {
     };
 
     //description is optional
-    var _addCost = function(eventid, name, amount, callback, description) {
+    var _addCost = function(eventid, name, amount, description, callback) {
         var cost = {
             'name': name,
             'amount': amount,
@@ -142,7 +165,7 @@ var Event = (function Event() {
     };
 
     //note from attendee is optional
-    var _markAttending = function(eventid, attendee_email, attendee_name, callback, note_from_attendee) {
+    var _markAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
         _model.update({'_id':eventid, 'attendees.email':attendee_email},
                       {$set: {'attendees.$.attending':1,
                               'attendees.$.name':attendee_name,
@@ -150,7 +173,7 @@ var Event = (function Event() {
                        callback);
     };
 
-    var _markNotAttending = function(eventid, attendee_email, callback, note_from_attendee) {
+    var _markNotAttending = function(eventid, attendee_email, note_from_attendee, callback) {
         _model.update({'_id':eventid, 'attendees.email':attendee_email},
                       {$set: {'attendees.$.attending':2,
                               'attendees.$.note':note_from_attendee || ""}},
@@ -158,14 +181,17 @@ var Event = (function Event() {
     };
 
     return {
-        ifEventExists       : _ifEventExists,
-        getEvent            : _getEvent,
         findById            : _findById,
         createNewEvent      : _createNewEvent,
         clearAllEvents      : _clearAllEvents,
         getEventsByUser     : _getEventsByUser,
         deleteEvent         : _deleteEvent,
         addInformation      : _addInformation,
+        addPlanner          : _addPlanner,
+        addCost             : _addCost,
+        addInvite           : _addInvite,
+        markAttending       : _markAttending,
+        markNotAttending    : _markNotAttending,
     };
 })();
 module.exports = Event;
