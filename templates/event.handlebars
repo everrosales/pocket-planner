@@ -1,0 +1,16 @@
+<!-- store event ID info in the event-container -->
+<div class="column event-container">
+  <div class="event">
+    {{#if name}}
+      <p class="event_name">{{name}}</p>
+      <hr>
+    {{/if}}
+    {{#if location}}
+      <p class="event_loc">{{location}}</p>
+      <hr>
+    {{/if}}
+    {{#if description}}
+      <p class="event_desc">{{description}}</p>
+    {{/if}}
+  </div>
+</div>
