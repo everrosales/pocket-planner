@@ -19,7 +19,7 @@ var app = express();
 
 //Database setup
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/fritter');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/pocketplanner');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
@@ -57,7 +57,8 @@ app.use(function(req, res, next) {
 //Map to imported route handlers
 app.use('/', index);
 app.use('/users', users);
-app.use('/events', events);
+app.use('/events', event);
+app.use('/attend', attend);
 //app.use('/tweets', tweets);
 
 // catch 404 and forward to error handler

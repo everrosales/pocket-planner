@@ -48,8 +48,7 @@ router.all('*', requireAuthentication);
     Response:
      - success: true if the server succeeded in getting the user's events
      - content: on success, an object with a single field 'events' which contains
-            user's events, all events, and events from users this user is
-            subscribed to (three lists)
+            user's events
      - err: on failure, an error message
 */
 router.get('/', function(req, res) {
@@ -81,12 +80,130 @@ router.get('/', function(req, res) {
      - err: on failure, an error message
 */
 router.post('/', function(req, res) {
-    if (!req.body.content) {
-        utils.sendErrResponse(res, 400, 'Content required in request.');
-    }
+    // if (!req.body.content) {
+    //     utils.sendErrResponse(res, 400, 'Content required in request.');
+    // }
     // Create a new event
+    if (!req.body.email || !req.body.name || !req.body.time) {
+      utils.sendErrResponse(res, 400, 'Email, name and time required in request');
+    }
+
+    Event.createNewEvent(req.body.email, req.body.name, req.body.time, function(err, event) {
+      utils.sendSuccessResponse(res, event);
+    });
 });
 
+/*
+    POST /events/:event/addcost
+    Request parameters:
+     - event ID: the unique ID of the event we're going to change
+    Response:
+     - success: true if server succeeded in adding a cost to the Event
+     - err: on failure, an error message
+*/
+router.post('/:event/addcost', function (req, res) {
+  // add cost to the event
+});
+
+/*
+    POST /events/:event/addplanner
+    Request parameters:
+     - event ID: the unique ID of the event we're going to change
+    Response:
+     - success: true if server succeeded in adding a planner to the Event
+     - err: on failure, an error message
+*/
+router.post('/:event/addplanner', function(req, res) {
+  // add another planner to the event
+});
+
+/*
+    POST /events/:event/addinformation
+    Request parameters:
+     - event ID: the unique ID of the event we're going to change
+    Response:
+     - success: true if server succeeded in adding information to the Event
+     - err: on failure, an error message
+*/
+router.post('/:event/addinformation', function(req, res) {
+  // add information to the event
+});
+
+/*
+    POST /events/:event/addcategory
+    Request parameters:
+     - event ID: the unique ID of the event we're going to change
+    Response:
+     - success: true if server succeeded in adding information to the Event
+     - err: on failure, an error message
+*/
+router.post('/:event/addcategory', function (req, res) {
+
+});
+
+/*
+    POST /events/:event/category/:category/addtodo
+    Request parameters:
+     - event ID: the unique ID of the event we're going to modify
+     - category: the category that we are going to add the todo to
+    Response:
+     - success: true if server succeeded in adding a todo to a category
+     - err: on failure, an error message
+*/
+router.post('/:event/category/:category/addtodo', function (req, res) {
+
+});
+
+/*
+    DELETE /events/:event/cost/:cost
+    Request parameters:
+     - event ID: the unique ID of the event within the logged-in user's collection
+     - cost ID: the identifier for the cost of an event.
+    Response:
+     - success: true if the server succeeded in deleting the user's event's cost
+     - err: on failure, an error message
+*/
+router.delete('/:event/cost/:cost', function(req, res) {
+
+});
+
+/*
+    DELETE /events/:event/planner/:planner
+    Request parameters:
+     - event ID: the unique ID of the event within the logged-in user's collection
+     - planner ID: the unique ID of the planner who will be removed for the list of planners
+    Response:
+     - success: true if the server succeeded in deleting the planner from the event
+     - err: on failure, an error message
+*/
+router.delete('/:event/planner/:planner', function(req, res) {
+
+});
+
+/*
+    DELETE /events/:event/category/:category
+    Request parameters:
+     - event ID: the unique ID of the event within the logged-in user's collection
+     - category ID: the unique ID of the category in the event.
+    Response:
+     - success: true if the server succeeded in deleting the event's category
+     - err: on failure, an error message
+*/
+router.delete('/:event/category/:category', function (req, res) {
+
+});
+
+/*
+    DELETE /events/:event/category/:category/todo/:todo
+    Request parameters:
+     - event ID: the unique ID of the event within the logged-in user's collection
+    Response:
+     - success: true if the server succeeded in deleting the user's event
+     - err: on failure, an error message
+*/
+router.delete('/:event/category/:category/todo/:todo', function (req, res) {
+
+});
 /*
     POST /events/:Event
     Request parameters:
