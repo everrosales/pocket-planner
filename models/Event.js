@@ -129,15 +129,27 @@ var Event = (function Event() {
     // CANNOT USE THIS METHOD TO ADD PLANNERS OR COSTS OR INVITEES
     //      (OR ANYTHING IN A LIST)
     var _addInformation = function(eventid, information, callback) {
-        _model.findByIdAndUpdate(eventid, information, callback);
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                _model.findByIdAndUpdate(eventid, information, callback);
+            } else {
+                callback({msg: "No such event."});
+            }
+        });
     };
 
     var _addPlanner = function(eventid, planner_email, callback) {
-        Users.findByEmail(planner_email, function(err, user) {
-            if (err) {
-                callback(err);
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                User.findByEmail(planner_email, function(err, planner) {
+                    if (err) {
+                        callback(err);
+                    } else {
+                        _model.update({_id:eventid}, {$push:{'planners':planner._id}},{new:true}, callback);
+                    }
+                });
             } else {
-                _model.findByIdAndUpdate(eventid, {$push: {planners:user._id}}, callback);
+                callback({msg:"No such event."});
             }
         });
     };
@@ -149,35 +161,71 @@ var Event = (function Event() {
             'amount': amount,
             'description':description || "",
         };
-        _model.findByIdAndUpdate(eventid, {$push:{cost: cost}}, callback);
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                _model.findByIdAndUpdate(eventid, {$push:{cost: cost}}, callback);
+            } else {
+                callback({msg: "No such event."});
+            }
+        });
     };
 
     var _addInvite = function(eventid, attendee_email, callback) {
-        Users.findByEmail(attendee_email, function(err, user) {
-            if (err) {//no such user, create attendee
-                _model.findByIdAndUpdate(eventid,
-                    {$push:{attendees:{'email': email}}}, callback);
-            } else { //user exists, attach userid to attendee
-                _model.findByIdAndUpdate(eventid,
-                    {$push:{attendees:{'email': email, 'userId': user._id}}}, callback);
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                User.findByEmail(attendee_email, function(err, user) {
+                    if (err) {//no such user, create attendee
+                        _model.findByIdAndUpdate(eventid,
+                            {$push:{attendees:{'email': attendee_email}}}, callback);
+                    } else { //user exists, attach userid to attendee
+                        _model.findByIdAndUpdate(eventid,
+                            {$push:{attendees:{'email': attendee_email, 'userId': user._id}}}, callback);
+                    }
+                });
+            } else {
+                callback({msg: "No such event."});
             }
         });
     };
 
     //note from attendee is optional
     var _markAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
-        _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                      {$set: {'attendees.$.attending':1,
-                              'attendees.$.name':attendee_name,
-                              'attendees.$.note':note_from_attendee || ""}},
-                       callback);
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                _model.update({'_id':eventid, 'attendees.email':attendee_email},
+                              {$set: {'attendees.$.attending':1,
+                                      'attendees.$.name':attendee_name,
+                                      'attendees.$.note':note_from_attendee || ""}},
+                               function(err, result) {
+                                   if(result.nModified === 0) {
+                                       callback({msg:"No such invitee."});
+                                   } else {
+                                       callback(err, result);
+                                   }
+                               });
+            } else {
+                callback({msg: "No such event."});
+            }
+        });
     };
 
-    var _markNotAttending = function(eventid, attendee_email, note_from_attendee, callback) {
-        _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                      {$set: {'attendees.$.attending':2,
-                              'attendees.$.note':note_from_attendee || ""}},
-                       callback);
+    var _markNotAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                _model.update({'_id':eventid, 'attendees.email':attendee_email},
+                              {$set: {'attendees.$.attending':2,
+                                      'attendees.$.note':note_from_attendee || ""}},
+                                      function(err, result) {
+                                          if(result.nModified === 0) {
+                                              callback({msg:"No such invitee."});
+                                          } else {
+                                              callback(err, result);
+                                          }
+                                      });
+            } else {
+                callback({msg: "No such event."});
+            }
+        });
     };
 
     return {
