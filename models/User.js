@@ -72,7 +72,7 @@ var User = (function User() {
             if(exists) {
                 _getUser(email, function(err, user) {
                     if (user.password === candidatepw) {
-                        callback(null, true);
+                        callback(null, user);
                     } else {
                         callback(null, false);
                     }
