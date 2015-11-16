@@ -1,0 +1,36 @@
+Meeting notes for TA meeting November 16, 2015
+
+
+
+our meeting agenda looks fine - doesn't need to be any more fleshed out than we have
+
+feedback on design doc:
+  overview, motivation fine
+  concepts:
+    attendance - not really a concept? more of a state
+    event - good, means a little more than just a calendar event
+    calendar, todo good, carry meaning
+  ui looks fine
+  design challenge looks fine (esp. liked the options, and selecting one)
+
+she'll send more detailed, line-by-line comments tonight
+  
+most of the functionality is creating, adding, deleting things (etc) - fine for MVP
+  going forward, however, think of more features we can add (post-MVP) - such as email
+  (which is already included...) but things like that
+
+
+feedback on data model:
+  -keeping track of deleted attendees - give attendees status instead of different types
+
+
+developing in horizontal layers rather than concepts (probably fine, as long as work isn't imbalanced.)
+  -eg. don't have one person doing only css and one person doing the whole server and one person writing tests
+  -make sure to have specs or some sort of design so that ppl aren't waiting for other people
+  -but fine if people want to focus on different parts (eg. datamodel vs ui vs etc)
+
+
+additional features would be a good idea (for next meeting, have list of features and 
+  choosing to implement or not implement them)
+
+
