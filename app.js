@@ -11,7 +11,9 @@ require('handlebars/runtime');
 // Import route handlers
 var index = require('./routes/index');
 var users = require('./routes/users');
-var tweets = require('./routes/tweets');
+//var tweets = require('./routes/tweets');
+var events = require('./routes/event');
+var attend = require('./routes/attend');
 
 // Import Tweet User Model
 var User = require('./models/User');
@@ -20,7 +22,7 @@ var app = express();
 
 //Database setup
 var mongoose = require('mongoose');
-mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/fritter');
+mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/pocketplanner');
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function (callback) {
@@ -79,7 +81,9 @@ app.use(function(req, res, next) {
 //Map to imported route handlers
 app.use('/', index);
 app.use('/users', users);
-app.use('/tweets', tweets);
+app.use('/events', events);
+app.use('/attend', attend);
+//app.use('/tweets', tweets);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

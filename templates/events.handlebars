@@ -1,0 +1,17 @@
+{{> header currentUser=currentUser title=title}}
+
+<div id="events">
+  {{#each my_events}}
+    {{> event}}
+  {{else}}
+    <p><em>No events yet!</em></p>
+  {{/each}}
+
+    <div class="column btn btn-default" id="new_event">
+      <p>+ Add a new event</p>
+    </div>
+
+
+
+
+</div>

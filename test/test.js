@@ -2,72 +2,41 @@ var assert = require("assert");
 
 var User = require("../models/User");
 
-var Tweet = require("../models/Tweet");
+var Event = require("../models/Event");
 
 var mongoose = require("mongoose");
-mongoose.connect('mongodb://localhost/fritter');
-
-// Array is the module under test.
-describe('Array', function() {
-  // indexOf is the method under test.
-  describe('#indexOf()', function () {
-
-    // This is a test, we indicate what we're testing for.
-    it('should return -1 when the value is not present', function () {
-      assert.equal(-1, [1,2,3].indexOf(5));
-      assert.equal(-1, [1,2,3].indexOf(0));
-    });
-
-
-    // Another test.
-    it('should find values that exist', function() {
-      assert.equal(0, [1, 2, 3].indexOf(1));
-      assert.equal(2, [1, 2, 3].indexOf(3));
-    });
-
-  }); // End describe indexOf.
-
-  // map is the method under test.
-  describe('#map', function() {
-
-    // This is a test.
-    it('should map values given a function', function() {
-      assert.deepEqual([2, 4, 6], [1, 2, 3].map(function(x) { return 2 * x; }));
-    });
-
-
-    // Another test.
-    it('should work on empty arrays', function() {
-      assert.deepEqual([], [].map(function(x) { return 2 * x; }));
-    });
-
-  }); // End describe map.
-
-}); // End describe Array.
+mongoose.connect('mongodb://localhost/pocketplanner');
 
 describe('User', function() {
     beforeEach(function(done) {
         User.clearAllUsers(function() {
-            Tweet.clearAllTweets(done);
+            Event.clearAllEvents(done);
         });
     });
-
     afterEach(function(done) {
         User.clearAllUsers(function() {
-            Tweet.clearAllTweets(done);
+            Event.clearAllEvents(done);
         });
     });
 
     describe('#createNewUser', function() {
         it('should return a null error if user created successfully', function(done) {
-            User.createNewUser('erosolar', 'blah', function(error, result) {
+            User.createNewUser('erosolar@mit.edu', 'blah', "", function(error, result) {
                 assert.deepEqual(error, null);
                 done();
             });
         });
-        it('should return a "taken" error if username already exists', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.createNewUser('erosolar', 'blah2', function(error, result) {
+        it('should return created user', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(error, result) {
+                assert.deepEqual(result.email, 'erosolar@mit.edu');
+                assert.deepEqual(result.password, 'blah');
+                assert.deepEqual(result.username, 'erosolar');
+                done();
+            });
+        });
+        it('should return a "taken" error if email already exists', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', "", function() {
+                User.createNewUser('erosolar@mit.edu', 'blah2', "", function(error, result) {
                     assert.deepEqual(error.taken, true);
                     done();
                 });
@@ -75,12 +44,32 @@ describe('User', function() {
         });
     });
 
+    describe('#findByEmail', function() {
+        it('should return the user if user exists', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', "", function() {
+                User.findByEmail('erosolar@mit.edu', function(error, result) {
+                    assert.deepEqual(error, null);
+                    assert.deepEqual(result.email, 'erosolar@mit.edu');
+                    assert.deepEqual(result.password, 'blah');
+                    done();
+                });
+            });
+        });
+        it('should return a no user error if no user exists', function(done) {
+            User.findByEmail('erosolar@mit.edu', function(error, result) {
+                assert.deepEqual(error.msg, "No such user.");
+                done();
+            });
+        });
+    });
+
     describe('#findByUsername', function() {
         it('should return the user if user exists', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
+            User.createNewUser('erosolar@mit.edu', 'blah', "erosolar", function() {
                 User.findByUsername('erosolar', function(error, result) {
                     assert.deepEqual(error, null);
                     assert.deepEqual(result.username, 'erosolar');
+                    assert.deepEqual(result.email, 'erosolar@mit.edu');
                     assert.deepEqual(result.password, 'blah');
                     done();
                 });
@@ -88,86 +77,145 @@ describe('User', function() {
         });
         it('should return a no user error if no user exists', function(done) {
             User.findByUsername('erosolar', function(error, result) {
-                assert.deepEqual(error.msg, "No such user!");
+                assert.deepEqual(error.msg, "No such user.");
                 done();
             });
         });
     });
 
-    describe('#addTweet', function() {
-        it('should throw an error if no user exists', function(done) {
-            User.addTweet('invalidUsername', {content:"hi"}, function(error, result) {
-                assert.deepEqual(error.msg, "Invalid user.");
+    describe('#verifyPassword', function() {
+        it('should return true if the given password matches', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.verifyPassword('erosolar@mit.edu', 'blah', function(err, result) {
+                    assert.deepEqual(err, undefined);
+                    assert.deepEqual(result, true);
+                    done();
+                });
+            });
+        });
+        it('should return false if the given password does not match', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.verifyPassword('erosolar@mit.edu', 'incorrect', function(err, result) {
+                    assert.deepEqual(err, undefined);
+                    assert.deepEqual(result, false);
+                    done();
+                });
+            });
+        });
+        it('should return a no user error if the user does not exist', function(done) {
+            User.verifyPassword('erosolar@mit.edu', 'blah', function(err, result) {
+                assert.deepEqual(err.msg, "No such user.");
                 done();
             });
         });
-        it('should not throw an error if tweet created successfully', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.addTweet('erosolar', {content:"hi"}, function(error, result) {
-                    assert.deepEqual(error, null);
+    });
+
+    describe('#verifyPasswordWithUsername', function() {
+        it('should return true if the given password matches', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.verifyPasswordWithUsername('erosolar', 'blah', function(err, result) {
+                    assert.deepEqual(err, undefined);
+                    assert.deepEqual(result, true);
+                    done();
+                });
+            });
+        });
+        it('should return false if the given password does not match', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.verifyPasswordWithUsername('erosolar', 'incorrect', function(err, result) {
+                    assert.deepEqual(err, undefined);
+                    assert.deepEqual(result, false);
+                    done();
+                });
+            });
+        });
+        it('should return a no user error if the user does not exist', function(done) {
+            User.verifyPasswordWithUsername('erosolar', 'blah', function(err, result) {
+                assert.deepEqual(err.msg, "No such user.");
+                done();
+            });
+        });
+    });
+});
+
+describe('Event', function() {
+    beforeEach(function(done) {
+        Event.clearAllEvents(function() {
+            User.clearAllUsers(done);
+        });
+    });
+    afterEach(function(done) {
+        Event.clearAllEvents(function() {
+            User.clearAllUsers(done);
+        });
+    });
+
+    describe('#createNewEvent', function() {
+        it('should return error if user does not exist', function(done) {
+            Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err) {
+                assert.deepEqual(err.msg, "No such user.");
+                done();
+            });
+        });
+
+        it('should return null error when event created', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, user) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, result) {
+                    assert.deepEqual(err, undefined);
                     done();
                 });
             });
         });
     });
 
-    describe('#getTweet', function() {
-        it('should return a tweet if tweet exists', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.addTweet('erosolar', {content : "hi"}, function(err, id) {
-                    User.getTweet('erosolar', id, function(error, result) {
-                        assert.deepEqual(error, null);
-                        assert.deepEqual(result.content, "hi");
-                        assert.deepEqual(result._id, id);
+    describe('#findById', function() {
+        it('should return an Event if event exists', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, result) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, newevent) {
+                    Event.findById(newevent._id, function(err, result) {
+                        assert.deepEqual(err, null);
+                        assert.deepEqual(result.hostEmail, 'erosolar@mit.edu');
+                        assert.deepEqual(result.name, 'blah');
+                        assert.deepEqual(result.date, new Date(1995, 7, 7, 10, 39, 0));
                         done();
                     });
                 });
             });
         });
-        it('should return a no such tweet error if no tweet exists', function(done) {
-            User.createNewUser('erosolar', 'blah', function(err, id) {
-                User.getTweet('erosolar', id, function(error, result) {
-                    assert.deepEqual(error.msg, "Invalid tweet.");
-                    done();
-                });
-            });
-        });
-        it('should return a no such user error if no user exists', function(done) {
-            User.getTweet('erosolar', 0, function(error, result) {
-                assert.deepEqual(error.msg, "Invalid user.");
+        it('should return an error if no Event exists', function(done) {
+            Event.findById(0 /*hopefully no event with id 0 */, function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
                 done();
             });
         });
     });
 
-    describe('#getTweets', function() {
-        it('should return empty array if no tweets', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.getTweets('erosolar', function(error, result) {
-                    assert.deepEqual(error, null);
+    describe('#getEventsByUser', function() {
+        it('should return no events if no events for user exist', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', "", function(err, created_user) {
+                Event.getEventsByUser('erosolar@mit.edu', function(err, result) {
+                    assert.deepEqual(err, null);
                     assert.deepEqual(result, []);
                     done();
                 });
             });
         });
-        it('should return no user error if no user exists', function(done) {
-            User.getTweets('erosolar', function(error, result) {
-                assert.deepEqual(error.msg, 'Invalid user.');
+        it('should return an error if no such user', function(done) {
+            Event.getEventsByUser('erosolar@mit.edu', function(err, result) {
+                assert.deepEqual(err.msg, "No such user.");
                 done();
             });
         });
-        it('should return a list of tweets if there are tweets', function(done) {
-            sample_tweet = { content : "hi" };
-            User.createNewUser('erosolar', 'blah', function() {
-                User.addTweet('erosolar', sample_tweet, function(err, id) {
-                    sample_tweet._id = id;
-                    sample_tweet.author = 'erosolar';
-                    sample_tweet.old_author = "";
-                    sample_tweet.tags = [];
-                    User.getTweets('erosolar', function(error, result) {
-                        assert.deepEqual(error, null);
+        it('should return events user is allowed to edit', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', "", function(uh, created_user) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function() {
+                    Event.getEventsByUser('erosolar@mit.edu', function(err, result) {
+                        assert.deepEqual(err, undefined);
                         assert.deepEqual(result.length, 1);
-                        assert.deepEqual(result[0], sample_tweet);
+                        assert.deepEqual(result[0].host, created_user._id);
+                        assert.deepEqual(result[0].hostEmail, 'erosolar@mit.edu');
+                        assert.deepEqual(result[0].name, 'blah');
+                        assert.deepEqual(result[0].date, new Date(1995, 7, 7, 10, 39, 0));
                         done();
                     });
                 });
@@ -175,37 +223,39 @@ describe('User', function() {
         });
     });
 
-    describe('#removeTweet', function() {
-        it('should return invalid user error if no user exists', function(done) {
-            User.removeTweet('erosolar', 0, function(error, result) {
-                assert.deepEqual(error.msg, 'Invalid user.');
-                done();
-            });
-        });
-        it('should return invalid tweet error if no tweet exists', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.removeTweet('erosolar', 0, function(error, result) {
-                    assert.deepEqual(error.msg, 'Invalid tweet.');
-                    done();
-                });
-            });
-        });
-        it('should return nothing if tweet removed successfully', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.addTweet('erosolar', {content:"hi"}, function(err, id) {
-                    User.removeTweet('erosolar', id, function(error, result) {
-                        assert.deepEqual(error, null);
+    describe('#deleteEvent', function() {
+        it('should return error if user not host of event', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, created_user) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
+                    Event.deleteEvent(0, created_event._id, function(err, result) {
+                        assert.deepEqual(err.msg, "You do not have the authority to delete this Event.");
                         done();
                     });
                 });
             });
         });
-        it('should affect future getTweet calls', function(done) {
-            User.createNewUser('erosolar', 'blah', function() {
-                User.addTweet('erosolar', {content:"hi"}, function(err, id) {
-                    User.removeTweet('erosolar', id, function() {
-                        User.getTweet('erosolar', id, function(error, result) {
-                            assert.deepEqual(error.msg, 'Invalid tweet.');
+        it('should return invalid event error if no event exists', function(done) {
+            Event.deleteEvent(0, 0, function(error, result) {
+                assert.deepEqual(error.msg, 'No such event.');
+                done();
+            });
+        });
+        it('should return nothing if event removed successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, created_user) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
+                    Event.deleteEvent(created_user._id, created_event._id, function(err, result) {
+                        assert.deepEqual(err, null);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should affect future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, created_user) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
+                    Event.deleteEvent(created_user._id, created_event._id, function() {
+                        Event.findById(created_event._id, function(err, result) {
+                            assert.deepEqual(err.msg, "No such event.");
                             done();
                         });
                     });
@@ -213,203 +263,271 @@ describe('User', function() {
             });
         });
     });
-});
 
-describe('Tweet', function() {
-    beforeEach(function(done) {
-        Tweet.clearAllTweets(done);
-    });
-    afterEach(function(done) {
-        Tweet.clearAllTweets(done);
-    });
-
-    describe('#createNewTweet', function() {
-        it('should return null error when tweet created', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi', tags:["tag1"]}, function(err, result) {
-                // console.log(err);
-                // assert.deepEqual(err, undefined);
+    describe('#addInformation', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.addInformation(0, {}, function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
                 done();
             });
         });
-    });
-
-    describe('#findById', function() {
-        it('should return a tweet if tweet exists', function(done) {
-            Tweet.createNewTweet('erosolar', {content:"hi", tags:["tag1"]}, function(err, id) {
-                Tweet.findById(id, function(err, result) {
-                    assert.deepEqual(err, null);
-                    assert.deepEqual(result.author, 'erosolar');
-                    assert.deepEqual(result.content, 'hi');
-                    assert.deepEqual(result.tags.toObject(), ["tag1"]);
-                    done();
-                });
-            });
-        });
-        it('should return an error if no tweet exists', function(done) {
-            Tweet.findById(0, function(err, result) {
-                assert.deepEqual(err.msg, "No such tweet.");
-                done();
-            });
-        });
-    });
-
-    describe('#reTweet', function() {
-        it('should return error if no such tweet exists', function(done) {
-            Tweet.reTweet('erosolar', 0, function(err, result) {
-                assert.deepEqual(err.msg, "Invalid tweet.");
-                done();
-            });
-        });
-        it('should return error if same user', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi', tags:["tag1"]}, function(err, id) {
-                Tweet.reTweet('erosolar', id, function(err, result) {
-                    assert.deepEqual(err.msg, "You can't retweet your own tweet!");
-                    assert.deepEqual(err.retweet_fail, true);
-                    done();
-                });
-            });
-        });
-        it('should return error if same original author', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi', tags:['tag1']}, function(err, id) {
-                Tweet.reTweet('bob', id, function(err, id) {
-                    Tweet.reTweet('erosolar', id, function(err, result) {
-                        assert.deepEqual(err.msg, "You can't retweet your own tweet!");
-                        assert.deepEqual(err.retweet_fail, true);
-                        done();
-                    });
-                });
-            });
-        });
-
-        it('should return id of new tweet if tweet retweeted successfully', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi', tags:["tag1"]}, function(err, id) {
-                Tweet.reTweet('brad', id, function(err, new_id) {
-                    assert.deepEqual(err, null);
-                    assert.deepEqual(new_id, id+1);
-                    done();
-                });
-            });
-        });
-        it('should correctly store old author in tweet', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi', tags:["tag1"]}, function(err, id) {
-                Tweet.reTweet('brad', id, function(err, id) {
-                    Tweet.findById(id, function(err, result) {
+        it('should return nothing if event updated successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInformation(n_event._id, {location:"my house"}, function(err, result) {
                         assert.deepEqual(err, null);
-                        assert.deepEqual(result.author, 'brad');
-                        assert.deepEqual(result.old_author, 'erosolar');
-                        assert.deepEqual(result.content, 'hi');
-                        assert.deepEqual(result.tags.toObject(), ["tag1"]);
                         done();
+                    });
+                });
+            });
+        });
+        it('should change the result of future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInformation(n_event._id, {location:"my house"}, function(err, result) {
+                        Event.findById(n_event._id, function(err, result) {
+                            assert.deepEqual(result.location, "my house");
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('works with fields that have already been set', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInformation(n_event._id, {name:"new_name"}, function(err, result) {
+                        Event.findById(n_event._id, function(err, result) {
+                            assert.deepEqual(result.name, "new_name");
+                            done();
+                        });
                     });
                 });
             });
         });
     });
 
-    describe('#getTweets', function() {
-        it('should return no tweets if no tweets exist', function(done) {
-            Tweet.getTweets(function(err, result) {
-                assert.deepEqual(err, null);
-                assert.deepEqual(result, []);
+    describe('#addPlanner', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.addPlanner(0, 'erosales@mit.edu', function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
                 done();
             });
         });
-        it('should return all tweets', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi', tags:['tag1']}, function(){
-                Tweet.createNewTweet('bob', {content:'yo', tags:['tag2']}, function(){
-                    Tweet.getTweets(function(err, result) {
-                        assert.deepEqual(err, null);
-                        assert.deepEqual(result[0].author, 'erosolar');
-                        assert.deepEqual(result[0].content, 'hi');
-                        assert.deepEqual(result[0].tags, ['tag1']);
-                        assert.deepEqual(result[1].author, 'bob');
-                        assert.deepEqual(result[1].content, 'yo');
-                        assert.deepEqual(result[1].tags, ['tag2']);
+        it('should return a no such user error if planner doesn\'t exist', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
+                        assert.deepEqual(err.msg, "No such user.");
                         done();
+                    });
+                });
+            });
+        });
+        it('should return nothing if event updated successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function() {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                        Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
+                            assert.deepEqual(err, null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('should change the result of future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, planner) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                        Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
+                            Event.findById(n_event._id, function(err, result) {
+                                assert.deepEqual(result.planners.toObject(), [planner._id]);
+                                done();
+                            });
+                        });
                     });
                 });
             });
         });
     });
 
-    describe('#getTweetsByUser', function() {
-        it('should return no tweets if no tweets by author exist', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi',tags:['tag1']}, function(err, id){
-                Tweet.getTweetsByUser('bob', function(err, result) {
-                    assert.deepEqual(err, null);
-                    assert.deepEqual(result, []);
-                    done();
-                });
-            });
-        });
-        it('should return tweets with matching author', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi',tags:['tag1']}, function(err, id){
-                Tweet.getTweetsByUser('erosolar', function(err, result) {
-                    assert.deepEqual(err, null);
-                    assert.deepEqual(result.length, 1);
-                    assert.deepEqual(result[0], {content:'hi', tags:['tag1'], old_author:"", author:'erosolar', _id:id});
-                    done();
-                });
-            });
-        });
-    });
-
-    describe('#getTweetsByTag', function() {
-        it('should return no tweets if no tweets with that tag exist', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi',tags:['tag1']}, function(){
-                Tweet.getTweetsByTag('tag2', function(err, result) {
-                    assert.deepEqual(err, null);
-                    assert.deepEqual(result, []);
-                    done();
-                });
-            });
-        });
-        it('should return all tweets with the tag that exist', function(done) {
-            Tweet.createNewTweet('erosolar', {content:'hi',tags:['tag1']}, function(err, id){
-                Tweet.createNewTweet('erosolar', {content:'hi',tags:['tag2']}, function(err, new_id){
-                    Tweet.getTweetsByTag('tag1', function(err, result) {
-                        assert.deepEqual(err, null);
-                        assert.deepEqual(result.length, 1);
-                        assert.deepEqual(result[0], {content:'hi', tags:['tag1'], old_author:"", author:'erosolar', _id:id});
-                        done();
-                    });
-                });
-            });
-        });
-    });
-
-    describe('#deleteTweet', function() {
-        it('should return error if user not author of tweet', function(done) {
-            Tweet.createNewTweet('erosolar', {content:"hi"}, function(err, id) {
-                Tweet.deleteTweet('bob', id, function(err, result) {
-                    assert.deepEqual(err.msg, "You are not the author of this tweet.");
-                    done();
-                });
-            });
-        });
-        it('should return invalid tweet error if no tweet exists', function(done) {
-            Tweet.deleteTweet('erosolar', 0, function(error, result) {
-                assert.deepEqual(error.msg, 'Invalid tweet.');
+    describe('#addCost', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.addCost(0, 'venue', 12, 'wow such location', function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
                 done();
             });
         });
-        it('should return nothing if tweet removed successfully', function(done) {
-            Tweet.createNewTweet('erosolar', {content:"hi"}, function(err, id) {
-                Tweet.deleteTweet('erosolar', id, function(error, result) {
-                    assert.deepEqual(error, null);
-                    done();
-                });
-            });
-        });
-        it('should affect future getTweet calls', function(done) {
-            Tweet.createNewTweet('erosolar', {content:"hi"}, function(err, id) {
-                Tweet.deleteTweet('erosolar', id, function() {
-                    Tweet.findById(id, function(error, result) {
-                        assert.deepEqual(error.msg, 'No such tweet.');
+        it('should return nothing if event updated successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addCost(n_event._id, 'venue', 12, 'wow such location', function(err, result) {
+                        assert.deepEqual(err, null);
                         done();
                     });
                 });
             });
         });
+        it('should change the result of future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addCost(n_event._id, 'venue', 12, 'wow such location', function(err, result) {
+                        Event.findById(n_event._id, function(err, result) {
+                            assert.deepEqual(result.cost.length, 1);
+                            assert.deepEqual(result.cost[0].name, 'venue');
+                            assert.deepEqual(result.cost[0].amount, 12);
+                            assert.deepEqual(result.cost[0].description, "wow such location");
+                            done();
+                        });
+                    });
+                });
+            });
+        });
     });
+
+    describe('#addInvite', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.addInvite(0, 'erosales@mit.edu', function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return nothing if event updated successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
+                        assert.deepEqual(err, null);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should change the result of future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
+                        Event.findById(n_event._id, function(err, result) {
+                            assert.deepEqual(result.attendees.length, 1);
+                            assert.deepEqual(result.attendees[0].email, 'erosales@mit.edu');
+                            assert.deepEqual(result.attendees[0].attending, 0);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('should have userid of invitee if invitee has account', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, invitee) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                        Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
+                            Event.findById(n_event._id, function(err, result) {
+                                assert.deepEqual(result.attendees.length, 1);
+                                assert.deepEqual(result.attendees[0].email, 'erosales@mit.edu');
+                                assert.deepEqual(result.attendees[0].userId, invitee._id);
+                                assert.deepEqual(result.attendees[0].attending, 0);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    describe('#markAttending', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.markAttending(0, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return a no such invitee error if invitee doesn\'t exist', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                        assert.deepEqual(err.msg, "No such invitee.");
+                        done();
+                    });
+                });
+            });
+        });
+        it('should return nothing if event updated successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
+                        Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                            assert.deepEqual(err, null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('should change the result of future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
+                        Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                            Event.findById(n_event._id, function(err, result) {
+                                assert.deepEqual(result.attendees.length, 1);
+                                assert.deepEqual(result.attendees[0].email, 'erosales@mit.edu');
+                                assert.deepEqual(result.attendees[0].attending, 1);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    describe('#markNotAttending', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.markNotAttending(0, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return a no such invitee error if invitee doesn\'t exist', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                        assert.deepEqual(err.msg, "No such invitee.");
+                        done();
+                    });
+                });
+            });
+        });
+        it('should return nothing if event updated successfully', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
+                        Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                            assert.deepEqual(err, null);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('should change the result of future getEvent calls', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
+                        Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
+                            Event.findById(n_event._id, function(err, result) {
+                                assert.deepEqual(result.attendees.length, 1);
+                                assert.deepEqual(result.attendees[0].email, 'erosales@mit.edu');
+                                assert.deepEqual(result.attendees[0].attending, 2);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
 });

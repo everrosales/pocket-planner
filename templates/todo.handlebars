@@ -1,0 +1,23 @@
+
+  {{#each todos}}
+  <div class="todo">
+    <div class="checkbox-container">
+      <input type="checkbox">
+    </div>
+    <div class="todo-content">
+      <p>{{name}}<span class="glyphicon glyphicon-remove"></span></p>
+      {{#if deadline}}
+      <p><small>Deadline: {{deadline}}</small></p>
+      {{/if}}
+      {{#if priority}}
+      <p><small>Priority: {{priority}}</small></p>
+      {{/if}}
+    </div>
+    <br>
+
+  </div>
+  {{/each}}
+  <div class="add_todo">
+    <p>Add a To-Do...</p>
+  </div>
+</div>
