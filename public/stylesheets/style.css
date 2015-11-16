@@ -45,10 +45,10 @@ h2 {
     padding-left: 50px;
     padding-top: 0;
 }
-.todo-container{
-  position:absolute; /*to stack on top*/
+#todo-container{
+  /*position:absolute;*/ /*to stack on top*/
   background-color: #e2e4e6;
-  padding-left:
+  border-radius: 10px;
 }
 
 .todo-content{
@@ -104,7 +104,7 @@ h2 {
     border: solid 1px black;
 }
 
-.event_name{
+.event_name, .category{
   font-weight: bold;
 }
 
@@ -112,6 +112,16 @@ h2 {
   background-color:#bad4f6;
   cursor:pointer;
 }
+
+.event-container, #new-event-container, #new-todo-container{
+  border: 1px solid #ccc;
+  border-radius:10px;
+}
+
+#add-event-button{
+  text-align: center;
+}
+
 #edit_event{
   float:right;
 }
@@ -124,8 +134,7 @@ h2 {
     margin-top: 5%;
     /*width: 20%;*/
     padding: 10px;
-    border: 1px solid black;
-    border-radius:10px;
+
 
 }
 #input-new-tweet textarea {

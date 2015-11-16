@@ -32,6 +32,26 @@ router.param('event', function(req, res, next, eventId) {
     });
 });
 
+router.param('category', function (req, res, next, categoryId) {
+  if (categoryId) {
+    req.category = categoryId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
+
+router.param('cost', function (req, res, next, costId) {
+  if (costId) {
+    req.cost = costId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
+
+
+
 // Register the middleware handlers above
 router.all('*', requireAuthentication);
 
@@ -103,6 +123,18 @@ router.post('/', function(req, res) {
 */
 router.post('/:event/addcost', function (req, res) {
   // add cost to the event
+  if (!req.body.name || !req.body.amount) {
+    utils.sendErrResponse(res, 400, 'Name and amount are required.');
+  } else {
+    Event.addCost(req.event._id, req.body.name, req.body.amount, req.body.description,
+        function(err) {
+          if (err) {
+            utils.sendErrResponse(res, 500, err);
+          } else {
+            utils.sendSuccessResponse(res, true);
+          }
+        });
+  }
 });
 
 /*
@@ -115,6 +147,16 @@ router.post('/:event/addcost', function (req, res) {
 */
 router.post('/:event/addplanner', function(req, res) {
   // add another planner to the event
+  if (!req.body.planner) {
+    utils.sendErrResponse(res, 404, 'Planner is required');
+  }
+  Events.addPlanner(req.event._id, req.body.planner, function(err) {
+    if (err) {
+      utils.sendErrResponse(res, 404, err);
+    } else {
+      utils.sendSuccessResponse(res, true);
+    }
+  })
 });
 
 /*
@@ -127,6 +169,16 @@ router.post('/:event/addplanner', function(req, res) {
 */
 router.post('/:event/addinformation', function(req, res) {
   // add information to the event
+  if (!req.body.information) {
+    utils.sendErrResponse(res, 404, 'Information is required.');
+  }
+  Event.addInformation(req.event._id, information, function(err) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, true);
+    }
+  });
 });
 
 /*
@@ -138,9 +190,36 @@ router.post('/:event/addinformation', function(req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/addcategory', function (req, res) {
-
+  // Just add the category to the event.
+  Event.addCategory(req.event._id, function(err, id) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, id);
+    }
+  });
 });
 
+/*
+    POST /events/:event/addinvite
+    Request parameters:
+     - event ID: the unique ID of the event we're going to change
+    Response:
+     - success: true if server succeeded in adding information to the Event
+     - err: on failure, an error message
+*/
+router.post('/:event/addinvite', function (req, res) {
+  if (!req.body.attendee) {
+    utils.sendErrResponse(res, 400, 'Attendee email required.');
+  }
+  Event.addInvite(req.event._id, req.body.attendee, function(err) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, true);
+    }
+  });
+});
 /*
     POST /events/:event/category/:category/addtodo
     Request parameters:
@@ -151,7 +230,11 @@ router.post('/:event/addcategory', function (req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/category/:category/addtodo', function (req, res) {
-
+  if (!req.body.todo) {
+    utils.sendErrResponse(res, 500, 'Todo is required.');
+  }
+  // Add Event todo
+  // Event.addTodo()
 });
 
 /*
@@ -164,7 +247,7 @@ router.post('/:event/category/:category/addtodo', function (req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/cost/:cost', function(req, res) {
-
+  // Delete cost
 });
 
 /*
@@ -177,7 +260,7 @@ router.delete('/:event/cost/:cost', function(req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/planner/:planner', function(req, res) {
-
+  // Delete Planner
 });
 
 /*
@@ -190,7 +273,7 @@ router.delete('/:event/planner/:planner', function(req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/category/:category', function (req, res) {
-
+  // Delete category
 });
 
 /*
@@ -202,7 +285,7 @@ router.delete('/:event/category/:category', function (req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/category/:category/todo/:todo', function (req, res) {
-
+  // Delete todo
 });
 /*
     POST /events/:Event
@@ -213,9 +296,10 @@ router.delete('/:event/category/:category/todo/:todo', function (req, res) {
      - success: true if server succeeded in reeventing Event
      - err: on failure, an error message
 */
-router.post('/:event', function(req, res) {
-    // Update an event
-});
+// DISABLED FOR NOW...
+// router.post('/:event', function(req, res) {
+//     // Update an event
+// });
 
 /*
     DELETE /events/:event
@@ -227,6 +311,13 @@ router.post('/:event', function(req, res) {
 */
 router.delete('/:event', function(req, res) {
     // Delete the event and verify that its owned by the user
+    Event.deleteEvent(req.currentUser._id, req.event._id, function(err) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, true);
+      }
+    });
 });
 
 module.exports = router;

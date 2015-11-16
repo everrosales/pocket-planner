@@ -1,10 +1,17 @@
-{{#each categories}}
-  {{> todo}}
-{{else}}
-  <p><em>No todos yet!</em></p>
-{{/each}}
+<div id="category-container">
+  {{#each categories}}
+  <div class="column" id="todo-container">
+    <p class="category">{{name}}</p>
+    {{> todo}}
+  </div>
+  {{else}}
+    <p><em>No todos yet!</em></p>
+  {{/each}}
+  <div class="column btn btn-default" id="new_todo">
+    <p>+ Add a new To-Do list</p>
+  </div>
+  <div id="edit_event">
+    <p> edit event blabla</p>
 
-<div id="edit_event">
-  <p> edit event blabla</p>
-
+  </div>
 </div>
