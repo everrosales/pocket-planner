@@ -39,18 +39,13 @@ var isLoggedInOrInvalidBody = function(req, res) {
          of the logged in user.
      - err: on error, an error message
 */
-router.post('/login', function(req, res) {
-    if (isLoggedInOrInvalidBody(req, res)) {
-        return;
-    }
-    User.verifyPassword(req.body.username, req.body.password, function(err, match) {
-        if (match) {
-            req.session.username = req.body.username;
-            utils.sendSuccessResponse(res, { user: req.body.username });
-        } else {
-            utils.sendErrResponse(res, 403, "Username or password invalid.");
-        }
-    });
+router.post('/login', passport.authenticate('local'), function(req, res) {
+  if (req.user) {
+    req.session.username = req.user.username;
+    utils.sendSuccessResponse(res, { user: req.body.username });
+  } else {
+    utils.sendErrResponse(res, 403, "Username or password invalid.");
+  }
 });
 
 /*
