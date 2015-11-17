@@ -50,7 +50,7 @@ var userLoggedIn = function(req, res, next) {
 */
 router.post('/login', passport.authenticate('local-login', {//function(req, res) {
   successRedirect : '/users/loginsuccess',
-  failureRedirect : '/',
+  failureRedirect : '/users/loginfail',
   failureFlash : true,
 }));
 
@@ -68,6 +68,10 @@ router.get('/loginsuccess', userLoggedIn, function(req, res) {
   } else {
     utils.sendErrResponse(res, 403, "Username or password invalid.");
   }
+});
+
+router.get('/loginfail', function(req, res) {
+  utils.sendSuccessResponse(res, {message: 'Login failed'});
 });
 
 /*
@@ -106,10 +110,20 @@ router.post('/logout', function(req, res) {
      - err: on error, an error message
 */
 router.post('/', passport.authenticate('local-signup', {//function(req, res) {
-    successRedirect : '/',
-    failureRedirect : '/',
+    successRedirect : '/users/sigupsuccess', // Redirect to main page
+    failureRedirect : '/users/signupfail',
     failureFlash : true,
   }));
+
+// Redirected here to display message saying that signup was successful
+router.get('/users/signupsuccess', function(req, res) {
+  utils.sendSuccessResponse(res, {message: 'Signup success.'});
+});
+
+// Redirect here to display message saying that signup fail
+router.get('/user/signupfail', function(req, res) {
+  utils.sendSuccessResponse(res, {message: 'Signup fail.'});
+});
 
 /*
     Determine whether there is a current user logged in
