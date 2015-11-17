@@ -5,8 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var session = require('express-session');
+var flash = require('connect-flash');
 var passport = require('passport');
 require('handlebars/runtime');
+require('./config/passport')(passport)
 
 // Import route handlers
 var index = require('./routes/index');
@@ -42,26 +44,28 @@ app.use(cookieParser());
 app.use(session({ secret : 'sneakittysneaksneak', resave : true, saveUninitialized : true }));
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Passport configuration
 var LocalStrategy = require('passport-local').Strategy;
 
-passport.use(new LocalStrategy(function(email, password, done) {
-  User.verifyPassword(email, password, function(err, user) {
-    return done(err, user);
-  });
-}));
+// passport.use(new LocalStrategy(function(email, password, done) {
+//   User.verifyPassword(email, password, function(err, user) {
+//     return done(err, user);
+//   });
+// }));
+//
+// passport.serializeUser(function(user, done) {
+//   done(null, user.email);
+// });
+//
+// passport.deserializeUser(function(email, done) {
+//   User.findByEmail(email, function(err, user) {
+//     done(err, user);
+//   });
+// });
 
-passport.serializeUser(function(user, done) {
-  done(null, user.email);
-});
-
-passport.deserializeUser(function(email, done) {
-  User.findByEmail(email, function(err, user) {
-    done(err, user);
-  });
-});
 //TODO remove old fritter authen
 app.use(function(req, res, next) {
     if (req.session.username) {

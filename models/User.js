@@ -2,6 +2,7 @@
 var User = (function User() {
     var mongoose = require('mongoose');
     var Schema = require('mongoose').Schema;
+    var bcrypt = require('bcrypt-nodejs');
 
     var userSchema = new Schema({
         username    : String,
@@ -88,8 +89,8 @@ var User = (function User() {
         _ifUserExists(email, function(err, exists) {
             if(exists) {
                 _getUser(email, function(err, user) {
-                    if (user.password === candidatepw) {
-                        callback(null, user);
+                    if (_validPassword(user, candidatepw)) {
+                        callback(null, true);
                     } else {
                         callback(null, false);
                     }
@@ -105,6 +106,7 @@ var User = (function User() {
             if (exists) {
                 callback({ taken: true});
             } else {
+              password = _generateHash(password);
                 _model.create({
                     'username' : username,
                     'email'    : email,
@@ -113,6 +115,18 @@ var User = (function User() {
             }
         });
     };
+
+    //TODO(erosales): Write tests for generateHash
+    // Generate a hash of the password
+    var _generateHash = function(password) {
+      return bcrypt.hashSync(password, bcrypt.genSaltSync(8), null);
+    }
+
+    // TODO(erosales): Write tests for validPassword
+    // Validate my password
+    var _validPassword = function(user, password) {
+      return bcrypt.compareSync(password, user.password);
+    }
 
     // for testing, because apparently mocha tests aren't automatically independent >.<
     var _clearAllUsers = function(callback) {
@@ -126,6 +140,8 @@ var User = (function User() {
         verifyPassword                  : _verifyPassword,
         createNewUser                   : _createNewUser,
         clearAllUsers                   : _clearAllUsers,
+        generateHash                    : _generateHash,
+        validPassword                   : _validPassword,
     };
 })();
 

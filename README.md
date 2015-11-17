@@ -76,3 +76,15 @@ DELETE
 /event/:event/category/:category          // Delete a category from an event
 /event/:event/category/:category/todo/:todo // Delete a todo from a category
 ```
+
+Development
+-----------
+First make sure that your environment is up to date
+'''
+~$ npm install
+'''
+
+To run in developer mode:
+'''
+~$ npm run-script start-dev
+'''

@@ -10,7 +10,7 @@ var Event = require('../models/Event');
     clients who are not logged in will receive 403 error
 */
 var requireAuthentication = function(req, res, next) {
-    if (!req.currentUser) {
+    if (!req.isAuthenticated()) {
         utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
     } else {
         next();
@@ -287,21 +287,21 @@ router.delete('/:event', function(req, res) {
      - err: on failure, an error message
 */
 router.get('/', function(req, res) {
-    var response_data = {};
     // Find all of the events that are visible to the user
-    User.getEvents(req.currentUser.username, function(err, my_events) {
+    Event.getEventsByUserId(req.currentUser._id, function(err, my_events) {
         if (err) {
             utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
             my_events.forEach(function(event) {
+                //TODO(erosales): Change this according to what is actualy stored to check user
                 if (event.author === req.currentUser.username) {
                     event.is_mine = true;
                 } else {
                     event.is_mine = false;
                 }
             });
-            response_data.my_events = my_events.reverse();
-            utils.sendSuccessResponse(res, response_data);
+            my_events = my_events.reverse();
+            utils.sendSuccessResponse(res, my_events);
         }
     });
 });
@@ -342,6 +342,4 @@ router.post('/', function(req, res) {
       utils.sendSuccessResponse(res, event);
     });
 });
-
-
 module.exports = router;

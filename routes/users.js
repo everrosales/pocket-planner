@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var utils = require('../utils/utils');
+var passport = require('passport');
 
 var User = require('../models/User');
 
@@ -21,6 +22,14 @@ var isLoggedInOrInvalidBody = function(req, res) {
     return false;
 };
 
+var userLoggedIn = function(req, res, next) {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  // If someone tries to hit this page without being authenticated redirect to home page
+  res.redirect('/');
+}
+
 /*
     This function checks to see that the provided username-password combination
     is valid. for empty username/password, or if the combination is not correct,
@@ -39,13 +48,30 @@ var isLoggedInOrInvalidBody = function(req, res) {
          of the logged in user.
      - err: on error, an error message
 */
-router.post('/login', passport.authenticate('local'), function(req, res) {
+router.post('/login', passport.authenticate('local-login', {//function(req, res) {
+  successRedirect : '/users/loginsuccess',
+  failureRedirect : '/users/loginfail',
+  failureFlash : true,
+}));
+
+/*
+  GET /users/loginsuccess
+  Response:
+    - success: sets the corresponding session information
+*/
+router.get('/loginsuccess', userLoggedIn, function(req, res) {
+  // While this looks bad, the userLoggedIn middleware will redirect
+  // if the user is not authenticated
   if (req.user) {
     req.session.username = req.user.username;
-    utils.sendSuccessResponse(res, { user: req.body.username });
+    utils.sendSuccessResponse(res, { user: req.user.username });
   } else {
     utils.sendErrResponse(res, 403, "Username or password invalid.");
   }
+});
+
+router.get('/loginfail', function(req, res) {
+  utils.sendSuccessResponse(res, {message: 'Login failed'});
 });
 
 /*
@@ -83,42 +109,20 @@ router.post('/logout', function(req, res) {
      - success: true if user creation succeeded, false otherwise
      - err: on error, an error message
 */
-router.post('/', function(req, res) {
-    if (isLoggedInOrInvalidBody(req, res)) {
-        return;
-    }
+router.post('/', passport.authenticate('local-signup', {//function(req, res) {
+    successRedirect : '/users/sigupsuccess', // Redirect to main page
+    failureRedirect : '/users/signupfail',
+    failureFlash : true,
+  }));
 
-    User.createNewUser(req.body.username, req.body.password, function(err) {
-        if (err) {
-            if (err.taken) {
-                utils.sendErrResponse(res, 400, 'That username is already taken!');
-            } else {
-                utils.sendErrResponse(res, 500, 'An unknown error has occurred.');
-            }
-        } else {
-            utils.sendSuccessResponse(res, req.body.username);
-        }
-    });
+// Redirected here to display message saying that signup was successful
+router.get('/users/signupsuccess', function(req, res) {
+  utils.sendSuccessResponse(res, {message: 'Signup success.'});
 });
 
-router.post('/subscribe', function(req, res) {
-    User.addSubscribe(req.currentUser.username, req.body.username, function(err, result) {
-        if (err) {
-            utils.sendErrResponse(res, 404, err.msg);
-        } else {
-            utils.sendSuccessResponse(res);
-        }
-    });
-});
-
-router.delete('/subscribe/:username', function(req, res) {
-    User.removeSubscribe(req.currentUser.username, req.params.username, function(err, result) {
-        if (err) {
-            utils.sendErrResponse(res, 404, err.msg);
-        } else {
-            utils.sendSuccessResponse(res);
-        }
-    });
+// Redirect here to display message saying that signup fail
+router.get('/user/signupfail', function(req, res) {
+  utils.sendSuccessResponse(res, {message: 'Signup fail.'});
 });
 
 /*
