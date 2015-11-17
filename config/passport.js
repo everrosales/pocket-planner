@@ -27,7 +27,7 @@ var internalPassport = function(passport) {
           } else {
             User.createNewUser(email, password, email, function(err, newUser) {
               if (err) {
-                throw err;
+                return  done(err);
               }
               return done(null, newUser);
             });
