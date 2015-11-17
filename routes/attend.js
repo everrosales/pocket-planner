@@ -55,6 +55,7 @@ router.param('accessCode', function(req, res, next, accessCode) {
 */
 router.post('/:event/:accessCode', function(req, res) {
     // Mark attendance for event for private events given an access code.
+    utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -68,6 +69,7 @@ router.post('/:event/:accessCode', function(req, res) {
 */
 router.post('/:event', function(req, res) {
     // Mark attendance for event
+    utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -80,6 +82,7 @@ router.post('/:event', function(req, res) {
 */
 router.get('/:event', function(req, res) {
     // Get the event attendance opions for a particular event
+    utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 module.exports = router;

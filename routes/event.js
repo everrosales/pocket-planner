@@ -1,5 +1,5 @@
 var express = require('express');
-var router = express.Router();
+var router = express.Router({mergeParams:true});
 var utils = require('../utils/utils');
 
 var User = require('../models/User');
@@ -61,57 +61,6 @@ router.all('*', requireAuthentication);
   2. If accessing or modifying a specific resource, the client must own that event
   3. Requests are well-formed
 */
-
-/*
-    GET /events
-    No request parameters
-    Response:
-     - success: true if the server succeeded in getting the user's events
-     - content: on success, an object with a single field 'events' which contains
-            user's events
-     - err: on failure, an error message
-*/
-router.get('/', function(req, res) {
-    var response_data = {};
-    // Find all of the events that are visible to the user
-    User.getEvents(req.currentUser.username, function(err, my_events) {
-        if (err) {
-            utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-        } else {
-            my_events.forEach(function(event) {
-                if (event.author === req.currentUser.username) {
-                    event.is_mine = true;
-                } else {
-                    event.is_mine = false;
-                }
-            });
-            response_data.my_events = my_events.reverse();
-            utils.sendSuccessResponse(res, response_data);
-        }
-    });
-});
-
-/*
-    POST /events
-    Request body:
-     - content: the content of the event
-    Response:
-     - success: true if the server succeeded in recording the user's event
-     - err: on failure, an error message
-*/
-router.post('/', function(req, res) {
-    // if (!req.body.content) {
-    //     utils.sendErrResponse(res, 400, 'Content required in request.');
-    // }
-    // Create a new event
-    if (!req.body.email || !req.body.name || !req.body.time) {
-      utils.sendErrResponse(res, 400, 'Email, name and time required in request');
-    }
-
-    Event.createNewEvent(req.body.email, req.body.name, req.body.time, function(err, event) {
-      utils.sendSuccessResponse(res, event);
-    });
-});
 
 /*
     POST /events/:event/addcost
@@ -220,6 +169,7 @@ router.post('/:event/addinvite', function (req, res) {
     }
   });
 });
+
 /*
     POST /events/:event/category/:category/addtodo
     Request parameters:
@@ -235,6 +185,7 @@ router.post('/:event/category/:category/addtodo', function (req, res) {
   }
   // Add Event todo
   // Event.addTodo()
+  utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -248,6 +199,7 @@ router.post('/:event/category/:category/addtodo', function (req, res) {
 */
 router.delete('/:event/cost/:cost', function(req, res) {
   // Delete cost
+  utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -261,6 +213,7 @@ router.delete('/:event/cost/:cost', function(req, res) {
 */
 router.delete('/:event/planner/:planner', function(req, res) {
   // Delete Planner
+  utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -274,6 +227,7 @@ router.delete('/:event/planner/:planner', function(req, res) {
 */
 router.delete('/:event/category/:category', function (req, res) {
   // Delete category
+  utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -285,8 +239,10 @@ router.delete('/:event/category/:category', function (req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/category/:category/todo/:todo', function (req, res) {
-  // Delete todo
+    // Delete todo
+    utils.sendErrResponse(res, 404, 'Route not configured');
 });
+
 /*
     POST /events/:Event
     Request parameters:
@@ -299,6 +255,7 @@ router.delete('/:event/category/:category/todo/:todo', function (req, res) {
 // DISABLED FOR NOW...
 // router.post('/:event', function(req, res) {
 //     // Update an event
+//     utils.sendErrResponse(res, 404, 'Route not configured');
 // });
 
 /*
@@ -319,5 +276,72 @@ router.delete('/:event', function(req, res) {
       }
     });
 });
+
+/*
+    GET /events
+    No request parameters
+    Response:
+     - success: true if the server succeeded in getting the user's events
+     - content: on success, an object with a single field 'events' which contains
+            user's events
+     - err: on failure, an error message
+*/
+router.get('/', function(req, res) {
+    var response_data = {};
+    // Find all of the events that are visible to the user
+    User.getEvents(req.currentUser.username, function(err, my_events) {
+        if (err) {
+            utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+            my_events.forEach(function(event) {
+                if (event.author === req.currentUser.username) {
+                    event.is_mine = true;
+                } else {
+                    event.is_mine = false;
+                }
+            });
+            response_data.my_events = my_events.reverse();
+            utils.sendSuccessResponse(res, response_data);
+        }
+    });
+});
+
+/*
+    GET /events/:event
+    Parameters
+     - event: event id whose record will be looked up
+    Response:
+     - success: true if the server succeeded in getting the user's events
+     - content: on success, an object with a single field 'events' which contains
+            user's events
+     - err: on failure, an error message
+*/
+router.get('/:event', function(req, res) {
+  if (!req.event) {
+    utils.sendErrResponse(res, 404, "Invalid event id.");
+  } else {
+    utils.sendSuccessResponse(res, req.event);
+  }
+})
+
+/*
+    POST /events
+    Request body:
+     - content: the content of the event
+    Response:
+     - success: true if the server succeeded in recording the user's event
+     - err: on failure, an error message
+*/
+router.post('/', function(req, res) {
+    // Create a new event
+    if (!req.body.email || !req.body.name || !req.body.time) {
+      utils.sendErrResponse(res, 400, 'Email, name and time required in request');
+    }
+
+    Event.createNewEvent(req.body.email, req.body.name, req.body.time, function(err, event) {
+      utils.sendSuccessResponse(res, event);
+    });
+});
+
 
 module.exports = router;
