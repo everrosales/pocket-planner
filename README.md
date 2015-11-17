@@ -5,6 +5,8 @@ Files Structure
 ```
 bin/
   > www
+config/
+  > passport.js
 documents/
   agenda/
     > agenda-nov-16.pdf
@@ -76,15 +78,29 @@ DELETE
 /event/:event/category/:category          // Delete a category from an event
 /event/:event/category/:category/todo/:todo // Delete a todo from a category
 ```
+Summary of  user.js routes.
+```
+GET
+/users/loginsuccess     // Redirected here upon successful login (auth checked)
+/users/loginfail        // Redirected here upon failed login
+/users/signupsuccess    // Redirected here upon successful signup
+/users/signupfail       // Redirected here upon failed signup
+/current
+
+POST
+/users                  // Create a new user
+/users/login            // Authenticate user
+/users/logout           // Logout user and destroy session
+```
 
 Development
 -----------
 First make sure that your environment is up to date
-'''
+```
 ~$ npm install
-'''
+```
 
 To run in developer mode:
-'''
+```
 ~$ npm run-script start-dev
-'''
+```
