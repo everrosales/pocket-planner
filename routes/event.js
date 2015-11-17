@@ -268,7 +268,7 @@ router.delete('/:event/category/:category/todo/:todo', function (req, res) {
 */
 router.delete('/:event', function(req, res) {
     // Delete the event and verify that its owned by the user
-    Event.deleteEvent(req.currentUser._id, req.event._id, function(err) {
+    Event.deleteEvent(req.currentUser._id, req.data.event_id, function(err) {
       if (err) {
         utils.sendErrResponse(res, 500, err);
       } else {
@@ -288,8 +288,10 @@ router.delete('/:event', function(req, res) {
 */
 router.get('/', function(req, res) {
     // Find all of the events that are visible to the user
-    Event.getEventsByUserId(req.currentUser._id, function(err, my_events) {
+    console.log(req.currentUser);
+    Event.getEventsByUser(req.currentUser.email, function(err, my_events) {
         if (err) {
+          console.log("sending get events error");
             utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
             my_events.forEach(function(event) {
@@ -335,11 +337,14 @@ router.get('/:event', function(req, res) {
 router.post('/', function(req, res) {
     // Create a new event
     if (!req.body.email || !req.body.name || !req.body.time) {
-      utils.sendErrResponse(res, 400, 'Email, name and time required in request');
+      console.log("sending err response");
+      utils.sendErrResponse(res, 400, 'Email, name, and time required.');
+    }else{
+      Event.createNewEvent(req.body.email, req.body.name, req.body.time, function(err, event) {
+        utils.sendSuccessResponse(res, event);
+      });
     }
 
-    Event.createNewEvent(req.body.email, req.body.name, req.body.time, function(err, event) {
-      utils.sendSuccessResponse(res, event);
-    });
+
 });
 module.exports = router;

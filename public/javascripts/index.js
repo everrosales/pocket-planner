@@ -31,25 +31,32 @@ var loadHomePage = function() {
 };
 
 var loadEventsPage = function() {
-
-
     //get request for events. replace my_events with results
     //
-    loadPage('events', {
-      my_events: [
-        {
-          name: "Birthday party",
-          description: "it's gonna be awesome!",
-          location: "3 Ames St"},
-        {
-          name: "Fundraiser",
-          description: "we gonna make cash moniez",
-          location: "Media Lab"
-        }
-      ],
-      title: "Your Events"
+    $.get('/events', function(response){
+      console.log(response.content);
+      results = [];
+      response.content.forEach(function(e){
+        results.push(e);
+      });
+      results.forEach(function(r){
+        console.log(r.date);
+        r.date = new Date(r.date);
+        r.time = r.date.toLocaleTimeString();
+        var tmp_time = r.time.split(' ');
+        var am_pm = tmp_time[1];
+        tmp_time = r.time.split(':');
+        r.time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+        r.date = r.date.toLocaleDateString();
 
+      })
+      loadPage('events', {
+        my_events: response.content,
+        title: "Your Events"
+
+      });
     });
+
 };
 
 $(document).ready(function() {
@@ -62,12 +69,7 @@ $(document).ready(function() {
 
 });
 
-$(document).on('click', '#new_event', function(){
-  $('#new_event').remove();
-  var htmlStr = "<div class='column' id='new-event-container'><div class='event'><input type='text' placeholder='Event name'><br><input type='text' placeholder='Event time'><br><input type='text' placeholder='Description'><br><div class='btn btn-default' id='add-event-button'>Add event</div><div class='btn btn-default' id='cancel-event-button'>Cancel</div></div></div>";
-  $(htmlStr).appendTo("#events");
 
-});
 
 $(document).on('click', '#new_todo', function() {
   $('#new_todo').remove();
@@ -75,21 +77,12 @@ $(document).on('click', '#new_todo', function() {
   $(htmlStr).appendTo('#category-container');
 });
 
-$(document).on('click', '#cancel-event-button', function(){
-  $('#new-event-container').remove();
-  var htmlStr = '<div class="column btn btn-default" id="new_event"><p>+ Add a new event</p></div>';
-  $(htmlStr).appendTo('#events');
-});
+
 
 $(document).on('click', '#cancel-todo-button', function(){
   $('#new-todo-container').remove();
   var htmlStr = '<div class="column btn btn-default" id="new_todo"><p>+ Add a new To-Do list</p></div>';
   $(htmlStr).appendTo('#category-container');
-});
-
-$(document).on('click', '#add-event-button', function() {
-  //add event
-  loadEventsPage();
 });
 
 $(document).on('click', '.event-container', function(){

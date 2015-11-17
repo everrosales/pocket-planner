@@ -68,6 +68,7 @@ var Event = (function Event() {
     };
 
     var _getEventsByUserId = function(userid, callback) {
+      console.log("Event.js getting events");
         _model.find({$or:[{'host':userid}, {'planners':userid}]}, callback);
     };
 
