@@ -110,18 +110,18 @@ router.post('/logout', function(req, res) {
      - err: on error, an error message
 */
 router.post('/', passport.authenticate('local-signup', {//function(req, res) {
-    successRedirect : '/users/sigupsuccess', // Redirect to main page
+    successRedirect : '/users/signupsuccess', // Redirect to main page
     failureRedirect : '/users/signupfail',
     failureFlash : true,
   }));
 
 // Redirected here to display message saying that signup was successful
-router.get('/users/signupsuccess', function(req, res) {
+router.get('/signupsuccess', function(req, res) {
   utils.sendSuccessResponse(res, {message: 'Signup success.'});
 });
 
 // Redirect here to display message saying that signup fail
-router.get('/user/signupfail', function(req, res) {
+router.get('/signupfail', function(req, res) {
   utils.sendSuccessResponse(res, {message: 'Signup fail.'});
 });
 
