@@ -89,8 +89,8 @@ var User = (function User() {
         _ifUserExists(email, function(err, exists) {
             if(exists) {
                 _getUser(email, function(err, user) {
-                    if (user.password === candidatepw) {
-                        callback(null, user);
+                    if (_validPassword(user, candidatepw)) {
+                        callback(null, true);
                     } else {
                         callback(null, false);
                     }

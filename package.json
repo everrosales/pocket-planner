@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "test": "mocha ./test/test.js",
     "start": "node ./bin/www",
     "start-dev": "handlebars templates/.* -f public/javascripts/templates.js && nodemon ./bin/www"
   },

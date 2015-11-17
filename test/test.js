@@ -29,7 +29,7 @@ describe('User', function() {
         it('should return created user', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(error, result) {
                 assert.deepEqual(result.email, 'erosolar@mit.edu');
-                assert.deepEqual(result.password, 'blah');
+                assert.ok(User.validPassword(result, 'blah'));
                 assert.deepEqual(result.username, 'erosolar');
                 done();
             });
@@ -50,7 +50,7 @@ describe('User', function() {
                 User.findByEmail('erosolar@mit.edu', function(error, result) {
                     assert.deepEqual(error, null);
                     assert.deepEqual(result.email, 'erosolar@mit.edu');
-                    assert.deepEqual(result.password, 'blah');
+                    assert.ok(User.validPassword(result, 'blah'));
                     done();
                 });
             });
@@ -70,7 +70,7 @@ describe('User', function() {
                     assert.deepEqual(error, null);
                     assert.deepEqual(result.username, 'erosolar');
                     assert.deepEqual(result.email, 'erosolar@mit.edu');
-                    assert.deepEqual(result.password, 'blah');
+                    assert.ok(User.validPassword(result, 'blah'));
                     done();
                 });
             });
@@ -84,7 +84,7 @@ describe('User', function() {
     });
 
     describe('#verifyPassword', function() {
-        it('should return true if the given password matches', function(done) {
+        it('should return true if the given password is valid', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
                 User.verifyPassword('erosolar@mit.edu', 'blah', function(err, result) {
                     assert.deepEqual(err, undefined);
