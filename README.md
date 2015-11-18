@@ -65,7 +65,7 @@ POST
 /event                                    // Create an event
 /event/:event/addcost                     // Add a cost to an event
 /event/:event/addplanner                  // Add a planner to an event
-/event/:event/addinformation              // Add information to an event
+/event/:event/setInformation              // Add information to an event
 /event/:event/addcategory                 // Add a category to an event
 /event/:event/addinvite                   // Add an invite to an event
 /event/:event/category/:category/addtodo  // Add a todo to a category
