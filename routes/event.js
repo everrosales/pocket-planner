@@ -118,19 +118,19 @@ router.post('/:event/addplanner', function(req, res) {
 });
 
 /*
-    POST /events/:event/addinformation
+    POST /events/:event/setInformation
     Request parameters:
      - event ID: the unique ID of the event we're going to change
     Response:
      - success: true if server succeeded in adding information to the Event
      - err: on failure, an error message
 */
-router.post('/:event/addinformation', function(req, res) {
+router.post('/:event/setInformation', function(req, res) {
   // add information to the event
   if (!req.body.information) {
     utils.sendErrResponse(res, 404, 'Information is required.');
   }
-  Event.addInformation(req.event._id, information, function(err) {
+  Event.setInformation(req.event._id, information, function(err) {
     if (err) {
       utils.sendErrResponse(res, 500, err);
     } else {
