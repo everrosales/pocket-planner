@@ -41,6 +41,15 @@ router.param('category', function (req, res, next, categoryId) {
   }
 });
 
+router.param('todo', function(req, res, next, todoId) {
+  if (todoId) {
+    req.todo = todoId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
+
 router.param('cost', function (req, res, next, costId) {
   if (costId) {
     req.cost = costId;
@@ -139,8 +148,11 @@ router.post('/:event/addinformation', function(req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/addcategory', function (req, res) {
+  if (!req.body.name) {
+    utils.sendErrResponse(res, 500, 'Name is required.');
+  }
   // Just add the category to the event.
-  Event.addCategory(req.event._id, function(err, id) {
+  Event.addCategory(req.event._id, req.body.name, function(err, id) {
     if (err) {
       utils.sendErrResponse(res, 500, err);
     } else {
@@ -180,12 +192,60 @@ router.post('/:event/addinvite', function (req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/category/:category/addtodo', function (req, res) {
-  if (!req.body.todo) {
-    utils.sendErrResponse(res, 500, 'Todo is required.');
+  if (!req.body.name || !req.body.deadline) {
+    utils.sendErrResponse(res, 500, 'Name and deadline are required.');
   }
   // Add Event todo
-  // Event.addTodo()
-  utils.sendErrResponse(res, 404, 'Route not configured');
+  Event.addTodo(req.event, req.category, req.body.name, req.body.deadline, req.body.priority,
+      function(err, newTodo) {
+        if (err) {
+          utils.sendErrResponse(res, 500, err);
+        } else {
+          utils.sendSuccessResponse(res, newTodo);
+        }
+      });
+});
+
+/*
+    POST /events/:event/category/:category/todo/:todo/check
+    Request parameters:
+     - event ID: the unique ID of the event we're going to modify
+     - category: the category that we are going to modify
+     - todo: todo which is going to be marked as checked
+
+    Response:
+     - success: true if server succeeded in marking todo
+     - err: on failure, an error message
+*/
+router.post('/:event/category/:category/todo/:todo/check', function(req, res) {
+  Event.checkTodo(req.event, req.category, req.todo, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
+});
+
+/*
+    POST /events/:event/category/:category/todo/:todo/uncheck
+    Request parameters:
+     - event ID: the unique ID of the event we're going to modify
+     - category: the category that we are going to modify
+     - todo: todo which is going to be marked as unchecked
+
+    Response:
+     - success: true if server succeeded in marking todo
+     - err: on failure, an error message
+*/
+router.post('/:event/category/:category/todo/:todo/uncheck', function(req, res) {
+  Event.uncheckTodo(req.event, req.category, req.todo, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
 });
 
 /*
@@ -227,7 +287,13 @@ router.delete('/:event/planner/:planner', function(req, res) {
 */
 router.delete('/:event/category/:category', function (req, res) {
   // Delete category
-  utils.sendErrResponse(res, 404, 'Route not configured');
+  Event.deleteCategory(req.event, req.category, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
 });
 
 /*
@@ -240,7 +306,13 @@ router.delete('/:event/category/:category', function (req, res) {
 */
 router.delete('/:event/category/:category/todo/:todo', function (req, res) {
     // Delete todo
-    utils.sendErrResponse(res, 404, 'Route not configured');
+    Event.deleteTodo(req.event, req.category, req.todo, function(err, success) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, success);
+      }
+    });
 });
 
 /*

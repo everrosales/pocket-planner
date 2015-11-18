@@ -70,6 +70,8 @@ POST
 /event/:event/addcategory                 // Add a category to an event
 /event/:event/addinvite                   // Add an invite to an event
 /event/:event/category/:category/addtodo  // Add a todo to a category
+/event/:event/category/:category/todo/:todo/check // Marks todo as checked
+/event/:event/category/:category/todo/:todo/uncheck // Marks todo as unchecked
 
 DELETE
 /event/:event                             // Delete an event
@@ -95,6 +97,7 @@ POST
 
 Development
 -----------
+### Environment
 First make sure that your environment is up to date
 ```
 ~$ npm install

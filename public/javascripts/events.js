@@ -22,8 +22,14 @@
     var event_name = $('#event-name').val();
     var event_date = $('#event-date').datepicker("getDate");
     var hr_min = ($('#event-time').val()).split(':');
-    event_date.setHours(parseInt(hr_min[0]));
-    event_date.setMinutes(parseInt(hr_min[1]));
+    var hour = parseInt(hr_min[0]);
+    var min = parseInt(hr_min[1]);
+    if (hour) {
+      event_date.setHours(parseInt(hr_min[0]));
+    }
+    if (min) {
+      event_date.setMinutes(parseInt(hr_min[1]));
+    }
     var data = {email: currentUser, name: event_name, time: event_date};
     $.post('/events', data).done(function(response){
       console.log("success!");
