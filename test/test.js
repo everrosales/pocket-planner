@@ -538,6 +538,187 @@ describe('Event', function() {
         });
     });
 
+    describe('#getAttendingCount', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.getAttendingCount(0, function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return 0 if no one invited', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.getAttendingCount(n_event._id, function(err, result) {
+                        assert.deepEqual(err, null);
+                        assert.deepEqual(result, 0);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should return 0 if no one attending', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
+                        Event.getAttendingCount(n_event._id, function(err, result) {
+                            assert.deepEqual(err, null);
+                            assert.deepEqual(result, 0);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('should return as many people as are attending', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blah', function() {
+                        Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
+                            Event.getAttendingCount(n_event._id, function(err, result) {
+                                assert.deepEqual(err, null);
+                                assert.deepEqual(result, 2);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    describe('#getInvitedCount', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.getInvitedCount(0, function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return 0 if no one invited', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.getInvitedCount(n_event._id, function(err, result) {
+                        assert.deepEqual(err, null);
+                        assert.deepEqual(result, 0);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should return the number of invited people (regardless of attending status)', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
+                        Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
+                            Event.getInvitedCount(n_event._id, function(err, result) {
+                                assert.deepEqual(err, null);
+                                assert.deepEqual(result, 2);
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
+    describe('#getAttendeeEmails', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.getAttendeeEmails(0, function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return [] if no one invited', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.getAttendeeEmails(n_event._id, function(err, result) {
+                        assert.deepEqual(err, null);
+                        assert.deepEqual(result, []);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should return [] if no one attending', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
+                        Event.getAttendeeEmails(n_event._id, function(err, result) {
+                            assert.deepEqual(err, null);
+                            assert.deepEqual(result, []);
+                            done();
+                        });
+                    });
+                });
+            });
+        });
+        it('should return all emails of attendees', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blah', function() {
+                        Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
+                            Event.getAttendeeEmails(n_event._id, function(err, result) {
+                                assert.deepEqual(err, null);
+                                assert.deepEqual(result.length, 2);
+                                if (result[0] === 'erosales@mit.edu') {
+                                    assert.deepEqual(result[0], 'erosales@mit.edu');
+                                    assert.deepEqual(result[1], 'ajliu@mit.edu');
+                                } else {
+                                    assert.deepEqual(result[0], 'ajliu@mit.edu');
+                                    assert.deepEqual(result[1], 'erosales@mit.edu');
+                                }
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+
+    });
+
+    describe('#getInviteeEmails', function() {
+        it('should return a no event error if event doesn\'t exist', function(done) {
+            Event.getAttendeeEmails(0, function(err, result) {
+                assert.deepEqual(err.msg, "No such event.");
+                done();
+            });
+        });
+        it('should return [] if no one invited', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.getInviteeEmails(n_event._id, function(err, result) {
+                        assert.deepEqual(err, null);
+                        assert.deepEqual(result, []);
+                        done();
+                    });
+                });
+            });
+        });
+        it('should return the number of invited people (regardless of attending status)', function(done) {
+            User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
+                        Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
+                            Event.getInviteeEmails(n_event._id, function(err, result) {
+                                assert.deepEqual(err, null);
+                                assert.deepEqual(result.length, 2);
+                                if (result[0] === 'erosales@mit.edu') {
+                                    assert.deepEqual(result[0], 'erosales@mit.edu');
+                                    assert.deepEqual(result[1], 'ajliu@mit.edu');
+                                } else {
+                                    assert.deepEqual(result[0], 'ajliu@mit.edu');
+                                    assert.deepEqual(result[1], 'erosales@mit.edu');
+                                }
+                                done();
+                            });
+                        });
+                    });
+                });
+            });
+        });
+    });
+
     describe('#addCategory', function() {
         it('should return a no event error if event doesn\'t exist', function(done) {
             Event.addCategory(0, 'venue', function(err, result) {

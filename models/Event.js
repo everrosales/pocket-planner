@@ -177,6 +177,11 @@ var Event = (function Event() {
         });
     };
 
+    //TODO(erosolar): implement this
+    var _deletePlanner = function(eventid, plannerid, callback) {
+
+    };
+
     //description is optional
     var _addCost = function(eventid, name, amount, description, callback) {
         var cost = {
@@ -191,6 +196,11 @@ var Event = (function Event() {
                 callback({msg: "No such event."});
             }
         });
+    };
+
+    //TODO(erosolar): implement this
+    var _deleteCost = function(eventid, costid, callback) {
+
     };
 
     var _addInvite = function(eventid, attendee_email, callback) {
@@ -251,6 +261,63 @@ var Event = (function Event() {
                                       });
             } else {
                 callback({msg: "No such event."});
+            }
+        });
+    };
+
+    var _getAttendingCount = function(eventid, callback) {
+        _getEvent(eventid, function(err, given_event) {
+            if (err) {
+                callback(err);
+            } else {
+                var attending = given_event.attendees.filter(function(attendee) {
+                    if (attendee.attending == 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+                callback(err, attending.length);
+            }
+        });
+    };
+
+    var _getInvitedCount = function(eventid, callback) {
+        _getEvent(eventid, function(err, event) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(err, event.attendees.length);
+            }
+        });
+    };
+
+    var _getInviteeEmails = function(eventid, callback) {
+        _getEvent(eventid, function(err, event) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(err, event.attendees.map(function(attendee) {
+                    return attendee.email;
+                }));
+            }
+        });
+    };
+
+    var _getAttendeeEmails = function(eventid, callback) {
+        _getEvent(eventid, function(err, event) {
+            if (err) {
+                callback(err);
+            } else {
+                callback(err, event.attendees.filter(function(attendee) {
+                    if (attendee.attending === 1) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                }).map(function(attendee) {
+                    return attendee.email;
+                }));
             }
         });
     };
@@ -377,6 +444,10 @@ var Event = (function Event() {
         addInvite           : _addInvite,
         markAttending       : _markAttending,
         markNotAttending    : _markNotAttending,
+        getAttendingCount   : _getAttendingCount,
+        getInvitedCount     : _getInvitedCount,
+        getInviteeEmails    : _getInviteeEmails,
+        getAttendeeEmails   : _getAttendeeEmails,
         addTodo             : _addTodo,
         addCategory         : _addCategory,
         checkTodo           : _checkTodo,
