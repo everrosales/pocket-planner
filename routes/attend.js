@@ -68,8 +68,29 @@ router.post('/:event/:accessCode', function(req, res) {
      - err: on failure, an error message
 */
 router.post('/:event', function(req, res) {
-    // Mark attendance for event
-    utils.sendErrResponse(res, 404, 'Route not configured');
+  // Mark attendance for event
+  if (!req.body.email) {
+    utils.sendErrResponse(res, 500, 'Email required.');
+  } else {
+    if (req.body.attending) {
+      Event.markAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(err, result);
+        }
+      });
+    } else {
+      Event.markNotAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
+        if (err) {
+          callback(err);
+        } else {
+          callback(err, result);
+        }
+      });
+    }
+  }
+  utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
 /*
@@ -81,8 +102,8 @@ router.post('/:event', function(req, res) {
      - err: on failure, an error message
 */
 router.get('/:event', function(req, res) {
-    // Get the event attendance opions for a particular event
-    utils.sendErrResponse(res, 404, 'Route not configured');
+  // Get the event attendance opions for a particular event
+  res.render('attend', {});
 });
 
 module.exports = router;

@@ -56,7 +56,6 @@ views/
 Routes
 ------
 Summary of event.js routes. All of these routes require user authentication.
-
 ```
 GET
 /event                                    // Get all events for a user
@@ -93,6 +92,15 @@ POST
 /users                  // Create a new user
 /users/login            // Authenticate user
 /users/logout           // Logout user and destroy session
+```
+Summary of attend.js routes.
+```
+GET
+/attend/:event              // Get the invitee page
+
+POST
+/attend/:event              // Mark user attending
+/attend/:event/:accessCode  // Mark user attending with access code [Not Implemented]
 ```
 
 Development
