@@ -318,17 +318,25 @@ router.delete('/:event/category/:category/todo/:todo', function (req, res) {
 /*
     POST /events/:Event
     Request parameters:
-     - event ID: the unique ID of the event we're going to reevent
-     - username: the user who is reeventing the Event
+     - event ID: the unique ID of the event we're going to update
     Response:
-     - success: true if server succeeded in reeventing Event
+     - success: true if server succeeded in updating Event
      - err: on failure, an error message
 */
-// DISABLED FOR NOW...
-// router.post('/:event', function(req, res) {
-//     // Update an event
-//     utils.sendErrResponse(res, 404, 'Route not configured');
-// });
+router.post('/:event', function(req, res) {
+  if (!req.body.information) {
+    utils.sendErrResponse(res, 500, 'Information required.');
+  } else {
+    // Update an event
+    Event.setInformation(req.event, req.body.information, function(err, event) {
+      if (err) {
+        callback(err);
+      } else {
+        callback(err, event);
+      }
+    });
+  }
+});
 
 /*
     DELETE /events/:event
@@ -340,8 +348,6 @@ router.delete('/:event/category/:category/todo/:todo', function (req, res) {
 */
 router.delete('/:event', function(req, res) {
     // Delete the event and verify that its owned by the user
-    console.log(req.currentUser);
-    console.log(req.body.event_id);
     Event.deleteEvent(req.currentUser._id, req.body.event_id, function(err) {
       if (err) {
         utils.sendErrResponse(res, 500, err);
