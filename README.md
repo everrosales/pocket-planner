@@ -115,3 +115,15 @@ To run in developer mode:
 ```
 ~$ npm run-script start-dev
 ```
+
+### Email bot usage
+First import the email bot script using
+```
+var mailer = require('../config/mailer.js');
+```
+
+Then to send emails just use
+```
+mailer.sendEmail(recipient, subject, text, callback);
+```
+The `callback` will be called with the arguments `callback(err, info)`. For more information on what is contained in `info`, read the corresponding section [here](https://nodemailer.com).
