@@ -1,11 +1,11 @@
 
-  {{#each todos}}
-  <div class="todo">
+{{#each todos}}
+  <div class="todo" categoryId={{id}}>
     <div class="checkbox-container">
       <input type="checkbox">
     </div>
     <div class="todo-content">
-      <p>{{name}}<span class="glyphicon glyphicon-remove"></span></p>
+      <p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>
       {{#if deadline}}
       <p><small>Deadline: {{deadline}}</small></p>
       {{/if}}
@@ -16,8 +16,5 @@
     <br>
 
   </div>
-  {{/each}}
-  <div class="add_todo">
-    <p>Add a To-Do...</p>
-  </div>
-</div>
+{{/each}}
+  <button class="btn btn-default add_todo">Add a To-Do</button>

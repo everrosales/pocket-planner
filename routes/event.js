@@ -150,15 +150,18 @@ router.post('/:event/addinformation', function(req, res) {
 router.post('/:event/addcategory', function (req, res) {
   if (!req.body.name) {
     utils.sendErrResponse(res, 500, 'Name is required.');
+  }else{
+    //console.log(req);
+    // Just add the category to the event.
+    Event.addCategory(req.event._id, req.body.name, function(err, id) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, id);
+      }
+    });
   }
-  // Just add the category to the event.
-  Event.addCategory(req.event._id, req.body.name, function(err, id) {
-    if (err) {
-      utils.sendErrResponse(res, 500, err);
-    } else {
-      utils.sendSuccessResponse(res, id);
-    }
-  });
+
 });
 
 /*
@@ -194,16 +197,19 @@ router.post('/:event/addinvite', function (req, res) {
 router.post('/:event/category/:category/addtodo', function (req, res) {
   if (!req.body.name || !req.body.deadline) {
     utils.sendErrResponse(res, 500, 'Name and deadline are required.');
+  }else{
+    Event.addTodo(req.event, req.category, req.body.name, req.body.deadline, req.body.priority,
+        function(err, newTodo) {
+          if (err) {
+            utils.sendErrResponse(res, 500, err);
+          } else {
+            utils.sendSuccessResponse(res, newTodo);
+          }
+        }
+    );
   }
   // Add Event todo
-  Event.addTodo(req.event, req.category, req.body.name, req.body.deadline, req.body.priority,
-      function(err, newTodo) {
-        if (err) {
-          utils.sendErrResponse(res, 500, err);
-        } else {
-          utils.sendSuccessResponse(res, newTodo);
-        }
-      });
+
 });
 
 /*

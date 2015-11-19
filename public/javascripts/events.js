@@ -31,6 +31,7 @@
       event_date.setMinutes(parseInt(hr_min[1]));
     }
     var data = {email: currentUser, name: event_name, time: event_date};
+
     $.post('/events', data).done(function(response){
       console.log("success!");
       loadHomePage();
@@ -51,7 +52,7 @@
   $(document).on('click', '.delete-event', function(e){
     e.stopPropagation();
     console.log("deleting event");
-    var del_id = $(this).parent().parent().attr('id');
+    var del_id = $(this).parent().parent().parent().attr('id');
     $.ajax({
       url: 'events/' + del_id,
       type: 'DELETE',

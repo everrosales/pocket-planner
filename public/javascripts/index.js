@@ -30,9 +30,19 @@ var loadHomePage = function() {
     }
 };
 
+var loadTodosPage = function(event_id) {
+
+  $.get('/events/' + event_id).done(function(response){
+    console.log(response.content);
+    loadPage('todos', {event: response.content, title:"Your Todos", currentUser: currentUser});
+  }).fail(function(responseObject){
+    console.log("failed");
+  });
+}
 var loadEventsPage = function() {
     //get request for events. replace my_events with results
     //
+    console.log(currentUser);
     $.get('/events', function(response){
       console.log(response.content);
       results = [];
@@ -52,7 +62,8 @@ var loadEventsPage = function() {
       })
       loadPage('events', {
         my_events: response.content,
-        title: "Your Events"
+        title: "Your Events",
+        currentUser: currentUser
 
       });
     });
@@ -66,56 +77,6 @@ $(document).ready(function() {
         }
         loadHomePage();
     });
-
-});
-
-
-
-$(document).on('click', '#new_todo', function() {
-  $('#new_todo').remove();
-  var htmlStr = "<div class='column' id='new-todo-container'><div class='event'><input type='text' placeholder='To-Do List Title'><br><div class='btn btn-default' id='add-todo-button'>Add To-Do List</div><div class='btn btn-default' id='cancel-todo-button'>Cancel</div></div>";
-  $(htmlStr).appendTo('#category-container');
-});
-
-
-
-$(document).on('click', '#cancel-todo-button', function(){
-  $('#new-todo-container').remove();
-  var htmlStr = '<div class="column btn btn-default" id="new_todo"><p>+ Add a new To-Do list</p></div>';
-  $(htmlStr).appendTo('#category-container');
-});
-
-$(document).on('click', '.event-container', function(){
-  //go to edit that event
-  //get that event's info. for now, populated with dummy data.
-  //make requests for each of the Todos
-  //use date.toLocaleDateString() to get the string date
-  console.log("clicked");
-  var dummyDate = new Date();
-  var dummyStrDate = dummyDate.toLocaleDateString();
-  loadPage('todos', {
-    name: "Birthday party",
-    description: "it's gonna be awesome!",
-    location: "3 Ames St",
-    categories: [
-      {
-        name: "Food",
-        todos: [
-          {
-            name: "Get cake",
-            deadline: dummyStrDate,
-            priority: 3
-          },
-          {
-            name: "Decide on pizza or pasta",
-            deadline: dummyStrDate,
-            priority: 1
-          }
-        ]
-
-      }
-    ]
-  });
 
 });
 
