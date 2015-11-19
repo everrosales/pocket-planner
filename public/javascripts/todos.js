@@ -7,6 +7,58 @@
     $(htmlStr).appendTo('#category-container');
   });
 
+  $(document).on('click', '.add_todo', function() {
+
+    var parent = $(this).parent();
+    $(this).remove();
+    var htmlStr = "<div class='new-todo-form'><div class='error'></div><input type='text' id='todo-name' placeholder='Todo'><br><input type='text' placeholder='Deadline' id='deadline'><br><div class='btn btn-default' id='add-todo'>Add To-do</div><br><div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>";
+    $(htmlStr).appendTo(parent);
+
+    $('#deadline').datepicker({
+      minDate: new Date()
+    });
+    //use $.find() to find error div
+  });
+
+  $(document).on('click', '.delete-todo', function(){
+    var todoId = $(this).parent().parent().attr('todoId');
+    var categoryId = $(this).parent().parent().parent().parent().attr('categoryId');
+    event_id = $(this).parent().parent().parent().parent().parent().attr('eventId');
+    $.ajax({
+      url:'events/'+event_id+'/category/'+categoryId+'/todo/'+todoId,
+      type: 'DELETE'
+    }).done(function(response){
+      loadTodosPage(event_id);
+    })
+  });
+
+  $(document).on('click', '#add-todo', function(){
+    var categoryId = $(this).parent().parent().attr('categoryId');
+    event_id = $(this).parent().parent().parent().attr('eventId');
+    var error_div = $(this).parent().find('.error');
+    var todo_name = $('#todo-name').val();
+    var deadline = $('#deadline').datepicker("getDate");
+    if (todo_name.length < 1){
+      error_div.text('To-Do must have a name.');
+    }else{
+      $.post('events/'+event_id+'/category/'+categoryId+'/addtodo', {name:todo_name, deadline: deadline}).done(function(response){
+        loadTodosPage(event_id);
+      }).fail(function(responseObject){
+        var response = $.parseJSON(responseObject.responseText);
+        error_div.text(response.err);
+      })
+    }
+  });
+
+  $(document).on('click', '#cancel-add-todo', function(){
+
+
+    var container = $(this).parent().parent();
+    $(this).parent().remove(); //remove form
+    var htmlStr = '<button class="btn btn-default add_todo">Add a To-Do</button>';
+    $(htmlStr).appendTo(container);
+  });
+
   $(document).on('click', '#cancel-category-button', function(){
     $('#new-category-container').remove();
     var htmlStr = '<div class="column btn btn-default" id="new_category"><p>+ Add a new To-Do list</p></div>';
@@ -30,6 +82,17 @@
       })
     }
   });
+
+  $(document).on('click', '.delete-category', function(){
+    var category_id = $(this).parent().parent().attr('categoryId');
+    event_id = $(this).parent().parent().parent().attr('eventId');
+    $.ajax({
+      url: 'events/' + event_id + '/category/' + category_id,
+      type: 'DELETE',
+    }).done(function(response){
+      loadTodosPage(event_id);
+    });
+  })
 
   $(document).on('click', '.event-container', function(){
     event_id = ($(this).attr('id'));

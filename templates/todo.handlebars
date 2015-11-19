@@ -1,10 +1,10 @@
 
 {{#each todos}}
-  <div class="todo" categoryId={{id}}>
+  <div class="todo">
     <div class="checkbox-container">
       <input type="checkbox">
     </div>
-    <div class="todo-content">
+    <div class="todo-content" todoId={{_id}}>
       <p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>
       {{#if deadline}}
       <p><small>Deadline: {{deadline}}</small></p>

@@ -34,7 +34,13 @@ var loadTodosPage = function(event_id) {
 
   $.get('/events/' + event_id).done(function(response){
     console.log(response.content);
-    loadPage('todos', {event: response.content, title:"Your Todos", currentUser: currentUser});
+    response.content.categories.forEach(function(c){
+      c.todos.forEach(function(t){
+        t.deadline = new Date(t.deadline);
+        t.deadline = t.deadline.toLocaleDateString();
+      })
+    })
+    loadPage('todos', {event: response.content, title:"Your Todos for " + response.content.name, currentUser: currentUser});
   }).fail(function(responseObject){
     console.log("failed");
   });
@@ -42,22 +48,28 @@ var loadTodosPage = function(event_id) {
 var loadEventsPage = function() {
     //get request for events. replace my_events with results
     //
-    console.log(currentUser);
     $.get('/events', function(response){
-      console.log(response.content);
       results = [];
       response.content.forEach(function(e){
         results.push(e);
       });
       results.forEach(function(r){
-        console.log(r.date);
-        r.date = new Date(r.date);
-        r.time = r.date.toLocaleTimeString();
-        var tmp_time = r.time.split(' ');
+        //console.log(r.date);
+        r.start = new Date(r.start);
+        r.start_time = r.start.toLocaleTimeString();
+        var tmp_time = r.start_time.split(' ');
         var am_pm = tmp_time[1];
-        tmp_time = r.time.split(':');
-        r.time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-        r.date = r.date.toLocaleDateString();
+        tmp_time = r.start_time.split(':');
+        r.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+        r.start = r.start.toLocaleDateString();
+
+        r.end = new Date(r.end);
+        r.end_time = r.end.toLocaleTimeString();
+        tmp_time = r.end_time.split(' ');
+        am_pm = tmp_time[1];
+        tmp_time = r.end_time.split(':');
+        r.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+        r.end = r.end.toLocaleDateString();
 
       })
       loadPage('events', {

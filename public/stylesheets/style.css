@@ -113,14 +113,15 @@ h2 {
   cursor:pointer;
 }
 
-.event-container, #new-event-container, #new-category-container{
+.event-container, .todo-container, #new-event-container, #new-category-container{
   border: 1px solid #ccc;
   border-radius:10px;
   min-width:150px;
 }
 
-.delete-event:hover{
+.glyphicon-remove:hover{
   color:darkgray;
+  cursor:pointer;
 }
 
 #add-event-button{

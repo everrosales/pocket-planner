@@ -1,10 +1,10 @@
 {{> header currentUser=currentUser title=title}}
-<div id="category-container">
+<div id="category-container" eventId={{event._id}}>
   {{#each event.categories}}
-    <div class="column todo-container">
+    <div class="column todo-container" categoryId={{_id}}>
       <p class="category">{{name}}<span class="glyphicon glyphicon-remove delete-category"></span></p>
       <hr>
-      {{> todo id=_id}}
+      {{> todo}}
     </div>
   {{else}}
     <p><em>No todo lists yet!</em></p>

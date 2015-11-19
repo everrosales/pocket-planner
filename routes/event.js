@@ -420,10 +420,10 @@ router.get('/:event', function(req, res) {
 */
 router.post('/', function(req, res) {
     // Create a new event
-    if (!req.body.email || !req.body.name || !req.body.time) {
+    if (!req.body.email || !req.body.name || !req.body.start_date || !req.body.end_date) {
       utils.sendErrResponse(res, 400, 'Email, name, and time required.');
     }else{
-      Event.createNewEvent(req.body.email, req.body.name, req.body.time, function(err, event) {
+      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, function(err, event) {
         utils.sendSuccessResponse(res, event);
       });
     }
