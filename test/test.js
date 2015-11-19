@@ -152,7 +152,7 @@ describe('Event', function() {
 
     describe('#createNewEvent', function() {
         it('should return error if user does not exist', function(done) {
-            Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err) {
+            Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err) {
                 assert.deepEqual(err.msg, "No such user.");
                 done();
             });
@@ -160,7 +160,7 @@ describe('Event', function() {
 
         it('should return null error when event created', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, user) {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, result) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, result) {
                     assert.deepEqual(err, undefined);
                     done();
                 });
@@ -171,12 +171,13 @@ describe('Event', function() {
     describe('#findById', function() {
         it('should return an Event if event exists', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, result) {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, newevent) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, newevent) {
                     Event.findById(newevent._id, function(err, result) {
                         assert.deepEqual(err, null);
                         assert.deepEqual(result.hostEmail, 'erosolar@mit.edu');
                         assert.deepEqual(result.name, 'blah');
-                        assert.deepEqual(result.date, new Date(1995, 7, 7, 10, 39, 0));
+                        assert.deepEqual(result.end, new Date(1995, 7, 7, 10, 39, 0));
+                        assert.deepEqual(result.start, new Date(1995, 7, 6, 10, 39, 0));
                         done();
                     });
                 });
@@ -208,14 +209,15 @@ describe('Event', function() {
         });
         it('should return events user is allowed to edit', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', "", function(uh, created_user) {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function() {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function() {
                     Event.getEventsByUser('erosolar@mit.edu', function(err, result) {
                         assert.deepEqual(err, undefined);
                         assert.deepEqual(result.length, 1);
                         assert.deepEqual(result[0].host, created_user._id);
                         assert.deepEqual(result[0].hostEmail, 'erosolar@mit.edu');
                         assert.deepEqual(result[0].name, 'blah');
-                        assert.deepEqual(result[0].date, new Date(1995, 7, 7, 10, 39, 0));
+                        assert.deepEqual(result[0].end, new Date(1995, 7, 7, 10, 39, 0));
+                        assert.deepEqual(result[0].start, new Date(1995, 7, 6, 10, 39, 0));
                         done();
                     });
                 });
@@ -226,7 +228,7 @@ describe('Event', function() {
     describe('#deleteEvent', function() {
         it('should return error if user not host of event', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, created_user) {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
                     Event.deleteEvent(0, created_event._id, function(err, result) {
                         assert.deepEqual(err.msg, "You do not have the authority to delete this Event.");
                         done();
@@ -242,7 +244,7 @@ describe('Event', function() {
         });
         it('should return nothing if event removed successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, created_user) {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
                     Event.deleteEvent(created_user._id, created_event._id, function(err, result) {
                         assert.deepEqual(err, null);
                         done();
@@ -252,7 +254,7 @@ describe('Event', function() {
         });
         it('should affect future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function(err, created_user) {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, created_event) {
                     Event.deleteEvent(created_user._id, created_event._id, function() {
                         Event.findById(created_event._id, function(err, result) {
                             assert.deepEqual(err.msg, "No such event.");
@@ -273,7 +275,7 @@ describe('Event', function() {
         });
         it('should return nothing if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.setInformation(n_event._id, {location:"my house"}, function(err, result) {
                         assert.deepEqual(err, null);
                         done();
@@ -283,7 +285,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.setInformation(n_event._id, {location:"my house"}, function(err, result) {
                         Event.findById(n_event._id, function(err, result) {
                             assert.deepEqual(result.location, "my house");
@@ -295,7 +297,7 @@ describe('Event', function() {
         });
         it('works with fields that have already been set', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.setInformation(n_event._id, {name:"new_name"}, function(err, result) {
                         Event.findById(n_event._id, function(err, result) {
                             assert.deepEqual(result.name, "new_name");
@@ -316,7 +318,7 @@ describe('Event', function() {
         });
         it('should return a no such user error if planner doesn\'t exist', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
                         assert.deepEqual(err.msg, "No such user.");
                         done();
@@ -327,7 +329,7 @@ describe('Event', function() {
         it('should return nothing if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
                 User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function() {
-                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                         Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
                             assert.deepEqual(err, null);
                             done();
@@ -339,7 +341,7 @@ describe('Event', function() {
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
                 User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, planner) {
-                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                         Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
                             Event.findById(n_event._id, function(err, result) {
                                 assert.deepEqual(result.planners.toObject(), [planner._id]);
@@ -361,7 +363,7 @@ describe('Event', function() {
         });
         it('should return a no planner error if planner doesn\'t exist', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.deletePlanner(n_event._id, 0, function(err, result) {
                         assert.deepEqual(err.msg, "No such planner.");
                         done();
@@ -372,7 +374,7 @@ describe('Event', function() {
         it('should return true if planner deleted successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
                 User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, ever) {
-                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                         Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, n_event) {
                             Event.deletePlanner(n_event._id, ever._id, function(err, result) {
                                 assert.deepEqual(err, null);
@@ -387,7 +389,7 @@ describe('Event', function() {
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
                 User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, ever) {
-                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                         Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, n_event) {
                             Event.deletePlanner(n_event._id, ever._id, function(err, result) {
                                 Event.findById(n_event._id, function(err, result) {
@@ -412,7 +414,7 @@ describe('Event', function() {
         });
         it('should return nothing if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCost(n_event._id, 'venue', 12, 'wow such location', function(err, result) {
                         assert.deepEqual(err, null);
                         done();
@@ -422,7 +424,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCost(n_event._id, 'venue', 12, 'wow such location', function(err, result) {
                         Event.findById(n_event._id, function(err, result) {
                             assert.deepEqual(result.cost.length, 1);
@@ -446,7 +448,7 @@ describe('Event', function() {
         });
         it('should return true if cost deleted successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCost(n_event._id, 'blah', 12, 'blah2', function(err, n_event) {
                         Event.deleteCost(n_event._id, n_event.cost[0]._id, function(err, result) {
                             assert.deepEqual(err, null);
@@ -459,7 +461,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCost(n_event._id, 'blah', 12, 'blah2', function(err, n_event) {
                         Event.deleteCost(n_event._id, n_event.cost[0]._id, function(err, result) {
                             Event.findById(n_event._id, function(err, result) {
@@ -483,7 +485,7 @@ describe('Event', function() {
         });
         it('should return nothing if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
                         assert.deepEqual(err, null);
                         done();
@@ -493,7 +495,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
                         Event.findById(n_event._id, function(err, result) {
                             assert.deepEqual(result.attendees.length, 1);
@@ -508,7 +510,7 @@ describe('Event', function() {
         it('should have userid of invitee if invitee has account', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
                 User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, invitee) {
-                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                    Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                         Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
                             Event.findById(n_event._id, function(err, result) {
                                 assert.deepEqual(result.attendees.length, 1);
@@ -533,7 +535,7 @@ describe('Event', function() {
         });
         it('should add a new invitee if invitee doesn\'t exist', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
                         assert.deepEqual(err, null);
                         Event.findById(n_event._id, function(err, result) {
@@ -551,7 +553,7 @@ describe('Event', function() {
         });
         it('should return nothing if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
                         Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
                             assert.deepEqual(err, null);
@@ -563,7 +565,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
                         Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
                             Event.findById(n_event._id, function(err, result) {
@@ -588,7 +590,7 @@ describe('Event', function() {
         });
         it('should return a no such invitee error if invitee doesn\'t exist', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
                         assert.deepEqual(err.msg, "No such invitee.");
                         done();
@@ -598,7 +600,7 @@ describe('Event', function() {
         });
         it('should return nothing if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
                         Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
                             assert.deepEqual(err, null);
@@ -610,7 +612,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
                         Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
                             Event.findById(n_event._id, function(err, result) {
@@ -635,7 +637,7 @@ describe('Event', function() {
         });
         it('should return 0 if no one invited', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.getAttendingCount(n_event._id, function(err, result) {
                         assert.deepEqual(err, null);
                         assert.deepEqual(result, 0);
@@ -646,7 +648,7 @@ describe('Event', function() {
         });
         it('should return 0 if no one attending', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
                         Event.getAttendingCount(n_event._id, function(err, result) {
                             assert.deepEqual(err, null);
@@ -659,7 +661,7 @@ describe('Event', function() {
         });
         it('should return as many people as are attending', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blah', function() {
                         Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
                             Event.getAttendingCount(n_event._id, function(err, result) {
@@ -683,7 +685,7 @@ describe('Event', function() {
         });
         it('should return 0 if no one invited', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.getInvitedCount(n_event._id, function(err, result) {
                         assert.deepEqual(err, null);
                         assert.deepEqual(result, 0);
@@ -694,7 +696,7 @@ describe('Event', function() {
         });
         it('should return the number of invited people (regardless of attending status)', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
                         Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
                             Event.getInvitedCount(n_event._id, function(err, result) {
@@ -718,7 +720,7 @@ describe('Event', function() {
         });
         it('should return [] if no one invited', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.getAttendeeEmails(n_event._id, function(err, result) {
                         assert.deepEqual(err, null);
                         assert.deepEqual(result, []);
@@ -729,7 +731,7 @@ describe('Event', function() {
         });
         it('should return [] if no one attending', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, result) {
                         Event.getAttendeeEmails(n_event._id, function(err, result) {
                             assert.deepEqual(err, null);
@@ -742,7 +744,7 @@ describe('Event', function() {
         });
         it('should return all emails of attendees', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blah', function() {
                         Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
                             Event.getAttendeeEmails(n_event._id, function(err, result) {
@@ -774,7 +776,7 @@ describe('Event', function() {
         });
         it('should return [] if no one invited', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.getInviteeEmails(n_event._id, function(err, result) {
                         assert.deepEqual(err, null);
                         assert.deepEqual(result, []);
@@ -785,7 +787,7 @@ describe('Event', function() {
         });
         it('should return the number of invited people (regardless of attending status)', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
                         Event.markAttending(n_event._id, 'ajliu@mit.edu', 'amanda', 'blah2', function() {
                             Event.getInviteeEmails(n_event._id, function(err, result) {
@@ -816,7 +818,7 @@ describe('Event', function() {
         });
         it('should return the new category if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, result) {
                         assert.deepEqual(err, null);
                         assert.deepEqual(result.name, 'venue');
@@ -828,7 +830,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, result) {
                         Event.findById(n_event._id, function(err, result) {
                             assert.deepEqual(result.categories.length, 1);
@@ -851,7 +853,7 @@ describe('Event', function() {
         });
         it('should return an error if category doesn\'t exist', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.deleteCategory(n_event._id, 0, function(err, result) {
                         assert.deepEqual(err.msg, 'Category doesn\'t exist');
                         done();
@@ -861,7 +863,7 @@ describe('Event', function() {
         });
         it('should return true if category deleted successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.deleteCategory(n_event._id, new_category._id, function(err, result) {
                             assert.deepEqual(err, null);
@@ -874,7 +876,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.deleteCategory(n_event._id, new_category._id, function() {
                             Event.findById(n_event._id, function(err, result) {
@@ -898,7 +900,7 @@ describe('Event', function() {
         });
         it('should return a no category error if category doesn\'t exist in event', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addTodo(n_event._id, 0, 'blah', new Date(1995, 7, 6, 10, 39, 0), 0, function(err, result) {
                         assert.deepEqual(err.msg, 'Category doesn\'t exist');
                         done();
@@ -908,7 +910,7 @@ describe('Event', function() {
         });
         it('should return the new todo if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, result) {
                             assert.deepEqual(err, null);
@@ -923,7 +925,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function() {
                             Event.findById(n_event._id, function(err, result) {
@@ -952,7 +954,7 @@ describe('Event', function() {
         });
         it('should return a no category error if category doesn\'t exist in event', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.checkTodo(n_event._id, 0, 0, function(err, result) {
                         assert.deepEqual(err.msg, 'Category doesn\'t exist');
                         done();
@@ -962,7 +964,7 @@ describe('Event', function() {
         });
         it('should return true if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
                             Event.checkTodo(n_event._id, new_category._id, new_todo._id, function(err, result) {
@@ -977,7 +979,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
                             Event.checkTodo(n_event._id, new_category._id, new_todo._id, function() {
@@ -1008,7 +1010,7 @@ describe('Event', function() {
         });
         it('should return a no category error if category doesn\'t exist in event', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.uncheckTodo(n_event._id, 0, 0, function(err, result) {
                         assert.deepEqual(err.msg, 'Category doesn\'t exist');
                         done();
@@ -1018,7 +1020,7 @@ describe('Event', function() {
         });
         it('should return true if event updated successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
                             Event.checkTodo(n_event._id, new_category._id, new_todo._id, function(err, result) {
@@ -1035,7 +1037,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
                             Event.checkTodo(n_event._id, new_category._id, new_todo._id, function() {
@@ -1066,7 +1068,7 @@ describe('Event', function() {
         });
         it('should return an error if category doesn\'t exist', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.deleteTodo(n_event._id, 0, 0, function(err, result) {
                         assert.deepEqual(err.msg, 'Category doesn\'t exist');
                         done();
@@ -1076,7 +1078,7 @@ describe('Event', function() {
         });
         it('should return true if todo deleted successfully', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
                             Event.deleteTodo(n_event._id, new_category._id, new_todo._id, function(err, result) {
@@ -1091,7 +1093,7 @@ describe('Event', function() {
         });
         it('should change the result of future getEvent calls', function(done) {
             User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+                Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
                     Event.addCategory(n_event._id, 'venue', function(err, new_category) {
                         Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
                             Event.deleteTodo(n_event._id, new_category._id, new_todo._id, function() {

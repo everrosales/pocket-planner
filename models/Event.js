@@ -36,7 +36,8 @@ var Event = (function Event() {
         hostEmail       : String,       //required (in database)
         planners        : {type:[Schema.Types.ObjectId], default:[]},   //       ^
 
-        date            : Date,         //required
+        start           : Date,         //required
+        end             : Date,         //required (can be same as start)
         location        : {type:String, default:""},
         budget          : {type:Number, default:0},
         cost            : {type:[costSchema], default:[]},
@@ -103,14 +104,15 @@ var Event = (function Event() {
         event_name is a string,
         event_time is a Date object
     */
-    var _createNewEvent = function(host_email, event_name, event_time, callback) {
+    var _createNewEvent = function(host_email, event_name, event_start, event_end, callback) {
         User.findByEmail(host_email, function(err, user) {
             if (err) {
                 callback(err);
             } else {
                 _model.create({
                     'name' : event_name,
-                    'date' : event_time,
+                    'start' : event_start,
+                    'end' : event_end,
                     'hostEmail' : host_email,
                     'host' : user._id,
                 }, callback);
