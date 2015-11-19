@@ -168,7 +168,7 @@ var Event = (function Event() {
                     if (err) {
                         callback(err);
                     } else {
-                        _model.update({_id:eventid}, {$push:{'planners':planner._id}},{new:true}, callback);
+                        _model.findByIdAndUpdate(eventid, {$push:{'planners':planner._id}},{new:true}, callback);
                     }
                 });
             } else {
@@ -177,9 +177,23 @@ var Event = (function Event() {
         });
     };
 
-    //TODO(erosolar): implement this
     var _deletePlanner = function(eventid, plannerid, callback) {
-
+        _ifEventExists(eventid, function(err, exists) {
+            if (exists) {
+                _model.findOneAndUpdate({'_id':eventid, 'planners':plannerid},
+                                        {$unset:{'planners':plannerid}},
+                                        {new:true},
+                                        function(err, result) {
+                    if (result) {
+                        callback(err, true);
+                    } else {
+                        callback({msg: "No such planner."});
+                    }
+                });
+            } else {
+                callback({msg:"No such event."});
+            }
+        });
     };
 
     //description is optional
@@ -191,7 +205,7 @@ var Event = (function Event() {
         };
         _ifEventExists(eventid, function(err, exists) {
             if (exists) {
-                _model.findByIdAndUpdate(eventid, {$push:{cost: cost}}, callback);
+                _model.findByIdAndUpdate(eventid, {$push:{cost: cost}}, {new:true}, callback);
             } else {
                 callback({msg: "No such event."});
             }
@@ -199,8 +213,21 @@ var Event = (function Event() {
     };
 
     //TODO(erosolar): implement this
-    var _deleteCost = function(eventid, costid, callback) {
-
+    var _deleteCost = function(eventId, costid, callback) {
+        _getEvent(eventId, function(err, result) {
+            if (err) {
+                callback(err);
+            } else {
+                result.cost.id(costid).remove();
+                result.save(function(err) {
+                    if (err) {
+                        callback(err, false);
+                    } else {
+                        callback(err, true);
+                    }
+                });
+            }
+        });
     };
 
     var _addInvite = function(eventid, attendee_email, callback) {
@@ -440,7 +467,9 @@ var Event = (function Event() {
         deleteEvent         : _deleteEvent,
         setInformation      : _setInformation,
         addPlanner          : _addPlanner,
+        deletePlanner       : _deletePlanner,
         addCost             : _addCost,
+        deleteCost          : _deleteCost,
         addInvite           : _addInvite,
         markAttending       : _markAttending,
         markNotAttending    : _markNotAttending,
