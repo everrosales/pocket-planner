@@ -92,6 +92,7 @@ $(document).ready(function() {
 
 });
 
+
 $(document).on('click', '#home-link', function(evt) {
     evt.preventDefault();
     loadHomePage();
