@@ -134,6 +134,20 @@ var Event = (function Event() {
         });
     };
 
+    var _getPublicEvents = function(callback) {
+      // for now return all events (no private events for now)
+      _model.find({}, callback);
+    }
+
+    var _getPublicEventById = function(eventid, callback) {
+      _getEvent(eventid, function(err, event) {
+        // TODO(erosolar): implement this check
+        // if (!event.public is true) then throw error
+        // otherwise just return the thing
+        callback(err, event);
+      });
+    }
+
     var _deleteEvent = function(userid, eventid, callback) {
         _ifEventExists(eventid, function(err, exists) {
             if (exists) {
@@ -466,6 +480,8 @@ var Event = (function Event() {
         createNewEvent      : _createNewEvent,
         clearAllEvents      : _clearAllEvents,
         getEventsByUser     : _getEventsByUser,
+        getPublicEvents     : _getPublicEvents,
+        getPublicEventById  : _getPublicEventById,
         deleteEvent         : _deleteEvent,
         setInformation      : _setInformation,
         addPlanner          : _addPlanner,
