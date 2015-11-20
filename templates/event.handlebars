@@ -1,10 +1,11 @@
 <!-- store event ID info in the event-container -->
-<div class="column event-container">
-  <div class="event" id={{_id}}>
+<div class="column event-container" id={{_id}}>
+  <div class="event">
     <p class="event_name">{{name}}<span class="glyphicon glyphicon-remove delete-event"></span></p>
     <hr>
     <p class="host-email">Host: {{hostEmail}}</p>
-    <p class="date">{{date}} @ {{time}}</p>
+    <p class="start_date">Start: {{start}} @ {{start_time}}</p>
+    <p class="end_date">End: {{end}} @ {{end_time}}</p>
     <p class="event_loc">Location: {{#if location}}{{location}}{{else}}TBD{{/if}}</p>
 
     {{#if description}}

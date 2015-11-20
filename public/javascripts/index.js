@@ -30,29 +30,52 @@ var loadHomePage = function() {
     }
 };
 
+var loadTodosPage = function(event_id) {
+
+  $.get('/events/' + event_id).done(function(response){
+    console.log(response.content);
+    response.content.categories.forEach(function(c){
+      c.todos.forEach(function(t){
+        t.deadline = new Date(t.deadline);
+        t.deadline = t.deadline.toLocaleDateString();
+      })
+    })
+    loadPage('todos', {event: response.content, title:"Your Todos for " + response.content.name, currentUser: currentUser});
+  }).fail(function(responseObject){
+    console.log("failed");
+  });
+}
 var loadEventsPage = function() {
     //get request for events. replace my_events with results
     //
     $.get('/events', function(response){
-      console.log(response.content);
       results = [];
       response.content.forEach(function(e){
         results.push(e);
       });
       results.forEach(function(r){
-        console.log(r.date);
-        r.date = new Date(r.date);
-        r.time = r.date.toLocaleTimeString();
-        var tmp_time = r.time.split(' ');
+        //console.log(r.date);
+        r.start = new Date(r.start);
+        r.start_time = r.start.toLocaleTimeString();
+        var tmp_time = r.start_time.split(' ');
         var am_pm = tmp_time[1];
-        tmp_time = r.time.split(':');
-        r.time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-        r.date = r.date.toLocaleDateString();
+        tmp_time = r.start_time.split(':');
+        r.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+        r.start = r.start.toLocaleDateString();
+
+        r.end = new Date(r.end);
+        r.end_time = r.end.toLocaleTimeString();
+        tmp_time = r.end_time.split(' ');
+        am_pm = tmp_time[1];
+        tmp_time = r.end_time.split(':');
+        r.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+        r.end = r.end.toLocaleDateString();
 
       })
       loadPage('events', {
         my_events: response.content,
-        title: "Your Events"
+        title: "Your Events",
+        currentUser: currentUser
 
       });
     });
@@ -69,55 +92,6 @@ $(document).ready(function() {
 
 });
 
-
-
-$(document).on('click', '#new_todo', function() {
-  $('#new_todo').remove();
-  var htmlStr = "<div class='column' id='new-todo-container'><div class='event'><input type='text' placeholder='To-Do List Title'><br><div class='btn btn-default' id='add-todo-button'>Add To-Do List</div><div class='btn btn-default' id='cancel-todo-button'>Cancel</div></div>";
-  $(htmlStr).appendTo('#category-container');
-});
-
-
-
-$(document).on('click', '#cancel-todo-button', function(){
-  $('#new-todo-container').remove();
-  var htmlStr = '<div class="column btn btn-default" id="new_todo"><p>+ Add a new To-Do list</p></div>';
-  $(htmlStr).appendTo('#category-container');
-});
-
-$(document).on('click', '.event-container', function(){
-  //go to edit that event
-  //get that event's info. for now, populated with dummy data.
-  //make requests for each of the Todos
-  //use date.toLocaleDateString() to get the string date
-  console.log("clicked");
-  var dummyDate = new Date();
-  var dummyStrDate = dummyDate.toLocaleDateString();
-  loadPage('todos', {
-    name: "Birthday party",
-    description: "it's gonna be awesome!",
-    location: "3 Ames St",
-    categories: [
-      {
-        name: "Food",
-        todos: [
-          {
-            name: "Get cake",
-            deadline: dummyStrDate,
-            priority: 3
-          },
-          {
-            name: "Decide on pizza or pasta",
-            deadline: dummyStrDate,
-            priority: 1
-          }
-        ]
-
-      }
-    ]
-  });
-
-});
 
 $(document).on('click', '#home-link', function(evt) {
     evt.preventDefault();

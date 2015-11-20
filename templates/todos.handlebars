@@ -1,13 +1,16 @@
-<div id="category-container">
-  {{#each categories}}
-  <div class="column" id="todo-container">
-    <p class="category">{{name}}</p>
-    {{> todo}}
-  </div>
+{{> header currentUser=currentUser title=title}}
+<div id="category-container" eventId={{event._id}}>
+  {{#each event.categories}}
+    <div class="column todo-container" categoryId={{_id}}>
+      <p class="category">{{name}}<span class="glyphicon glyphicon-remove delete-category"></span></p>
+      <hr>
+      {{> todo}}
+    </div>
   {{else}}
-    <p><em>No todos yet!</em></p>
+    <p><em>No todo lists yet!</em></p>
   {{/each}}
-  <div class="column btn btn-default" id="new_todo">
+
+  <div class="column btn btn-default" id="new_category">
     <p>+ Add a new To-Do list</p>
   </div>
   <div id="edit_event">

@@ -28,7 +28,7 @@ h2 {
     font-size: 0.5;
     margin-left: 5px;
 }
-.todo{
+.todo, .add_todo{
   margin:5px !important;
   background-color:white;
   padding:10px;
@@ -45,7 +45,7 @@ h2 {
     padding-left: 50px;
     padding-top: 0;
 }
-#todo-container{
+.todo-container{
   /*position:absolute;*/ /*to stack on top*/
   background-color: #e2e4e6;
   border-radius: 10px;
@@ -113,14 +113,15 @@ h2 {
   cursor:pointer;
 }
 
-.event-container, #new-event-container, #new-todo-container{
+.event-container, .todo-container, #new-event-container, #new-category-container{
   border: 1px solid #ccc;
   border-radius:10px;
   min-width:150px;
 }
 
-.delete-event:hover{
+.glyphicon-remove:hover{
   color:darkgray;
+  cursor:pointer;
 }
 
 #add-event-button{
