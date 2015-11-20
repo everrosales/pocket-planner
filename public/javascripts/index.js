@@ -34,6 +34,21 @@ var loadTodosPage = function(event_id) {
 
   $.get('/events/' + event_id).done(function(response){
     console.log(response.content);
+    response.content.start = new Date(response.content.start);
+    response.content.start_time = response.content.start.toLocaleTimeString();
+    var tmp_time = response.content.start_time.split(' ');
+    var am_pm = tmp_time[1];
+    tmp_time = response.content.start_time.split(':');
+    response.content.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+    response.content.start = response.content.start.toLocaleDateString();
+
+    response.content.end = new Date(response.content.end);
+    response.content.end_time = response.content.end.toLocaleTimeString();
+    tmp_time = response.content.end_time.split(' ');
+    am_pm = tmp_time[1];
+    tmp_time = response.content.end_time.split(':');
+    response.content.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+    response.content.end = response.content.end.toLocaleDateString();
     response.content.categories.forEach(function(c){
       c.todos.forEach(function(t){
         t.deadline = new Date(t.deadline);

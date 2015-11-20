@@ -13,8 +13,35 @@
   <div class="column btn btn-default" id="new_category">
     <p>+ Add a new To-Do list</p>
   </div>
-  <div id="edit_event">
-    <p> edit event blabla</p>
+  <div id="event_panel" eventId={{event._id}}>
+    <div id="event_editable">
+      <h3 id="event_name">{{event.name}}<span class="glyphicon glyphicon-pencil" id="edit-event"></span></h3>
+      <hr>
+      <p id="event-start"><span class="bold">Start:</span> <span id="start-date">{{event.start}}</span> @ <span id="start-time">{{event.start_time}}</span></p>
+      <p id="event-end"><span class="bold">End:</span> <span id="end-date">{{event.end}}</span> @ <span id="end-time">{{event.end_time}}</span></p>
+      <p id="event-loc"><span class="bold">Location:</span> {{event.location}}</p>
+      <p id="event-desc"><span class="bold">Description:</span>  {{event.description}}</p>
+      <p id="event-budget"><span class="bold">Budget:</span> {{event.budget}}</p>
+    </div>
 
+    <div id="event-edit-form" style="display:none">
+      <h3 id="event_name_edit" class="edit"  contenteditable="true">{{event.name}}</h3>
+      <hr>
+      <p id="event-start"><span class="bold">Start:</span></p><input type="text" id="edit-start-date" placeholder={{event.start}}> @ <input type="time" id="edit-start-time" placeholder={{event.start_time}}>
+      <br>
+      <br>
+      <p id="event-end"><span class="bold">End:</span></p><input type="text" id="edit-end-date" placeholder={{event.end}}> @ <input type="time" id="edit-end-time" placeholder={{event.end_time}}>
+      <br>
+      <br>
+      <span class="bold">Location:</span><p id="edit-event-loc" class="edit" contenteditable="true"> {{event.location}}</p>
+      <br>
+      <span class="bold">Description:</span> <p id="edit-event-desc" class="edit" contenteditable="true"> {{event.description}}</p>
+      <br>
+      <span class="bold">Budget:</span><p id="edit-event-budget" class="edit" contenteditable="true"> {{event.budget}}</p>
+
+      <button class="btn btn-default" id="submit-edit-event">Submit</button>
+      <button class="btn btn-default" id="cancel-edit-event">Cancel</button>
+    </div>
   </div>
+  <hr>
 </div>

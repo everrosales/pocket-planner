@@ -1,6 +1,31 @@
 (function () {
   var event_id = undefined;
 
+
+  $(document).on('click', '#edit-event', function(){
+    event_id = $(this).parent().parent().attr("eventId");
+    var event_name = $('#event_name').text();
+    console.log($('#start-date').text());
+    var start_date = ($('#start-date').text());
+    var end_date = ($('#end-date').text());
+
+    //console.log(event_name);
+    $("#event_editable").hide();
+    $("#event-edit-form").show();
+    $("#edit-start-date").datepicker();
+    $("#edit-start-date").datepicker("setDate", start_date);
+    $("#edit-end-date").datepicker();
+    $("#edit-end-date").datepicker("setDate", end_date);
+
+  });
+
+  $(document).on('click', '#cancel-edit-event', function(){
+    event_id = $(this).parent().parent().attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  //when press cancel, loadTodosPage
+
   $(document).on('click', '#new_category', function() {
     $('#new_category').remove();
     var htmlStr = "<div class='column' id='new-category-container'><div class='event'><div class='error'></div><input id='category-title' type='text' placeholder='To-Do List Title'><br><div class='btn btn-default' id='add-category-button'>Add To-Do List</div><div class='btn btn-default' id='cancel-category-button'>Cancel</div></div>";

@@ -104,7 +104,7 @@ h2 {
     border: solid 1px black;
 }
 
-.event_name, .category{
+.event_name, .category, .bold{
   font-weight: bold;
 }
 
@@ -113,13 +113,17 @@ h2 {
   cursor:pointer;
 }
 
+#event_name_edit, .edit{
+  border:1px solid #ccc;
+}
+
 .event-container, .todo-container, #new-event-container, #new-category-container{
   border: 1px solid #ccc;
   border-radius:10px;
   min-width:150px;
 }
 
-.glyphicon-remove:hover{
+.glyphicon-remove:hover, .glyphicon-pencil:hover{
   color:darkgray;
   cursor:pointer;
 }
@@ -128,8 +132,20 @@ h2 {
   text-align: center;
 }
 
-#edit_event{
+#edit-event{
   float:right;
+}
+
+#event_panel{
+  float:right;
+  display:block;
+  margin-top:5%;
+  height: 100vh;
+  border: 1px solid #ccc;
+  border-radius:10px;
+  padding: 10px;
+  min-width:20vw;
+
 }
 .column {
     text-align: center;
