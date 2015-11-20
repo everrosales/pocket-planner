@@ -39,7 +39,7 @@
     var todo_name = $('#todo-name').val();
     var deadline = $('#deadline').datepicker("getDate");
     if (todo_name.length < 1){
-      error_div.text('To-Do must have a name.');
+      error_div.text('To-Do must have a name and deadline.');
     }else{
       $.post('events/'+event_id+'/category/'+categoryId+'/addtodo', {name:todo_name, deadline: deadline}).done(function(response){
         loadTodosPage(event_id);
@@ -68,7 +68,8 @@
   $(document).on('click', '#add-category-button', function() {
     var category_title = $('#category-title').val();
     if (category_title.length < 1){
-      $('.error').text('To-Do List must have a title.');
+
+      $(this).parent().find('.error').text('To-Do List must have a title.');
     }else{
       console.log(event_id);
       $.post('events/' + event_id + '/addcategory', {name: category_title}).done(function(response){
@@ -78,7 +79,7 @@
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
         console.log(response);
-        $('.error').text(response.err);
+        $(this).parent().find('.error').text(response.err);
       })
     }
   });
