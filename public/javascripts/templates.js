@@ -60,7 +60,7 @@ templates['header'] = template({"1":function(container,depth0,helpers,partials,d
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {};
 
-  return "<div id=\"header\">\n    <p> Pocket Planner</p>\n    <button id=\"signin-btn\">Home</button>\n    <p id=\"title\">"
+  return "<div id=\"header\">\n    <p> Pocket Planner</p>\n    <button id=\"home-link\">Home</button>\n    <p id=\"title\">"
     + container.escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(alias1,{"name":"title","hash":{},"data":data}) : helper)))
     + "</p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.currentUser : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
@@ -112,9 +112,7 @@ templates['subscribe'] = template({"compiler":[7,">= 4.0.0"],"main":function(con
 templates['todo'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "  <div class=\"todo\" categoryId="
-    + alias4(((helper = (helper = helpers.cat_id || (depth0 != null ? depth0.cat_id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"cat_id","hash":{},"data":data}) : helper)))
-    + ">\n    <div class=\"checkbox-container\">\n      <input type=\"checkbox\">\n    </div>\n    <div class=\"todo-content\" todoId="
+  return "  <div class=\"todo\">\n    <div class=\"checkbox-container\">\n      <input type=\"checkbox\">\n    </div>\n    <div class=\"todo-content\" todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n      <p>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
@@ -149,7 +147,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + ">\n      <p class=\"category\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + "<span class=\"glyphicon glyphicon-remove delete-category\"></span></p>\n      <hr>\n"
-    + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","hash":{"cat_id":(depth0 != null ? depth0._id : depth0)},"data":data,"indent":"      ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
+    + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"      ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
     + "    </div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "    <p><em>No todo lists yet!</em></p>\n";
