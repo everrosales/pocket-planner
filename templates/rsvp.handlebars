@@ -1,0 +1,12 @@
+<div class="rsvp-container" id={{event._id}}>
+  {{> attendeventsummary}}
+  <div>
+    <form name="attendee-status">
+      <input name="email" placeholder="Email [required]">
+      <input name="name" placeholder="Your name">
+      <textarea name="note" placeholder="Comments"></textarea>
+      <button type="submit" name="attending" value="1">Yes</button>
+      <button type="submit" name="attending" value="0">No</button>
+    </form>
+  </div>
+</div>

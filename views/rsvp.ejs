@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Pocket Planner</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
+
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+        <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+        <script src="/javascripts/handlebars.runtime-v4.0.2.js"></script>
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+        <!-- <script src="/javascripts/templates.js"></script> -->
+        <script src="/javascripts/helpers.js"></script>
+        <!-- <script src="/javascripts/index.js"></script> -->
+        <!-- <script src="/javascripts/users.js"></script> -->
+        <!-- <script src="/javascripts/events.js"></script> -->
+        <!-- <script src="/javascripts/todos.js"></script> -->
+        <script src="/javascripts/attendfeed.js"></script>
+        <script src="/javascripts/rsvp.js"></script>
+    </head>
+    <body>
+        <div id="main-container">
+          <p class="event_name"><%= locals.name %><span class="glyphicon glyphicon-remove delete-event"></span></p>
+          <hr>
+          <p class="host-email">Host: <%= locals.hostEmail %></p>
+          <p class="start_date">Start: <%= locals.start %> <% if (locals.start_time) { %> @ <%= locals.start_time %> <% } %> </p>
+          <p class="end_date">End: <%= locals.end %> <% if (locals.end_time) { %> @ <%= locals.end_time %> <% } %></p>
+          <p class="event_loc">Location: <% if (locals.location) { %> <%= locals.location %><% } else { %> TBD <% } %></p>
+
+          <% if (locals.description) { %>
+            <p class="event_desc"><%= locals.description %></p>
+          <% } %>
+
+          <div>
+            <form action="/attend/<%= locals._id %>" method="POST" target="/attend" name="attendee-status">
+              <input name="email" placeholder="Email [required]"><br>
+              <input name="name" placeholder="Your name"><br>
+              <textarea name="note" placeholder="Comments"></textarea><br>
+              <button type="submit" name="attending" value="1">Yes</button>
+              <button type="submit" name="attending" value="0">No</button>
+            </form>
+          </div>
+        </div>
+        <div id="footer">
+            <p>Today's date is <%= date %></p>
+        </div>
+    </body>
+</html>

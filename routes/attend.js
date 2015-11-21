@@ -22,7 +22,7 @@ var requireAuthentication = function(req, res, next) {
     request path (any routes defined with :event as a parameter).
 */
 router.param('event', function(req, res, next, eventId) {
-    Event.findById(eventId, function(err, event) {
+    Event.getPublicEventById(eventId, function(err, event) {
         if (event) {
             req.event = event;
             next();
@@ -93,6 +93,22 @@ router.post('/:event', function(req, res) {
   utils.sendErrResponse(res, 404, 'Route not configured');
 });
 
+router.get('/', function(req, res) {
+  // Get all public Events
+  Event.getPublicEvents(function(err, my_events) {
+      if (err) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+      } else {
+          my_events = my_events.reverse();
+          utils.sendSuccessResponse(res, my_events);
+      }
+  });
+});
+
+router.get('/:event/details', function(req, res) {
+    utils.sendSuccessResponse(res, {'event' : req.event });
+})
+
 /*
     GET /attend/:event
     Request parameters:
@@ -103,7 +119,21 @@ router.post('/:event', function(req, res) {
 */
 router.get('/:event', function(req, res) {
   // Get the event attendance opions for a particular event
-  res.render('attend', {});
+  // This is a bit roundabout (come back and simpliy this)
+  console.log('serving attend page');
+  // var eventObj = {
+  //   _id : req.event._id,
+  //   name : req.event.name,
+  //   hostEmail : req.event.hostEmail,
+  //   start : req.event.start,
+  //   start_time : 0,
+  //   end : req.event.end,
+  //   end_time : 0,
+  //   location : req.event.location,
+  //   description : req.event.description,
+  //   date : new Date(),
+  // }
+  res.render('rsvp', {date: new Date(), locals: req.event});
 });
 
 module.exports = router;
