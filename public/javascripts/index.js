@@ -24,11 +24,14 @@ var loadPage = function(template, data) {
 };
 
 var loadHomePage = function() {
-
-    loadPage('index');
-
+  console.log(currentUser)
+    if (currentUser){
+      console.log("giving data currentUser")
+      loadPage('index', {currentUser: currentUser});
+    }else{
+      loadPage('index');
+    }
 };
-
 
 
 var zero_pad = function(str){
@@ -159,6 +162,7 @@ var loadAttendEvents = function() {
 
 $(document).ready(function() {
     $.get('/users/current', function(response) {
+      console.log(response);
         if (response.content.loggedIn) {
             currentUser = response.content.user;
         }
@@ -171,7 +175,7 @@ $(document).on('click', '#organize-events', function(){
   loadEventsPage();
 })
 $(document).on('click', '#home-link', function(evt) {
-    evt.preventDefault();
+
     loadHomePage();
 });
 

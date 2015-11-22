@@ -1,11 +1,12 @@
 (function () {
   var event_id = undefined;
 
-  $(document).on("click", ".check-todo", function(){
+  $(document).on("change", ".check-todo", function(){
     event_id = $(this).parent().parent().parent().parent().attr("eventId");
     var cat_id=$(this).parent().parent().parent().attr("categoryId");
     var todo_id = $(this).attr("todoId");
-    var checked = $(this).checked;
+    var checked = $(this).is(":checked");
+    console.log(checked);
     if(checked){
       $.post("/events/"+event_id+"/category/"+cat_id+"/todo/"+todo_id+"/check").done(function(response){
         console.log("success");

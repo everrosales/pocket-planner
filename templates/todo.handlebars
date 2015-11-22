@@ -2,7 +2,7 @@
 {{#each todos}}
   <div class="todo">
     <div class="checkbox-container">
-      <input type="checkbox" class="check-todo" todoId={{_id}}>
+      <input type="checkbox" {{#equal status 1}} checked="true"{{/equal}} class="check-todo" todoId={{_id}}>
     </div>
     <div class="todo-content" todoId={{_id}}>
       <p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>
