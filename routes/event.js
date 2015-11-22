@@ -269,8 +269,18 @@ router.post('/:event/category/:category/todo/:todo/uncheck', function(req, res) 
 */
 router.delete('/:event/cost/:cost', function(req, res) {
   // Delete cost
-  utils.sendErrResponse(res, 404, 'Route not configured');
-});
+  console.log(req.cost._id);
+  Event.deleteCost(req.event._id, req.cost,
+      function(err) {
+        if (err) {
+          utils.sendErrResponse(res, 500, err);
+        } else {
+          utils.sendSuccessResponse(res, true);
+        }
+      });
+  }
+
+);
 
 /*
     DELETE /events/:event/planner/:planner

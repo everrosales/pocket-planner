@@ -1,6 +1,19 @@
 (function () {
   var event_id = undefined;
 
+  $(document).on("click", ".remove-cost", function(){
+    event_id = $(this).parent().parent().parent().parent().attr("eventId");
+    var cost_id = $(this).parent().parent().attr("costId");
+    $.ajax({
+      url: 'events/'+event_id+'/cost/'+cost_id,
+      type: 'DELETE'
+    }).done(function(response){
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log("failed");
+    })
+  });
+
   $(document).on("change", ".check-todo", function(){
     event_id = $(this).parent().parent().parent().parent().attr("eventId");
     var cat_id=$(this).parent().parent().parent().attr("categoryId");

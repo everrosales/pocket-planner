@@ -54,8 +54,8 @@
       <p class="bold">Costs</p>
       <ul>
       {{#each event.cost}}
-        <li>
-          <p><span class="bold">{{name}}</span><span class="glyphicon glyphicon-remove" id="remove-cost"></span></p>
+        <li costId={{_id}}>
+          <p><span class="bold">{{name}}</span><span class="glyphicon glyphicon-remove remove-cost"></span></p>
           <p>Amount: ${{amount}}</p>
           {{#if description}}
             <p>Description: {{description}}</p>
