@@ -107,14 +107,16 @@ router.post('/:event/addplanner', function(req, res) {
   // add another planner to the event
   if (!req.body.planner) {
     utils.sendErrResponse(res, 404, 'Planner is required');
+  }else{
+    Events.addPlanner(req.event._id, req.body.planner, function(err) {
+      if (err) {
+        utils.sendErrResponse(res, 404, err);
+      } else {
+        utils.sendSuccessResponse(res, true);
+      }
+    })
   }
-  Events.addPlanner(req.event._id, req.body.planner, function(err) {
-    if (err) {
-      utils.sendErrResponse(res, 404, err);
-    } else {
-      utils.sendSuccessResponse(res, true);
-    }
-  })
+
 });
 
 /*
@@ -129,14 +131,16 @@ router.post('/:event/setInformation', function(req, res) {
   // add information to the event
   if (!req.body.information) {
     utils.sendErrResponse(res, 404, 'Information is required.');
+  }else{
+    Event.setInformation(req.event._id, req.body.information, function(err) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, true);
+      }
+    });
   }
-  Event.setInformation(req.event._id, information, function(err) {
-    if (err) {
-      utils.sendErrResponse(res, 500, err);
-    } else {
-      utils.sendSuccessResponse(res, true);
-    }
-  });
+
 });
 
 /*

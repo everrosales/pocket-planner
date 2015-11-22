@@ -1,6 +1,50 @@
 (function () {
   var event_id = undefined;
 
+  $(document).on("click", ".check-todo", function(){
+    event_id = $(this).parent().parent().parent().parent().attr("eventId");
+    var cat_id=$(this).parent().parent().parent().attr("categoryId");
+    var todo_id = $(this).attr("todoId");
+    var checked = $(this).checked;
+    if(checked){
+      $.post("/events/"+event_id+"/category/"+cat_id+"/todo/"+todo_id+"/check").done(function(response){
+        console.log("success");
+      }).fail(function(responseObject){
+        console.log("failed");
+      });
+    }else{
+      $.post("/events/"+event_id+"/category/"+cat_id+"/todo/"+todo_id+"/uncheck").done(function(response){
+        console.log("success");
+      }).fail(function(responseObject){
+        console.log("failed");
+      });
+    }
+  });
+
+  $(document).on("click", "#add-cost", function(){
+    $("#add-cost").hide();
+    $("#add-cost-form").show();
+  });
+
+  $(document).on("click", "#cancel-cost", function(){
+    event_id = $(this).parent().attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  $(document).on("click", "#submit-cost", function(){
+    event_id = $(this).parent().attr("eventId");
+    var name = $("#cost-name").val();
+    var amount = $("#cost-amount").val();
+    var desc = $("#cost-desc").val()
+    $.post("/events/"+event_id+"/addcost", {name:name , amount:amount, description:desc}).done(function(response){
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log(responseObject);
+      var response = $.parseJSON(responseObject.responseText).err;
+      $("#add-cost-form").find(".error").text(response);
+    })
+  });
+
 
   $(document).on('click', '#edit-event', function(){
     event_id = $(this).parent().parent().attr("eventId");
@@ -8,6 +52,7 @@
     console.log($('#start-date').text());
     var start_date = ($('#start-date').text());
     var end_date = ($('#end-date').text());
+
 
     //console.log(event_name);
     $("#event_editable").hide();
@@ -31,6 +76,50 @@
     var htmlStr = "<div class='column' id='new-category-container'><div class='event'><div class='error'></div><input id='category-title' type='text' placeholder='To-Do List Title'><br><div class='btn btn-default' id='add-category-button'>Add To-Do List</div><div class='btn btn-default' id='cancel-category-button'>Cancel</div></div>";
     $(htmlStr).appendTo('#category-container');
   });
+
+  $(document).on("click", "#submit-edit-event", function(){
+    event_id = $(this).parent().parent().attr("eventId");
+    var start_date = $("#edit-start-date").datepicker("getDate");
+    var end_date = $("#edit-end-date").datepicker("getDate");
+
+    var name = $("#event_name_edit").text();
+    console.log($("#event_name_edit").text());
+
+    var hr_min = ($('#start-time').val()).split(':');
+    var hour = parseInt(hr_min[0]);
+    var min = parseInt(hr_min[1]);
+    if (hour) {
+      start_date.setHours(parseInt(hr_min[0]));
+    }
+    if (min) {
+      start_date.setMinutes(parseInt(hr_min[1]));
+    }
+
+    hr_min = ($('#end-time').val()).split(':');
+    hour = parseInt(hr_min[0]);
+    min = parseInt(hr_min[1]);
+    if (hour) {
+      end_date.setHours(parseInt(hr_min[0]));
+    }
+    if (min) {
+      end_date.setMinutes(parseInt(hr_min[1]));
+    }
+
+    var location = $("#edit-event-loc").text();
+    var budget = $("#edit-event-budget").text();
+
+    var desc = $("#edit-event-desc").text();
+
+    var info = {name:name, start:start_date, end:end_date, location:location, budget:budget, description: desc};
+    console.log(info);
+
+    $.post("/events/"+event_id+"/setInformation", {information:info}).done(     function(response){
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log("failed");
+      $("#event_panel").find(".error").text("Invalid input format.");
+    });
+  })
 
   $(document).on('click', '.add_todo', function() {
 

@@ -9,22 +9,26 @@
         <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
         <script src="/javascripts/handlebars.runtime-v4.0.2.js"></script>
         <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
-        <!-- <script src="/javascripts/templates.js"></script> -->
+        <!--<script src="/javascripts/templates.js"></script> -->
         <script src="/javascripts/helpers.js"></script>
         <!-- <script src="/javascripts/index.js"></script> -->
-        <!-- <script src="/javascripts/users.js"></script> -->
+        <script src="/javascripts/users.js"></script>
         <!-- <script src="/javascripts/events.js"></script> -->
         <!-- <script src="/javascripts/todos.js"></script> -->
         <script src="/javascripts/attendfeed.js"></script>
         <script src="/javascripts/rsvp.js"></script>
     </head>
     <body>
-        <div id="main-container">
-          <p class="event_name"><%= locals.name %><span class="glyphicon glyphicon-remove delete-event"></span></p>
+      <div id="main-container" class="rsvp-container">
+        <div id="header">
+            <p> Pocket Planner</p>
+            <button id="home-link">Home</button>
+        </div>
+          <p class="event_name">RSVP for <%= locals.name %></p>
           <hr>
           <p class="host-email">Host: <%= locals.hostEmail %></p>
-          <p class="start_date">Start: <%= locals.start %> <% if (locals.start_time) { %> @ <%= locals.start_time %> <% } %> </p>
-          <p class="end_date">End: <%= locals.end %> <% if (locals.end_time) { %> @ <%= locals.end_time %> <% } %></p>
+          <p class="start_date">Start: <%= locals.start.toLocaleDateString() %> <% if (locals.start_time) { %> @ <%= locals.start_time %> <% } %> </p>
+          <p class="end_date">End: <%= locals.end.toLocaleDateString() %> <% if (locals.end_time) { %> @ <%= locals.end_time %> <% } %></p>
           <p class="event_loc">Location: <% if (locals.location) { %> <%= locals.location %><% } else { %> TBD <% } %></p>
 
           <% if (locals.description) { %>
@@ -32,12 +36,12 @@
           <% } %>
 
           <div>
-            <form action="/attend/<%= locals._id %>" method="POST" target="/attend" name="attendee-status">
-              <input name="email" placeholder="Email [required]"><br>
-              <input name="name" placeholder="Your name"><br>
-              <textarea name="note" placeholder="Comments"></textarea><br>
-              <button type="submit" name="attending" value="1">Yes</button>
-              <button type="submit" name="attending" value="0">No</button>
+            <form name="attendee-status">
+              <input name="email" id="rsvp-email" placeholder="Email [required]"><br>
+              <input name="name" id="rsvp-name" placeholder="Your name [required]"><br>
+              <textarea id="rsvp-comments" name="note" placeholder="Comments"></textarea><br>
+              <button eventId = "<%= locals._id %>" class="rsvp-attend" type="submit" name="attending" value="1">Yes</button>
+              <button eventId = "<%= locals._id %>" class="rsvp-attend" type="submit" name="attending" value="0">No</button>
             </form>
           </div>
         </div>

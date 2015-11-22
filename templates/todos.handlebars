@@ -14,6 +14,7 @@
     <p>+ Add a new To-Do list</p>
   </div>
   <div id="event_panel" eventId={{event._id}}>
+    <div class="error"></div>
     <div id="event_editable">
       <h3 id="event_name">{{event.name}}<span class="glyphicon glyphicon-pencil" id="edit-event"></span></h3>
       <hr>
@@ -25,12 +26,13 @@
     </div>
 
     <div id="event-edit-form" style="display:none">
+
       <h3 id="event_name_edit" class="edit"  contenteditable="true">{{event.name}}</h3>
       <hr>
-      <p id="event-start"><span class="bold">Start:</span></p><input type="text" id="edit-start-date" placeholder={{event.start}}> @ <input type="time" id="edit-start-time" placeholder={{event.start_time}}>
+      <p id="event-start"><span class="bold">Start:</span></p><input type="text" id="edit-start-date" placeholder={{event.start}}> @ <input type="time" id="edit-start-time" value={{event.start_time_24}}>
       <br>
       <br>
-      <p id="event-end"><span class="bold">End:</span></p><input type="text" id="edit-end-date" placeholder={{event.end}}> @ <input type="time" id="edit-end-time" placeholder={{event.end_time}}>
+      <p id="event-end"><span class="bold">End:</span></p><input type="text" id="edit-end-date" placeholder={{event.end}}> @ <input type="time" id="edit-end-time" value={{event.end_time_24}}>
       <br>
       <br>
       <span class="bold">Location:</span><p id="edit-event-loc" class="edit" contenteditable="true"> {{event.location}}</p>
@@ -42,6 +44,43 @@
       <button class="btn btn-default" id="submit-edit-event">Submit</button>
       <button class="btn btn-default" id="cancel-edit-event">Cancel</button>
     </div>
+    <hr>
+    <div>
+      <p class="bold">Invite link:</p><a href=/attend/{{event._id}}>pocketplanner.herokuapp.com/attend/{{event._id}}</a>
+      <p><span class="bold">Number attendees:</span>  {{event.attendees.length}}</p>
+      <hr>
+    </div>
+    <div id="cost-list" eventId={{event._id}}>
+      <p class="bold">Costs</p>
+      <ul>
+      {{#each event.cost}}
+        <li>
+          <p><span class="bold">{{name}}</span></p>
+          <p>Amount: ${{amount}}</p>
+          {{#if description}}
+            <p>Description: {{description}}</p>
+          {{/if}}
+        </li>
+      {{else}}
+        <p>No costs yet.</p>
+      {{/each}}
+      </ul>
+      <button class="btn btn-default" id="add-cost">Add Cost</button>
+    </div>
+    <div id="add-cost-form" style="display:none" eventId={{event._id}}>
+      <div class="error"></div>
+      <br>
+      <input id="cost-name" placeholder="Name of cost [required]">
+      <br>
+      <input id="cost-amount" placeholder="Amount (in $) [required]">
+      <br>
+      <input id="cost-desc" placeholder="Description">
+      <br>
+
+      <button class="btn btn-default"  id="submit-cost">Submit Cost</button>
+      <br>
+      <button class="btn btn-default" id="cancel-cost">Cancel</button>
+    </div>
   </div>
-  <hr>
+
 </div>
