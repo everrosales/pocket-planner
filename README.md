@@ -1,5 +1,9 @@
 ajliu_erosales_erosolar_kimsin98_final
 ======================================
+Live Site
+---------
+This site is currently live at [pocketplanner.herokuapp.com](http://pocketplanner.herokuapp.com/).
+
 Files Structure
 ---------------
 ```
