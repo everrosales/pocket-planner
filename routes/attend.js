@@ -10,11 +10,11 @@ var Event = require('../models/Event');
     clients who are not logged in will receive 403 error
 */
 var requireAuthentication = function(req, res, next) {
-    if (!req.currentUser) {
-        utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
-    } else {
-        next();
-    }
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+  }
 };
 
 /*
