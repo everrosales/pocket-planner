@@ -7,40 +7,40 @@ var Event = (function Event() {
   var Schema = require('mongoose').Schema;
 
   var todoSchema = new Schema({
-    name      : String,     //required
-    deadline    : Date,     //required (in database)
-    status      : {type:Number, default:0}, // default unchecked (0: unchecked, 1: checked)
-    priority    : {type:Number, default:0}  //default none
+    name          : String,     //required
+    deadline      : Date,     //required (in database)
+    status        : {type:Number, default:0}, // default unchecked (0: unchecked, 1: checked)
+    priority      : {type:Number, default:0}  //default none
   });
   var categorySchema = new Schema({
-    name      : String,     //required
-    todos       : {type:[todoSchema], default:[]}
+    name          : String,     //required
+    todos         : {type:[todoSchema], default:[]}
   });
   var costSchema = new Schema({
-    name      : String,     //required
-    amount      : Number,     //required
+    name          : String,     //required
+    amount        : Number,     //required
     description   : {type:String, default:""},
   });
   var attendeeSchema = new Schema({
-    userId      : Schema.Types.ObjectId, //link to user database (default = nonexistent)
-    name      : {type:String, default:""},
-    email       : String,   //required
+    userId        : Schema.Types.ObjectId, //link to user database (default = nonexistent)
+    name          : {type:String, default:""},
+    email         : String,   //required
     attending     : {type:Number, default:0},
     //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
-    note      : {type:String, default:""},
+    note          : {type:String, default:""},
   });
   var eventSchema = new Schema({
-    name      : String,     //required
+    name          : String,     //required
     description   : {type:String, default:""},
-    host      : Schema.Types.ObjectId,   //required, link to user database
+    host          : Schema.Types.ObjectId,   //required, link to user database
     hostEmail     : String,     //required (in database)
-    planners    : {type:[Schema.Types.ObjectId], default:[]},   //     ^
+    planners      : {type:[Schema.Types.ObjectId], default:[]},   //     ^
 
-    start       : Date,     //required
-    end       : Date,     //required (can be same as start)
-    location    : {type:String, default:""},
-    budget      : {type:Number, default:0},
-    cost      : {type:[costSchema], default:[]},
+    start         : Date,     //required
+    end           : Date,     //required (can be same as start)
+    location      : {type:String, default:""},
+    budget        : {type:Number, default:0},
+    cost          : {type:[costSchema], default:[]},
 
     attendees     : {type:[attendeeSchema], default:[]},
 
@@ -228,7 +228,6 @@ var Event = (function Event() {
     });
   };
 
-  //TODO(erosolar): implement this
   var _deleteCost = function(eventId, costid, callback) {
     _getEvent(eventId, function(err, result) {
       if (err) {
@@ -241,6 +240,34 @@ var Event = (function Event() {
           } else {
             callback(err, true);
           }
+        });
+      }
+    });
+  };
+
+  var _getTotalCost = function(eventId, callback) {
+    _getEvent(eventid, function(err, event) {
+      if (err) {
+        callback(err);
+      } else {
+        total = 0;
+        event.cost.map(function(one_cost) {
+          return one_cost.amount;
+        }).each(function(one_cost) {
+          total+= one_cost;
+        });
+        callback(err, total);
+      }
+    });
+  };
+
+  var _getBudgetRemaining = function(eventId, callback) {
+    _getEvent(eventid, function(err, event) {
+      if (err) {
+        callback(err);
+      } else {
+        _getTotalCost(eventId, function(err, total) {
+          callback(err, event.budget - total);
         });
       }
     });
