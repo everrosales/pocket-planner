@@ -10,11 +10,11 @@ var Event = require('../models/Event');
     clients who are not logged in will receive 403 error
 */
 var requireAuthentication = function(req, res, next) {
-    if (!req.isAuthenticated()) {
-        utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
-    } else {
-        next();
-    }
+  if (req.isAuthenticated()) {
+    next();
+  } else {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+  }
 };
 
 /*
@@ -368,7 +368,7 @@ router.post('/:event', function(req, res) {
 */
 router.delete('/:event', function(req, res) {
     // Delete the event and verify that its owned by the user
-    Event.deleteEvent(req.currentUser._id, req.body.event_id, function(err) {
+    Event.deleteEvent(req.user._id, req.body.event_id, function(err) {
       if (err) {
         utils.sendErrResponse(res, 500, err);
       } else {
@@ -388,13 +388,13 @@ router.delete('/:event', function(req, res) {
 */
 router.get('/', function(req, res) {
     // Find all of the events that are visible to the user
-    Event.getEventsByUser(req.currentUser.email, function(err, my_events) {
+    Event.getEventsByUser(req.user.email, function(err, my_events) {
         if (err) {
             utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
             my_events.forEach(function(event) {
                 //TODO(erosales): Change this according to what is actualy stored to check user
-                if (event.author === req.currentUser.username) {
+                if (event.author === req.user.username) {
                     event.is_mine = true;
                 } else {
                     event.is_mine = false;
@@ -444,4 +444,5 @@ router.post('/', function(req, res) {
 
 
 });
+
 module.exports = router;

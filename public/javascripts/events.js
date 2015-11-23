@@ -50,7 +50,7 @@
 
     $.post('/events', data).done(function(response){
       console.log("success!");
-      loadHomePage();
+      loadEventsPage();
     }).fail(function(responseObject){
       console.log("failed");
       var response = $.parseJSON(responseObject.responseText);
@@ -73,7 +73,7 @@
       type: 'DELETE',
       data: {event_id: del_id}
     }).done(function(response){
-      loadHomePage();
+      loadEventsPage();
     }).fail(function(response){
       console.log("failed");
     });
