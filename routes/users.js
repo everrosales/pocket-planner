@@ -12,7 +12,7 @@ var User = require('../models/User');
     return immediately in this case.
 */
 var isLoggedInOrInvalidBody = function(req, res) {
-    if (req.currentUser) {
+    if (req.isAuthenticated()) {
         utils.sendErrResponse(res, 403, "There is already a user logged in.");
         return true;
     } else if (!(req.body.username && req.body.password)) {
@@ -48,7 +48,7 @@ var userLoggedIn = function(req, res, next) {
          of the logged in user.
      - err: on error, an error message
 */
-router.post('/login', passport.authenticate('local-login', {//function(req, res) {
+router.post('/login', passport.authenticate('local-login', {
   successRedirect : '/users/loginsuccess',
   failureRedirect : '/users/loginfail',
   failureFlash : true,
@@ -62,11 +62,10 @@ router.post('/login', passport.authenticate('local-login', {//function(req, res)
 router.get('/loginsuccess', userLoggedIn, function(req, res) {
   // While this looks bad, the userLoggedIn middleware will redirect
   // if the user is not authenticated
-  if (req.user) {
-    req.session.username = req.user.username;
+  if (req.isAuthenticated()) {
     utils.sendSuccessResponse(res, { user: req.user.username });
   } else {
-    utils.sendErrResponse(res, 403, "Username or password invalid.");
+    utils.sendErrResponse(res, 500, "Passport successRedirect error.");
   }
 });
 
@@ -82,12 +81,12 @@ router.get('/loginfail', function(req, res) {
      - err: on error, an error message
 */
 router.post('/logout', function(req, res) {
-    if (req.currentUser) {
-        req.session.destroy();
-        utils.sendSuccessResponse(res);
-    } else {
-        utils.sendErrResponse(res, 403, "There is no user currently logged in.");
-    }
+  if (req.isAuthenticated()) {
+    req.logout();
+    utils.sendSuccessResponse(res);
+  } else {
+    utils.sendErrResponse(res, 403, "There is no user currently logged in.");
+  }
 });
 
 /*
@@ -109,11 +108,11 @@ router.post('/logout', function(req, res) {
      - success: true if user creation succeeded, false otherwise
      - err: on error, an error message
 */
-router.post('/', passport.authenticate('local-signup', {//function(req, res) {
-    successRedirect : '/users/signupsuccess', // Redirect to main page
-    failureRedirect : '/users/signupfail',
-    failureFlash : true,
-  }));
+router.post('/', passport.authenticate('local-signup', {
+  successRedirect : '/users/signupsuccess', // Redirect to main page
+  failureRedirect : '/users/signupfail',
+  failureFlash : true,
+}));
 
 // Redirected here to display message saying that signup was successful
 router.get('/signupsuccess', function(req, res) {
@@ -135,8 +134,8 @@ router.get('/signupfail', function(req, res) {
      - success.user: if success.loggedIn, the currently logged in user
 */
 router.get('/current', function(req, res) {
-    if (req.currentUser) {
-        utils.sendSuccessResponse(res, { loggedIn : true, user : req.currentUser.username });
+    if (req.isAuthenticated()) {
+        utils.sendSuccessResponse(res, { loggedIn : true, user : req.user.username });
     } else {
         utils.sendSuccessResponse(res, { loggedIn : false });
     }

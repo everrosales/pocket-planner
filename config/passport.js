@@ -27,7 +27,7 @@ var internalPassport = function(passport) {
           } else {
             User.createNewUser(email, password, email, function(err, newUser) {
               if (err) {
-                return  done(err);
+                return done(err);
               }
               return done(null, newUser);
             });
@@ -49,7 +49,6 @@ var internalPassport = function(passport) {
       } else if (!User.validPassword(user, password)) {
         return done(null, false, { message: 'Wrong password.'});
       }
-      req.user = user;
       return done(null, user);
     })
   }))
