@@ -1,0 +1,25 @@
+<div class="rsvp-container" id={{locals._id}}>
+  <div class="column attend-event-container" id={{locals._id}}>
+    <div class="event">
+      <p class="event_name">{{locals.name}}</span></p>
+      <hr>
+      <p class="host-email">Host: {{locals.hostEmail}}</p>
+      <p class="start_date">Start: {{locals.start}} @ {{locals.start_time}}</p>
+      <p class="end_date">End: {{locals.end}} @ {{locals.end_time}}</p>
+      <p class="event_loc">Location: {{#if locals.location}}{{locals.location}}{{else}}TBD{{/if}}</p>
+
+      {{#if description}}
+        <p class="event_desc">{{locals.description}}</p>
+      {{/if}}
+    </div>
+  </div>
+  <div>
+    <form name="attendee-status">
+      <input name="email" placeholder="Email [required]">
+      <input name="name" placeholder="Your name [required]">
+      <textarea name="note" placeholder="Comments"></textarea>
+      <button type="submit" name="attending" value="1">Yes</button>
+      <button type="submit" name="attending" value="0">No</button>
+    </form>
+  </div>
+</div>

@@ -22,7 +22,7 @@ var requireAuthentication = function(req, res, next) {
     request path (any routes defined with :event as a parameter).
 */
 router.param('event', function(req, res, next, eventId) {
-    Event.findById(eventId, function(err, event) {
+    Event.getPublicEventById(eventId, function(err, event) {
         if (event) {
             req.event = event;
             next();
@@ -69,29 +69,47 @@ router.post('/:event/:accessCode', function(req, res) {
 */
 router.post('/:event', function(req, res) {
   // Mark attendance for event
-  if (!req.body.email) {
-    utils.sendErrResponse(res, 500, 'Email required.');
+  if (!req.body.email || !req.body.name) {
+    utils.sendErrResponse(res, 500, 'Email and name required.');
   } else {
     if (req.body.attending) {
       Event.markAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
-          callback(err);
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          callback(err, result);
+          //loadHomePage();
+          utils.sendSuccessResponse(res, result);
         }
       });
     } else {
       Event.markNotAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
-          callback(err);
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          callback(err, result);
+          //loadHomePage();
+          utils.sendSuccessResponse(res, result);
         }
       });
     }
   }
-  utils.sendErrResponse(res, 404, 'Route not configured');
+
 });
+
+router.get('/', function(req, res) {
+  // Get all public Events
+  Event.getPublicEvents(function(err, my_events) {
+      if (err) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+      } else {
+          my_events = my_events.reverse();
+          utils.sendSuccessResponse(res, my_events);
+      }
+  });
+});
+
+router.get('/:event/details', function(req, res) {
+    utils.sendSuccessResponse(res, {'event' : req.event });
+})
 
 /*
     GET /attend/:event
@@ -101,9 +119,40 @@ router.post('/:event', function(req, res) {
      - success: page displaying the event attendance options
      - err: on failure, an error message
 */
-router.get('/:event', function(req, res) {
+router.get('/:event', function(req, res, next) {
   // Get the event attendance opions for a particular event
-  res.render('attend', {});
+  // This is a bit roundabout (come back and simpliy this)
+  console.log('serving attend page');
+  // var eventObj = {
+  //   _id : req.event._id,
+  //   name : req.event.name,
+  //   hostEmail : req.event.hostEmail,
+  //   start : req.event.start,
+  //   start_time : 0,
+  //   end : req.event.end,
+  //   end_time : 0,
+  //   location : req.event.location,
+  //   description : req.event.description,
+  //   date : new Date(),
+  // }
+  var evt = req.event;
+  evt.start = new Date(evt.start);
+  evt.start_time = evt.start.toLocaleTimeString();
+  var tmp_time = evt.start_time.split(' ');
+  var am_pm = tmp_time[1];
+  tmp_time = evt.start_time.split(':');
+  evt.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+  evt.start = evt.start.toLocaleDateString();
+
+  evt.end = new Date(evt.end);
+  evt.end_time = evt.end.toLocaleTimeString();
+  tmp_time = evt.end_time.split(' ');
+  am_pm = tmp_time[1];
+  tmp_time = evt.end_time.split(':');
+  evt.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+  evt.end = evt.end.toLocaleDateString();
+  //console.log(evt.end.toLocaleDateString());
+  res.render('rsvp', {date: new Date(), locals: evt});
 });
 
 module.exports = router;

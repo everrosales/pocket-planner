@@ -3,6 +3,7 @@
 
   $(document).on('click', '#new_event', function(){
     $('#new_event').remove();
+    // TODO(ajliu): Make the new DOM element using Javascript DOM elements
     var htmlStr = "<div class='column' id='new-event-container'><div class='event'><div class='error'></div><input type='text' id='event-name' placeholder='Event name'><br><input type='text' id='start-date' placeholder='Start date'><br><input type='time' id='start-time' placeholder='Start time'><br><input type='text' id='end-date' placeholder='End date'><br><input type='time' id='end-time' placeholder='End time'><div class='btn btn-default' id='add-event-button'>Add event</div><div class='btn btn-default' id='cancel-event-button'>Cancel</div></div></div>";
 
 
@@ -49,7 +50,7 @@
 
     $.post('/events', data).done(function(response){
       console.log("success!");
-      loadHomePage();
+      loadEventsPage();
     }).fail(function(responseObject){
       console.log("failed");
       var response = $.parseJSON(responseObject.responseText);
@@ -72,9 +73,28 @@
       type: 'DELETE',
       data: {event_id: del_id}
     }).done(function(response){
-      loadHomePage();
+      loadEventsPage();
     }).fail(function(response){
       console.log("failed");
+    });
+  });
+
+  $(document).on('click', '.event-container', function(){
+    event_id = ($(this).attr('id'));
+    //go to edit that event
+    //get that event's info. for now, populated with dummy data.
+    //make requests for each of the Todos
+    //use date.toLocaleDateString() to get the string date
+    //$.get()
+    $.get('/events/'+ event_id).done(function(response){
+      console.log("success!");
+      console.log(response.content);
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log("failed");
+      var response = $.parseJSON(responseObject.responseText);
+      console.log(response);
+      $('.error').text(response.err);
     });
   });
 })();

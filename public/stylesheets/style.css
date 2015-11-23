@@ -108,7 +108,7 @@ h2 {
   font-weight: bold;
 }
 
-.event-container:hover{
+.event-container:hover, .attend-event-container:hover{
   background-color:#bad4f6;
   cursor:pointer;
 }
@@ -117,7 +117,11 @@ h2 {
   border:1px solid #ccc;
 }
 
-.event-container, .todo-container, #new-event-container, #new-category-container{
+.rsvp-container{
+  text-align:center;
+}
+
+.event-container, .todo-container, .attend-event-container, #new-event-container, #new-category-container{
   border: 1px solid #ccc;
   border-radius:10px;
   min-width:150px;

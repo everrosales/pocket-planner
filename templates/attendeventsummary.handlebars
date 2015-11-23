@@ -1,0 +1,15 @@
+<!-- store event ID info in the event-container -->
+<div class="column attend-event-container" id={{_id}}>
+  <div class="event">
+    <p class="event_name">{{name}}</span></p>
+    <hr>
+    <p class="host-email">Host: {{hostEmail}}</p>
+    <p class="start_date">Start: {{start}} @ {{start_time}}</p>
+    <p class="end_date">End: {{end}} @ {{end_time}}</p>
+    <p class="event_loc">Location: {{#if location}}{{location}}{{else}}TBD{{/if}}</p>
+
+    {{#if description}}
+      <p class="event_desc">{{description}}</p>
+    {{/if}}
+  </div>
+</div>
