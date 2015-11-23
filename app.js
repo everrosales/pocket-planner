@@ -13,11 +13,10 @@ require('./config/passport')(passport)
 // Import route handlers
 var index = require('./routes/index');
 var users = require('./routes/users');
-//var tweets = require('./routes/tweets');
 var events = require('./routes/event');
 var attend = require('./routes/attend');
 
-// Import Tweet User Model
+// Import User Model
 var User = require('./models/User');
 
 var app = express();
@@ -50,22 +49,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Passport configuration
 var LocalStrategy = require('passport-local').Strategy;
 
-// passport.use(new LocalStrategy(function(email, password, done) {
-//   User.verifyPassword(email, password, function(err, user) {
-//     return done(err, user);
-//   });
-// }));
-//
-// passport.serializeUser(function(user, done) {
-//   done(null, user.email);
-// });
-//
-// passport.deserializeUser(function(email, done) {
-//   User.findByEmail(email, function(err, user) {
-//     done(err, user);
-//   });
-// });
-
 //TODO remove old fritter authen
 app.use(function(req, res, next) {
     if (req.session.username) {
@@ -87,7 +70,6 @@ app.use('/', index);
 app.use('/users', users);
 app.use('/events', events);
 app.use('/attend', attend);
-//app.use('/tweets', tweets);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
