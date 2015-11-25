@@ -287,7 +287,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
     + "</p>\n      <p id=\"event-desc\"><span class=\"bold\">Description:</span>  "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</p>\n      <p id=\"event-budget\"><span class=\"bold\">Budget:</span> "
+    + "</p>\n      <p id=\"event-budget\"><span class=\"bold\">Budget:</span> $"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
     + "</p>\n    </div>\n\n    <div id=\"event-edit-form\" style=\"display:none\">\n\n      <h3 id=\"event_name_edit\" class=\"edit\"  contenteditable=\"true\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))

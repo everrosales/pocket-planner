@@ -200,6 +200,7 @@
       $(this).parent().find('.error').text('To-Do List must have a title.');
     }else{
       console.log(event_id);
+      event_id = $("#event_panel").attr("eventId");
       $.post('events/' + event_id + '/addcategory', {name: category_title}).done(function(response){
         console.log("woo, added category");
         console.log(event_id);
