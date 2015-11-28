@@ -79,7 +79,7 @@ router.all('*', requireAuthentication);
      - success: true if server succeeded in adding a cost to the Event
      - err: on failure, an error message
 */
-router.post('/:event/addcost', function (req, res) {
+router.post('/:event/costs', function (req, res) {
   // add cost to the event
   if (!req.body.name || !req.body.amount) {
     utils.sendErrResponse(res, 400, 'Name and amount are required.');
@@ -103,7 +103,7 @@ router.post('/:event/addcost', function (req, res) {
      - success: true if server succeeded in adding a planner to the Event
      - err: on failure, an error message
 */
-router.post('/:event/addplanner', function(req, res) {
+router.post('/:event/planners', function(req, res) {
   // add another planner to the event
   if (!req.body.planner) {
     utils.sendErrResponse(res, 404, 'Planner is required');
@@ -127,7 +127,7 @@ router.post('/:event/addplanner', function(req, res) {
      - success: true if server succeeded in adding information to the Event
      - err: on failure, an error message
 */
-router.post('/:event/setInformation', function(req, res) {
+router.put('/:event', function(req, res) {
   // add information to the event
   if (!req.body.information) {
     utils.sendErrResponse(res, 404, 'Information is required.');
@@ -176,7 +176,7 @@ router.post('/:event/addcategory', function (req, res) {
      - success: true if server succeeded in adding information to the Event
      - err: on failure, an error message
 */
-router.post('/:event/addinvite', function (req, res) {
+router.post('/:event/invite', function (req, res) {
   if (!req.body.attendee) {
     utils.sendErrResponse(res, 400, 'Attendee email required.');
   }

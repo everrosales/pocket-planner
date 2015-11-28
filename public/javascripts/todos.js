@@ -50,7 +50,7 @@
     var name = $("#cost-name").val();
     var amount = $("#cost-amount").val();
     var desc = $("#cost-desc").val()
-    $.post("/events/"+event_id+"/addcost", {name:name , amount:amount, description:desc}).done(function(response){
+    $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log(responseObject);
@@ -127,7 +127,7 @@
     var info = {name:name, start:start_date, end:end_date, location:location, budget:budget, description: desc};
     console.log(info);
 
-    $.post("/events/"+event_id+"/setInformation", {information:info}).done(     function(response){
+    $.put("/events/"+event_id, {information:info}).done(     function(response){
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
