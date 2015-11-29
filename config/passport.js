@@ -21,18 +21,13 @@ var internalPassport = function(passport) {
 
   function(req, email, password, done) {
       process.nextTick(function() {
-        console.log('here');
         User.findByUsername(email, function(err, user) {
           if (user) {
-            console.log("This is going wrong: ");
-            console.log(user);
             return done(null, false, {message: 'That email is already taken'});
           } else {
             User.createNewUser(email, password, email, function(err, newUser) {
               if (err) {
-                console.log("This is going wrong: ");
-                console.log(err);
-                return done(err);
+                return done(null, false, err);
               }
               // req.login(newUser);
               req.user = newUser;
@@ -50,7 +45,7 @@ var internalPassport = function(passport) {
   }, function(req, email, password, done) {
     User.findByEmail(email, function(err, user) {
       if (err) {
-        return done(err);
+        return done(null, false, err);
       } else if (!user) {
         return done(null, false, { message: 'No user found.'});
       } else if (!User.validPassword(user, password)) {

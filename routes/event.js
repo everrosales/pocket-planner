@@ -169,9 +169,7 @@ router.post('/:event/attend', function(req, res) {
 
 // PUT requests
 
-
 // DELETE requests
-
 
 // Register the middleware handlers above
 router.all('*', requireAuthentication);
