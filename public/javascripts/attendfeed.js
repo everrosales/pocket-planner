@@ -10,7 +10,7 @@ $(document).on('click', '.attend-event-container', function(){
   //make requests for each of the Todos
   //use date.toLocaleDateString() to get the string date
   //$.get()
-  window.location.href = "/attend/" + event_id;
+  window.location.href = "/events/" + event_id + "/attend";
   // $.get('/attend/'+ event_id).done(function(response){
   //   console.log("success!");
   //   console.log(response.content);

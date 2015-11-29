@@ -14,7 +14,6 @@ require('./config/passport')(passport);
 var index = require('./routes/index');
 var users = require('./routes/users');
 var events = require('./routes/event');
-var attend = require('./routes/attend');
 
 // Import User Model
 var User = require('./models/User');
@@ -50,7 +49,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', index);
 app.use('/users', users);
 app.use('/events', events);
-app.use('/attend', attend);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

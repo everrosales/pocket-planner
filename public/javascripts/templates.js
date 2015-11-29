@@ -305,11 +305,11 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n      <br>\n      <span class=\"bold\">Budget:</span><p id=\"edit-event-budget\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "</p>\n\n      <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n      <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n    </div>\n    <hr>\n    <div>\n      <p class=\"bold\">Invite link:</p><a href=/attend/"
+    + "</p>\n\n      <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n      <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n    </div>\n    <hr>\n    <div>\n      <p class=\"bold\">Invite link:</p><a href=/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">pocketplanner.herokuapp.com/attend/"
+    + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + "</a>\n      <p><span class=\"bold\">Number attendees:</span>  "
+    + "/attend</a>\n      <p><span class=\"bold\">Number attendees:</span>  "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1)) != null ? stack1.length : stack1), depth0))
     + "</p>\n      <hr>\n    </div>\n    <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
@@ -624,11 +624,11 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
     + "</p>\n      <br>\n      <span class=\"bold\">Budget:</span><p id=\"edit-event-budget\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "</p>\n\n      <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n      <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n    </div>\n    <hr>\n    <div>\n      <p class=\"bold\">Invite link:</p><a href=/attend/"
+    + "</p>\n\n      <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n      <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n    </div>\n    <hr>\n    <div>\n      <p class=\"bold\">Invite link:</p><a href=/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">pocketplanner.herokuapp.com/attend/"
+    + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + "</a>\n      <p><span class=\"bold\">Number attendees:</span>  "
+    + "/attend</a>\n      <p><span class=\"bold\">Number attendees:</span>  "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1)) != null ? stack1.length : stack1), depth0))
     + "</p>\n      <hr>\n    </div>\n    <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
