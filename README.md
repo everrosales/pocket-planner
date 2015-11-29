@@ -63,6 +63,7 @@ Summary of event.js routes. All of these routes require user authentication.
 ```
 GET
 /events                                    // Get all events for a user
+/events/public                             // Get the list of all public events (will be used for invited events)
 /events/:event                             // Get an event given a eventId
 /events/:event/attend                      // Get the invitee attendance page
 
