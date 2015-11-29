@@ -1,8 +1,78 @@
-{{> header currentUser=currentUser}}
-
 <div id="homepage">
-    <h1>Pocket Planner</h1>
-    <p>To create an event login</p>
-    <button id="organize-events">Organize</button>
-    <button id="attend-events" name="attend">Attend</button>
+    {{> header currentUser=currentUser}}
+    <div>
+      {{#unless currentUser}}
+      <div class="navbar">
+        <nav class="nav-error white red-text accent-1-text">
+          <div class="nav-error center">
+            You need to be logged in to create an event
+          </div>
+        </nav>
+      </div>
+      {{/unless}}
+      <div class="slider background-slider hide-on-med-and-down">
+        <ul class="slides">
+          <li>
+            <img class="responsive-img" src="/imgs/concert.jpg">
+          </li>
+          <li>
+            <img class="responsive-img" src="/imgs/fight.jpg">
+          </li>
+          <li>
+            <img class="responsive-img" src="/imgs/fireworks.jpg">
+          </li>
+          <li>
+            <img class="responsive-img" src="/imgs/timessquare.jpg">
+          </li>
+        </ul>
+      </div>
+      <script>
+        // Used to intialize the slider
+        $(document).ready(function(){
+          $('.slider').slider({
+            full_width: true,
+            indicators: false,
+            interval: 3000,
+            height: 300
+          });
+        });
+      </script>
+      <div class="container">
+        <h1 class="center">Pocket Planner</h1>
+        <!-- <p>To create an event login</p> -->
+        <div class="section">
+          <div class="row">
+            <div class="col s12 m6">
+              <div class="card white hoverable">
+                <div class="card-content">
+                  <span class="card-title">Organize <i class="material-icons">edit</i></span>
+                  <p> Create a new event! <br>
+                    We'll help you keep track of your progress and remind you of different
+                    things you need to get done. We can also help you keep track of who's coming.</p>
+                </div>
+                <div class="card-action">
+                  <a id="organize-events" class=" waves-effect waves-light center white-text btn">Organize</a>
+                </div>
+              </div>
+            </div>
+
+            <div class="col s12 m6">
+              <div class="card white hoverable">
+                <div class="card-content">
+                  <span class="card-title">Attend <i class="material-icons">group</i></span>
+                  <p>Attend an event! <br>
+                    Find an awesome event you can attend and let the organizers you are going.
+                    We'll keep you posted and let you know if their plans change. </p>
+                </div>
+                <div class="card-action">
+                  <a id="attend-events" name="attend" class=" waves-effect waves-light white-text btn">Attend</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
 </div>

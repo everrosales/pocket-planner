@@ -180,11 +180,11 @@ $(document).on('click', '#home-link', function(evt) {
 });
 
 $(document).on('click', '#signin-btn', function(evt) {
-    loadPage('signin');
+    $('#login-modal').openModal();
 });
 
 $(document).on('click', '#register-btn', function(evt) {
-    loadPage('register');
+    $('#signup-modal').openModal();
 });
 
 $(document).on('click', '#attend-events', function(evt) {

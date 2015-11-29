@@ -1,12 +1,93 @@
 <div id="header">
-    <p> Pocket Planner</p>
-    <button id="home-link">Home</button>
-    <p id="title">{{title}}</p>
-    {{#if currentUser}}
-        <button class="currentUser" id="logout-link">Log out</button>
-        <p class="currentUser">Welcome, {{currentUser}}</p>
-    {{else}}
-        <button class="currentUser" id="signin-btn">Sign in</button>
-        <button class="currentUser" id="register-btn">Register</button>
-    {{/if}}
+  <div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper blue-grey">
+        <a href="#" class="brand-logo">Pocket Planner</a>
+        <a href="#" data-activates="mobile-header" class="button-collapse"><i class="material-icons">menu</i></a>
+        <ul class="right hide-on-med-and-down">
+          {{#if currentUser}}
+            <li>{{currentUser}}</li>
+            <li><a id="logout-link" class="waves-effect waves-light" href="#">Logout </a></li>
+          {{else}}
+            <li><a id="signin-btn" class="waves-effect waves-light" href="#">Sign in </a></li>
+            <li><a id="register-btn" class="waves-effect waves-light" href="#">Sign up</a></li>
+          {{/if}}
+        </ul>
+        <ul class="side-nav" id="mobile-header">
+          {{#if currentUser}}
+            <li><a id="logout-link" class="waves-effect waves-light currentUser" href="#">Logout</a></li>
+            <!-- <li><a class="waves-effect waves-light currentUser" href="#">{{currentUser}}</a></li> -->
+          {{else}}
+            <li><a id="signin-btn" class="waves-effect waves-light currentUser" href="#">Sign in</a></li>
+            <li><a id="register-btn" class="waves-effect waves-light currentUser" href="#">Sign up</a></li>
+          {{/if}}
+        </ul>
+      </div>
+    </nav>
+  </div>
+  <script>
+    // Used for simple window collapse for mobile and small screens
+    $(document).ready(function() {
+      $(".button-collapse").sideNav();
+    });
+  </script>
+
+  <div id="login-modal" class="modal">
+    <div class="modal-content">
+      <div class="row">
+        <form id="signin-form" class="col s12">
+          <div class="row">
+            <div class="input-field col s12">
+              <input name="username" type="email" class="validate" required>
+              <label for="username">Email</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s12">
+              <input name="password" type="password" class="validate" required>
+              <label for="password">Password</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" id="login-cancel" class="modal-action modal-close waves-effect waves-green btn-flat btn">Cancel</a>
+      <a href="#!" id="login-submit" type="submit" class="waves-effect waves-green btn-flat btn">Submit</a>
+    </div>
+  </div>
+
+  <div id="signup-modal" class="modal">
+    <div class="modal-content">
+      <div class="row">
+        <form id="signup-form" class="col s12">
+          <div class="row">
+            <div class="input-field col s6">
+              <input name="username" type="email" class="validate" required>
+              <label for="username">Email</label>
+            </div>
+
+            <div class="input-field col s6">
+              <input name="confirmusername" type="email" class="validate" required>
+              <label for="confirmusername">Confirm Email</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <input name="password" type="password" class="validate" required>
+              <label for="password">Password</label>
+            </div>
+            <div class="input-field col s6">
+              <input name="confirmpassword" type="password" class="validate" required>
+              <label for="confirmpassword">Confirm Password</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" id="signup-cancel" class="modal-action modal-close waves-effect waves-green btn-flat btn">Cancel</a>
+      <a href="#!" id="signup-submit" type="submit" class="waves-effect waves-green btn-flat btn">Submit</a>
+    </div>
+  </div>
 </div>
