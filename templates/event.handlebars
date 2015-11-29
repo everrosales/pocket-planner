@@ -1,15 +1,19 @@
 <!-- store event ID info in the event-container -->
-<div class="column event-container" id={{_id}}>
-  <div class="event">
-    <p class="event_name">{{name}}<span class="glyphicon glyphicon-remove delete-event"></span></p>
-    <hr>
-    <p class="host-email">Host: {{hostEmail}}</p>
-    <p class="start_date">Start: {{start}} @ {{start_time}}</p>
-    <p class="end_date">End: {{end}} @ {{end_time}}</p>
-    <p class="event_loc">Location: {{#if location}}{{location}}{{else}}TBD{{/if}}</p>
+<div class="col m3 s12">
+  <div class="card event-container" id={{_id}}>
+    <div class="card-content event">
+      <span class="card-title">{{name}}</span>
+      <i class="material-icon right">delete</i>
+      <p class="event_name">{{name}}<span class="glyphicon glyphicon-remove delete-event"></span></p>
+      <hr>
+      <p class="host-email">Host: {{hostEmail}}</p>
+      <p class="start_date">Start: {{start}} @ {{start_time}}</p>
+      <p class="end_date">End: {{end}} @ {{end_time}}</p>
+      <p class="event_loc">Location: {{#if location}}{{location}}{{else}}TBD{{/if}}</p>
 
-    {{#if description}}
-      <p class="event_desc">{{description}}</p>
-    {{/if}}
+      {{#if description}}
+        <p class="event_desc">{{description}}</p>
+      {{/if}}
+    </div>
   </div>
 </div>

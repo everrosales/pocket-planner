@@ -1,16 +1,101 @@
 {{> header currentUser=currentUser title=title}}
 
 <div id="events">
-  {{#each my_events}}
-    {{> event}}
-  {{else}}
-    <p><em>No events yet!</em></p>
-  {{/each}}
+  <div class="container">
+    <div class="row">
+      {{#each my_events}}
+        {{> event}}
+      {{else}}
+        <p><em>No events yet!</em></p>
+      {{/each}}
 
-
-    <div class="column btn btn-default" id="new_event">
-      <p>+ Add a new event</p>
+      <div class="col m3 s12" id="new_event">
+        <div class="card">
+          <div class="card-content">
+            <span class="card-title">Create</span>
+            <p>
+              Create and start planning a new event
+            </p>
+          </div>
+          <div class="card-action">
+            <a class="waves-effect waves-light white-text btn">New Event</a>
+          </div>
+        </div>
+        <!-- <p>+ Add a new event</p> -->
+      </div>
     </div>
+  </div>
 
+  <div id="new-event-modal" class="modal">
+    <div class="modal-content">
+      <div class="row">
+        <form id="new-event-form">
+          <div class="row">
+            <div class="input-field col s12">
+              <input name='eventname' type="text" class="validate" required>
+              <label for='eventname'>Event Name</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <input name='start_date' type="date" class="datepicker start_date" required>
+              <label for='start_date'>Start Date</label>
+            </div>
+            <div class="input-field col s6">
+              <input name='end_date' type="date" class="datepicker end_date" required>
+              <label for='end_date'>End Date</label>
+            </div>
+          </div>
+          <div class="row">
+            <div class="input-field col s6">
+              <input name='start_time' type="time">
+              <label for='start_time'>Start Time</label>
+            </div>
+            <div class="input-field col s6">
+              <input name="end_time" type="time">
+              <label for="end_time">End Time</label>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class='waves-effect waves-light btn-flat btn' id='add-event-button'>Add event</a>
+      <a href="#!" class='modal-action modal-close waves-effect waves-light btn-flat btn' id='cancel-event-button'>Cancel</a>
+    </div>
+    <script>
+      // Intialization for date widgets
+      console.log('setting the thing');
+      console.log($('.start_date'))
+
+      $('.start_date').pickadate({
+        min: new Date(),
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 15 // Creates a dropdown of 15 years to control year
+      });
+
+      $('.end_date').pickadate({
+        selectMonths: true,
+        selectYears: 15,
+        min: $('start_date').val() || new Date(),
+      })
+    </script>
+  </div>
+  <!-- <div class='column' id='new-event-container'>
+    <div class='event'>
+      <div class='error'></div>
+      <input type='text' id='event-name' placeholder='Event name'>
+      <br>
+      <input type='text' id='start-date' placeholder='Start date'>
+      <br>
+      <input type='time' id='start-time' placeholder='Start time'>
+      <br>
+      <input type='text' id='end-date' placeholder='End date'>
+      <br>
+      <input type='time' id='end-time' placeholder='End time'>
+      <div class='btn btn-default' id='add-event-button'>Add event</div>
+      <div class='btn btn-default' id='cancel-event-button'>Cancel</div>
+    </div>
+  </div> -->
 
 </div>

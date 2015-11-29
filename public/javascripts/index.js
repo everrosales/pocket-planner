@@ -117,7 +117,7 @@ var loadEventsPage = function() {
         });
       });
     } else{
-      loadPage("signin");
+      $('#login-modal').openModal();
     }
 
 
