@@ -6,21 +6,25 @@ var Event = (function Event() {
   var mongoose = require('mongoose');
   var Schema = require('mongoose').Schema;
 
+  // Schema for a todo (a task that should be accomplished)
   var todoSchema = new Schema({
     name          : {type:String, required:true},
     deadline      : {type:Date, required:true},
     status        : {type:Number, default:0}, // (0: unchecked, 1: checked)
     priority      : {type:Number, default:0}  //default none
   });
+  // Schema for a category (a collection of related todos)
   var categorySchema = new Schema({
     name          : {type:String, required:true},
     todos         : {type:[todoSchema], default:[]}
   });
+  // Schema for a cost object (a description of a particular expense)
   var costSchema = new Schema({
     name          : {type:String, required:true},
     amount        : {type:Number, required:true},
     description   : {type:String, default:""},
   });
+  // Schema for an attendee (someone attending an event)
   var attendeeSchema = new Schema({
     userId        : Schema.Types.ObjectId, //link to user database (default = nonexistent)
     name          : {type:String, default:""},
@@ -29,6 +33,7 @@ var Event = (function Event() {
     //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
     note          : {type:String, default:""},
   });
+  // Schema for an entire event, including (multiples of) the above schemas
   var eventSchema = new Schema({
     name          : {type:String, required:true},
     description   : {type:String, default:""},

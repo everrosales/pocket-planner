@@ -4,6 +4,7 @@ var User = (function User() {
   var Schema = require('mongoose').Schema;
   var bcrypt = require('bcrypt-nodejs');
 
+  // Schema for a user (someone who plans events with our app)
   var userSchema = new Schema({
     username  : String, //optional
     password  : {type:String, required:true},
