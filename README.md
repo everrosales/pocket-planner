@@ -62,26 +62,31 @@ Routes
 Summary of event.js routes. All of these routes require user authentication.
 ```
 GET
-/event                                    // Get all events for a user
-/event/:event                             // Get an event given a eventId
+/events                                    // Get all events for a user
+/events/public                             // Get the list of all public events (will be used for invited events)
+/events/:event                             // Get an event given a eventId
+/events/:event/attend                      // Get the invitee attendance page
 
 POST
-/event                                    // Create an event
-/event/:event/addcost                     // Add a cost to an event
-/event/:event/addplanner                  // Add a planner to an event
-/event/:event/setInformation              // Add information to an event
-/event/:event/addcategory                 // Add a category to an event
-/event/:event/addinvite                   // Add an invite to an event
-/event/:event/category/:category/addtodo  // Add a todo to a category
-/event/:event/category/:category/todo/:todo/check // Marks todo as checked
-/event/:event/category/:category/todo/:todo/uncheck // Marks todo as unchecked
+/events                                    // Create an event
+/events/:event/attend                      // Attend an event
+/events/:event/costs                       // Add a cost to an event
+/events/:event/planners                    // Add a planner to an event
+/events/:event/categories                  // Add a category to an event
+/events/:event/invite                      // Add an invite to an event
+/events/:event/categories/:category/todos  // Add a todo to a category
+
+PUT
+/events/:event                             // Add information to an event
+/events/:event/categories/:category/todos/:todo/check // Marks todo as checked
+/events/:event/categories/:category/todos/:todo/uncheck // Marks todo as unchecked
 
 DELETE
-/event/:event                             // Delete an event
-/event/:event/cost/:cost                  // Delete a cost from an event
-/event/:event/planner/:planner            // Remove a planner from an event
-/event/:event/category/:category          // Delete a category from an event
-/event/:event/category/:category/todo/:todo // Delete a todo from a category
+/events/:event                             // Delete an event
+/events/:event/costs/:cost                  // Delete a cost from an event
+/events/:event/planners/:planner            // Remove a planner from an event
+/events/:event/categories/:category          // Delete a category from an event
+/events/:event/categories/:category/todos/:todo // Delete a todo from a category
 ```
 Summary of  user.js routes.
 ```
@@ -96,15 +101,6 @@ POST
 /users                  // Create a new user
 /users/login            // Authenticate user
 /users/logout           // Logout user and destroy session
-```
-Summary of attend.js routes.
-```
-GET
-/attend/:event              // Get the invitee page
-
-POST
-/attend/:event              // Mark user attending
-/attend/:event/:accessCode  // Mark user attending with access code [Not Implemented]
 ```
 
 Development

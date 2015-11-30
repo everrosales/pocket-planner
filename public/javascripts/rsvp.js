@@ -14,7 +14,7 @@
       comments = "";
     }
 
-    $.post("/attend/" + event_id, {email:email, name:name, attending:attending, note:comments})
+    $.post("/events/" + event_id + "/attend", {email:email, name:name, attending:attending, note:comments})
 
     window.setTimeout(function(){
       window.location.href="/";

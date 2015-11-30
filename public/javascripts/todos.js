@@ -5,7 +5,7 @@
     event_id = $(this).parent().parent().parent().parent().attr("eventId");
     var cost_id = $(this).parent().parent().attr("costId");
     $.ajax({
-      url: 'events/'+event_id+'/cost/'+cost_id,
+      url: 'events/'+event_id+'/costs/'+cost_id,
       type: 'DELETE'
     }).done(function(response){
       loadTodosPage(event_id);
@@ -21,13 +21,21 @@
     var checked = $(this).is(":checked");
     console.log(checked);
     if(checked){
-      $.post("/events/"+event_id+"/category/"+cat_id+"/todo/"+todo_id+"/check").done(function(response){
+      $.ajax({
+        url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
+        type: 'PUT',
+        data: {status: 'check'}
+      }).done(function(response){
         console.log("success");
       }).fail(function(responseObject){
         console.log("failed");
       });
     }else{
-      $.post("/events/"+event_id+"/category/"+cat_id+"/todo/"+todo_id+"/uncheck").done(function(response){
+      $.ajax({
+        url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
+        type: 'PUT',
+        data: {status: 'uncheck'}
+      }).done(function(response){
         console.log("success");
       }).fail(function(responseObject){
         console.log("failed");
@@ -50,7 +58,7 @@
     var name = $("#cost-name").val();
     var amount = $("#cost-amount").val();
     var desc = $("#cost-desc").val()
-    $.post("/events/"+event_id+"/addcost", {name:name , amount:amount, description:desc}).done(function(response){
+    $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log(responseObject);
@@ -127,7 +135,11 @@
     var info = {name:name, start:start_date, end:end_date, location:location, budget:budget, description: desc};
     console.log(info);
 
-    $.post("/events/"+event_id+"/setInformation", {information:info}).done(     function(response){
+    $.ajax({
+      url:"/events/"+event_id,
+      type: 'PUT',
+      data: {information: info}
+    }).done(function(response){
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
@@ -153,7 +165,7 @@
     var categoryId = $(this).parent().parent().parent().parent().attr('categoryId');
     event_id = $(this).parent().parent().parent().parent().parent().attr('eventId');
     $.ajax({
-      url:'events/'+event_id+'/category/'+categoryId+'/todo/'+todoId,
+      url:'events/'+event_id+'/categories/'+categoryId+'/todos/'+todoId,
       type: 'DELETE'
     }).done(function(response){
       loadTodosPage(event_id);
@@ -169,7 +181,7 @@
     if (todo_name.length < 1){
       error_div.text('To-Do must have a name and deadline.');
     }else{
-      $.post('events/'+event_id+'/category/'+categoryId+'/addtodo', {name:todo_name, deadline: deadline}).done(function(response){
+      $.post('events/'+event_id+'/categories/'+categoryId+'/todos', {name:todo_name, deadline: deadline}).done(function(response){
         loadTodosPage(event_id);
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
@@ -201,7 +213,7 @@
     }else{
       console.log(event_id);
       event_id = $("#event_panel").attr("eventId");
-      $.post('events/' + event_id + '/addcategory', {name: category_title}).done(function(response){
+      $.post('events/' + event_id + '/categories', {name: category_title}).done(function(response){
         console.log("woo, added category");
         console.log(event_id);
         loadTodosPage(event_id);
@@ -217,7 +229,7 @@
     var category_id = $(this).parent().parent().attr('categoryId');
     event_id = $(this).parent().parent().parent().attr('eventId');
     $.ajax({
-      url: 'events/' + event_id + '/category/' + category_id,
+      url: 'events/' + event_id + '/categories/' + category_id,
       type: 'DELETE',
     }).done(function(response){
       loadTodosPage(event_id);

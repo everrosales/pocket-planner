@@ -126,7 +126,7 @@ var loadEventsPage = function() {
 var loadAttendEvents = function() {
   //get request for events. replace my_events with results
   //
-  $.get('/attend', function(response){
+  $.get('/events/public', function(response){
     results = [];
     response.content.forEach(function(e){
       results.push(e);
