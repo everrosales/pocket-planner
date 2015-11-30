@@ -66,15 +66,38 @@ var User = (function User() {
 
 //PUBLIC METHODS
 
+  /** Finds a user, given their email
+   *    Arguments:
+   *      email: email of user to find
+   *      callback: function to pass the found user to
+   *    Returns:
+   *      found user, or 'no such user' error if user doesn't exist
+   */
   var _findByEmail = function(email, callback) {
     _getUser(email, callback);
   };
 
+  /** Finds a user, given their username
+   *    Arguments:
+   *      username: username of user to find
+   *      callback: function to pass the found user to
+   *    Returns:
+   *      found user, or 'no such user' error if user doesn't exist
+   */
   var _findByUsername = function(username, callback) {
     //assuming usernames are unique
     _getUser_username(username, callback);
   };
 
+  /** Verifies that a password for a given user is correct
+   *    Arguments:
+   *      username: username of user to verify password for
+   *      candidatepw: password to verify
+   *      callback: function to call after verification
+   *    Returns:
+   *      true if password is correct, false if password is incorrect;
+   *      'no such user' error if user doesn't exist
+   */
   var _verifyPasswordWithUsername = function(username, candidatepw, callback) {
     _usernameToEmail(username, function(err, email) {
       if (err) {
@@ -85,6 +108,15 @@ var User = (function User() {
     });
   };
 
+  /** Verifies that a password for a given user is correct
+   *    Arguments:
+   *      email: email of user to verify password for
+   *      candidatepw: password to verify
+   *      callback: function to call after verification
+   *    Returns:
+   *      true if password is correct, false if password is incorrect;
+   *      'no such user' error if user doesn't exist
+   */
   var _verifyPassword = function(email, candidatepw, callback) {
     _ifUserExists(email, function(err, exists) {
       if(exists) {
@@ -101,6 +133,15 @@ var User = (function User() {
     });
   };
 
+  /** Creates a new user in the database
+   *    Arguments:
+   *      email: email of new user
+   *      password: password of new user
+   *      username: username of new user ("" if none provided)
+   *      callback: function to call after verification
+   *    Returns:
+   *      undefined
+   */
   var _createNewUser = function(email, password, username, callback) { //username optional
     _ifUserExists(email, function(err, exists) {
       if (exists) {
@@ -128,7 +169,12 @@ var User = (function User() {
     return bcrypt.compareSync(password, user.password);
   };
 
-  // for testing, because apparently mocha tests aren't automatically independent >.<
+  /** Removes all users from the database. Used for testing purposes.
+   *  Arguments:
+   *    callback: a function to call once the database is cleared
+   *  Returns:
+   *    undefined
+   */
   var _clearAllUsers = function(callback) {
     _model.remove({}, callback);
   };
