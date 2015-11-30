@@ -185,7 +185,7 @@ var User = (function User() {
     _model.remove({}, callback);
   };
 
-  return {
+  return Object.freeze({
     findByEmail           	 			: _findByEmail,
     findByUsername          			: _findByUsername,
     verifyPasswordWithUsername    : _verifyPasswordWithUsername,
@@ -194,7 +194,7 @@ var User = (function User() {
     clearAllUsers           			: _clearAllUsers,
     generateHash          				: _generateHash,
     validPassword           			: _validPassword,
-  };
+  });
 })();
 
 module.exports = User;

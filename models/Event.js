@@ -729,7 +729,7 @@ var Event = (function Event() {
     });
   };
 
-  return {
+  return Object.freeze({
     findById            : _findById,
     createNewEvent      : _createNewEvent,
     clearAllEvents      : _clearAllEvents,
@@ -755,6 +755,6 @@ var Event = (function Event() {
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,
     deleteCategory      : _deleteCategory,
-  };
+  });
 })();
 module.exports = Event;
