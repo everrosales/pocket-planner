@@ -5,9 +5,9 @@ var User = (function User() {
   var bcrypt = require('bcrypt-nodejs');
 
   var userSchema = new Schema({
-    username  : String,
-    password  : String,
-    email     : String,
+    username  : String, //optional
+    password  : {type:String, required:true},
+    email     : {type:String, required:true},
   }, {versionKey: false});
 
   var _model = mongoose.model('user', userSchema);
