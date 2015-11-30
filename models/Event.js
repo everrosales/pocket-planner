@@ -55,6 +55,7 @@ var Event = (function Event() {
   var _model = mongoose.model('event', eventSchema);
 
 //PRIVATE METHODS
+// returns true/false: event with given id exists/doesn't exist
   var _ifEventExists = function(id, callback) {
     _model.count({_id : id}, function(err, count) {
       if (count == 1) {
@@ -65,6 +66,7 @@ var Event = (function Event() {
     });
   };
 
+  // returns event with given id, if exists, or error if doesn't exist
   var _getEvent = function(id, callback) {
     _ifEventExists(id, function(err, exists) {
       if (exists) {
@@ -75,11 +77,7 @@ var Event = (function Event() {
     });
   };
 
-  // returns an object that is
-  // {
-  //  event: _event
-  //  category: _category
-  // }
+  // returns {event: <event>, category:<category>} for given eventid, categoryid
   var _getCategory = function(eventId, categoryId, callback) {
     _getEvent(eventId, function(err, event) {
       if (event) {
@@ -96,6 +94,7 @@ var Event = (function Event() {
     });
   };
 
+  // returns all events that a given user is planning (or helping to plan)
   var _getEventsByUserId = function(userid, callback) {
     _model.find({$or:[{'host':userid}, {'planners':userid}]}, callback);
   };

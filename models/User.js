@@ -15,6 +15,7 @@ var User = (function User() {
 
 //PRIVATE METHODS
 
+// returns true/false: user with given email exists/doesn't exist
   var _ifUserExists = function(email, callback) {
     _model.count({'email':email}, function(err, count) {
       if (count == 1) {
@@ -25,6 +26,7 @@ var User = (function User() {
     });
   };
 
+  // returns true/false: user with given username exists/doesn't exist
   var _ifUserExists_username = function(username, callback) {
     _model.count({'username':username}, function(err, count) {
       if (count == 1) {
@@ -35,6 +37,7 @@ var User = (function User() {
     });
   };
 
+  // returns user with given email, if exists, or error if doesn't exist
   var _getUser = function(email, callback) {
     _ifUserExists(email, function(err, exists) {
       if (exists) {
@@ -45,6 +48,7 @@ var User = (function User() {
     });
   };
 
+  // returns user with given username, if exists, or error if doesn't exist
   var _getUser_username = function(username, callback) {
     _ifUserExists_username(username, function(err, exists) {
       if (exists) {
@@ -55,6 +59,7 @@ var User = (function User() {
     });
   };
 
+  // given the username of a user, fetches their email
   var _usernameToEmail = function(username, callback) {
     _getUser_username(username, function(err, user) {
       if(err) {
