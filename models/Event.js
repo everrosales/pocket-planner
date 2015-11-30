@@ -7,37 +7,37 @@ var Event = (function Event() {
   var Schema = require('mongoose').Schema;
 
   var todoSchema = new Schema({
-    name          : String,     //required
-    deadline      : Date,     //required (in database)
-    status        : {type:Number, default:0}, // default unchecked (0: unchecked, 1: checked)
+    name          : {type:String, required:true},
+    deadline      : {type:Date, required:true},
+    status        : {type:Number, default:0}, // (0: unchecked, 1: checked)
     priority      : {type:Number, default:0}  //default none
   });
   var categorySchema = new Schema({
-    name          : String,     //required
+    name          : {type:String, required:true},
     todos         : {type:[todoSchema], default:[]}
   });
   var costSchema = new Schema({
-    name          : String,     //required
-    amount        : Number,     //required
+    name          : {type:String, required:true},
+    amount        : {type:Number, required:true},
     description   : {type:String, default:""},
   });
   var attendeeSchema = new Schema({
     userId        : Schema.Types.ObjectId, //link to user database (default = nonexistent)
     name          : {type:String, default:""},
-    email         : String,   //required
+    email         : {type:String, required:true},   //required
     attending     : {type:Number, default:0},
     //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
     note          : {type:String, default:""},
   });
   var eventSchema = new Schema({
-    name          : String,     //required
+    name          : {type:String, required:true},
     description   : {type:String, default:""},
-    host          : Schema.Types.ObjectId,   //required, link to user database
-    hostEmail     : String,     //required (in database)
-    planners      : {type:[Schema.Types.ObjectId], default:[]},   //     ^
+    host          : {type:Schema.Types.ObjectId, required:true}, //link to user database
+    hostEmail     : {type:String, required:true},
+    planners      : {type:[Schema.Types.ObjectId], default:[]},  //     ^
 
-    start         : Date,     //required
-    end           : Date,     //required (can be same as start)
+    start         : {type:Date, required:true},
+    end           : {type:Date, required:true}, // can be same as, but not earlier than, start
     location      : {type:String, default:""},
     budget        : {type:Number, default:0},
     cost          : {type:[costSchema], default:[]},
