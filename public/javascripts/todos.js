@@ -15,8 +15,8 @@
   });
 
   $(document).on("change", ".check-todo", function(){
-    event_id = $(this).parent().parent().parent().parent().attr("eventId");
-    var cat_id=$(this).parent().parent().parent().attr("categoryId");
+    event_id = $("#event_panel").attr("eventId");
+    var cat_id=$(this).parent().parent().parent().parent().attr("categoryId");
     var todo_id = $(this).attr("todoId");
     var checked = $(this).is(":checked");
     console.log(checked);
@@ -81,13 +81,25 @@
     $("#event-edit-form").show();
     $("#edit-start-date").pickadate({
       min: new Date(),
-      max: $('#edit-end-date').val() || new Date(),
+      max: $('#edit-end-date').val() || new Date(8640000000000000),
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
+      onClose: function(){
+        $('#edit-end-date').pickadate('picker').set('min', $('#edit-start-date').val());
+      }
     });
 
-    $("#edit-end-date").datepicker();
-    $("#edit-end-date").datepicker("setDate", end_date);
+    $('#edit-end-date').pickadate({
+      selectMonths: true,
+      selectYears: 15,
+      /*onSet: function(){
+        $('#start_date').pickadate.set('max', $(this).val());
+      }*/
+      min: $('#edit-start-date').val() || new Date(),
+      onClose: function(){
+        $('#edit-start-date').pickadate('picker').set('max', $('#edit-end-date').val());
+      }
+    });
 
   });
 
@@ -112,8 +124,8 @@
 
   $(document).on("click", "#submit-edit-event", function(){
     event_id = $(this).parent().parent().attr("eventId");
-    var start_date = $("#edit-start-date").datepicker("getDate");
-    var end_date = $("#edit-end-date").datepicker("getDate");
+    var start_date = new Date($("#edit-start-date").val());
+    var end_date = new Date($("#edit-end-date").val());
 
     var name = $("#event_name_edit").text();
     console.log($("#event_name_edit").text());
@@ -165,16 +177,16 @@
     var htmlStr = "<div class='new-todo-form'><div class='error'></div><input type='text' id='todo-name' placeholder='Todo'><br><input type='text' placeholder='Deadline' id='deadline'><br><div class='btn btn-default' id='add-todo'>Add To-do</div><br><div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>";
     $(htmlStr).appendTo(parent);
 
-    $('#deadline').datepicker({
-      minDate: new Date()
+    $('#deadline').pickadate({
+      min: new Date()
     });
     //use $.find() to find error div
   });
 
   $(document).on('click', '.delete-todo', function(){
-    var todoId = $(this).parent().parent().attr('todoId');
-    var categoryId = $(this).parent().parent().parent().parent().attr('categoryId');
-    event_id = $(this).parent().parent().parent().parent().parent().attr('eventId');
+    var todoId = $(this).parent().attr('todoId');
+    var categoryId = $(this).parent().parent().parent().attr('categoryId');
+    event_id = $('#event_panel').attr('eventId');
     $.ajax({
       url:'events/'+event_id+'/categories/'+categoryId+'/todos/'+todoId,
       type: 'DELETE'
@@ -184,11 +196,11 @@
   });
 
   $(document).on('click', '#add-todo', function(){
-    var categoryId = $(this).parent().parent().attr('categoryId');
-    event_id = $(this).parent().parent().parent().attr('eventId');
+    var categoryId = $(this).parent().parent().parent().attr('categoryId');
+    event_id = $('#event_panel').attr("eventId");
     var error_div = $(this).parent().find('.error');
     var todo_name = $('#todo-name').val();
-    var deadline = $('#deadline').datepicker("getDate");
+    var deadline = new Date($('#deadline').val());
     if (todo_name.length < 1){
       error_div.text('To-Do must have a name and deadline.');
     }else{
@@ -259,8 +271,8 @@
   });
 
   $(document).on('click', '.delete-category', function(){
-    var category_id = $(this).parent().parent().attr('categoryId');
-    event_id = $(this).parent().parent().parent().attr('eventId');
+    var category_id = $(this).parent().parent().parent().attr('categoryId');
+    event_id = $('#event_panel').attr('eventId');
     $.ajax({
       url: 'events/' + event_id + '/categories/' + category_id,
       type: 'DELETE',

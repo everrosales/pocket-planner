@@ -1,18 +1,21 @@
 
 {{#each todos}}
-  <div class="todo">
-    <div class="checkbox-container">
+  <div class="todo" todoId={{_id}}>
+    <i class="material-icons right delete-todo">clear</i>
+    <p>
+      <input class="check-todo" type="checkbox" {{#equal status 1}} checked="true"{{/equal}} todoId={{_id}} id="todo-name" />
+      <label for="todo-name">{{name}}</label>
+    </p>
+    <!--<div class="checkbox-container">
       <input type="checkbox" {{#equal status 1}} checked="true"{{/equal}} class="check-todo" todoId={{_id}}>
-    </div>
-    <div class="todo-content" todoId={{_id}}>
-      <p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>
+    </div>-->
+      <!--<p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>-->
       {{#if deadline}}
       <p><small>Deadline: {{deadline}}</small></p>
       {{/if}}
       {{#if priority}}
       <p><small>Priority: {{priority}}</small></p>
       {{/if}}
-    </div>
     <br>
 
   </div>

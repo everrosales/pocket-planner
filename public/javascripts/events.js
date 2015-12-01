@@ -27,7 +27,7 @@
       onClose: function(){
         $('#start_date').pickadate('picker').set('max', $('#end_date').val());
       }
-    })
+    });
 
   });
 

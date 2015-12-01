@@ -68,17 +68,17 @@ templates['event'] = template({"1":function(container,depth0,helpers,partials,da
 
   return "<!-- store event ID info in the event-container -->\n<div class=\"col m3 s12\">\n  <div class=\"card event-container\" eventId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    <div class=\"card-content event\">\n      <span class=\"card-title\">"
-    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span>\n\n      "
+    + ">\n    <div class=\"card-content event\">\n      "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.is_mine : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n\n      <hr>\n      <p class=\"host-email\">Host: "
+    + "\n      <p><span class=\"card-title\">"
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</span></p>\n\n\n\n      <hr>\n      <p class=\"host-email\">Host: "
     + alias4(((helper = (helper = helpers.hostEmail || (depth0 != null ? depth0.hostEmail : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"hostEmail","hash":{},"data":data}) : helper)))
-    + "</p>\n      <p class=\"start_date\">Start: "
+    + "</p>\n      <p>Start: "
     + alias4(((helper = (helper = helpers.start || (depth0 != null ? depth0.start : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.start_time || (depth0 != null ? depth0.start_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start_time","hash":{},"data":data}) : helper)))
-    + "</p>\n      <p class=\"end_date\">End: "
+    + "</p>\n      <p>End: "
     + alias4(((helper = (helper = helpers.end || (depth0 != null ? depth0.end : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
@@ -100,7 +100,7 @@ templates['events'] = template({"1":function(container,depth0,helpers,partials,d
   return ((stack1 = container.invokePartial(partials.header,depth0,{"name":"header","hash":{"title":(depth0 != null ? depth0.title : depth0),"currentUser":(depth0 != null ? depth0.currentUser : depth0)},"data":data,"helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
     + "\n<div id=\"events\">\n  <div class=\"container\">\n    <div class=\"row\">\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.my_events : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n      <div class=\"col m3 s12\" id=\"new_event\">\n        <div class=\"card\">\n          <div class=\"card-content\">\n            <span class=\"card-title\">Create</span>\n            <p>\n              Create and start planning a new event\n            </p>\n          </div>\n          <div class=\"card-action\">\n            <a class=\"waves-effect waves-light white-text btn\">New Event</a>\n          </div>\n        </div>\n        <!-- <p>+ Add a new event</p> -->\n      </div>\n    </div>\n  </div>\n\n  <div id=\"new-event-modal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <div class=\"row\">\n        <form id=\"new-event-form\">\n          <div class=\"row\">\n            <div class=\"input-field col s12\">\n              <input name='eventname' type=\"text\" class=\"validate\" required>\n              <label for='eventname'>Event Name</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_date' type=\"date\" id='start_date' class=\"datepicker start_date\" required>\n              <label for='start_date'>Start Date</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name='end_date' type=\"date\" id='end_date' class=\"datepicker end_date\" required>\n              <label for='end_date'>End Date</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_time' type=\"time\">\n              <!--<label for='start_time'>Start Time</label>-->\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"end_time\" type=\"time\">\n              <!--<label for=\"end_time\">End Time</label>-->\n            </div>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <a href=\"#!\" class='waves-effect waves-light btn-flat btn' id='add-event-button'>Add event</a>\n      <a href=\"#!\" class='modal-action modal-close waves-effect waves-light btn-flat btn' id='cancel-event-button'>Cancel</a>\n    </div>\n    <script>\n      // Intialization for date widgets\n      console.log('setting the thing');\n      console.log($('.start_date'))\n\n      $('.start_date').pickadate({\n        min: new Date(),\n        selectMonths: true, // Creates a dropdown to control month\n        selectYears: 15 // Creates a dropdown of 15 years to control year\n      });\n\n      $('.end_date').pickadate({\n        selectMonths: true,\n        selectYears: 15,\n        min: $('start_date').val() || new Date(),\n      })\n    </script>\n  </div>\n  <!-- <div class='column' id='new-event-container'>\n    <div class='event'>\n      <div class='error'></div>\n      <input type='text' id='event-name' placeholder='Event name'>\n      <br>\n      <input type='text' id='start-date' placeholder='Start date'>\n      <br>\n      <input type='time' id='start-time' placeholder='Start time'>\n      <br>\n      <input type='text' id='end-date' placeholder='End date'>\n      <br>\n      <input type='time' id='end-time' placeholder='End time'>\n      <div class='btn btn-default' id='add-event-button'>Add event</div>\n      <div class='btn btn-default' id='cancel-event-button'>Cancel</div>\n    </div>\n  </div> -->\n\n</div>\n";
+    + "\n      <div class=\"col m3 s12\" id=\"new_event\">\n        <div class=\"card\">\n          <div class=\"card-content\">\n            <span class=\"card-title\">Create</span>\n            <p>\n              Create and start planning a new event\n            </p>\n          </div>\n          <div class=\"card-action\">\n            <a class=\"waves-effect waves-light white-text btn\">New Event</a>\n          </div>\n        </div>\n        <!-- <p>+ Add a new event</p> -->\n      </div>\n    </div>\n  </div>\n\n  <div id=\"new-event-modal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <div class=\"row\">\n        <form id=\"new-event-form\">\n          <div class=\"row\">\n            <div class=\"input-field col s12\">\n              <input name='eventname' type=\"text\" class=\"validate\" required>\n              <label for='eventname'>Event Name</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_date' type=\"date\" id='start_date' class=\"datepicker start_date\" required>\n              <label for='start_date'>Start Date</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name='end_date' type=\"date\" id='end_date' class=\"datepicker end_date\" required>\n              <label for='end_date'>End Date</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_time' type=\"time\">\n              <!--<label for='start_time'>Start Time</label>-->\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"end_time\" type=\"time\">\n              <!--<label for=\"end_time\">End Time</label>-->\n            </div>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <a href=\"#!\" class='waves-effect waves-light btn-flat btn' id='add-event-button'>Add event</a>\n      <a href=\"#!\" class='modal-action modal-close waves-effect waves-light btn-flat btn' id='cancel-event-button'>Cancel</a>\n    </div>\n  </div>\n  <!-- <div class='column' id='new-event-container'>\n    <div class='event'>\n      <div class='error'></div>\n      <input type='text' id='event-name' placeholder='Event name'>\n      <br>\n      <input type='text' id='start-date' placeholder='Start date'>\n      <br>\n      <input type='time' id='start-time' placeholder='Start time'>\n      <br>\n      <input type='text' id='end-date' placeholder='End date'>\n      <br>\n      <input type='time' id='end-time' placeholder='End time'>\n      <div class='btn btn-default' id='add-event-button'>Add event</div>\n      <div class='btn btn-default' id='cancel-event-button'>Cancel</div>\n    </div>\n  </div> -->\n\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['header'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -211,18 +211,24 @@ templates['subscribe'] = template({"compiler":[7,">= 4.0.0"],"main":function(con
 templates['todo'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "  <div class=\"todo\">\n    <div class=\"checkbox-container\">\n      <input type=\"checkbox\" "
+  return "  <div class=\"todo\" todoId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n    <i class=\"material-icons right delete-todo\">clear</i>\n    <p>\n      <input class=\"check-todo\" type=\"checkbox\" "
+    + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " todoId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + " id=\"todo-name\" />\n      <label for=\"todo-name\">"
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</label>\n    </p>\n    <!--<div class=\"checkbox-container\">\n      <input type=\"checkbox\" "
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " class=\"check-todo\" todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    </div>\n    <div class=\"todo-content\" todoId="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n      <p>"
+    + ">\n    </div>-->\n      <!--<p>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<span class=\"glyphicon glyphicon-remove delete-todo\"></span></p>\n"
+    + "<span class=\"glyphicon glyphicon-remove delete-todo\"></span></p>-->\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <br>\n\n  </div>\n";
+    + "    <br>\n\n  </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return " checked=\"true\"";
 },"4":function(container,depth0,helpers,partials,data) {
@@ -247,90 +253,90 @@ templates['todo'] = template({"1":function(container,depth0,helpers,partials,dat
 templates['todos'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "    <div class=\"column todo-container\" categoryId="
+  return "    <div class=\"todo-container col s3\" categoryId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n      <p class=\"category\">"
+    + ">\n      <div class=\"inner-todo-container\">\n        <p class=\"category\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<span class=\"glyphicon glyphicon-remove delete-category\"></span></p>\n      <hr>\n"
-    + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"      ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "    </div>\n";
+    + "<i class=\"material-icons right delete-category\">clear</i></p>\n        <hr>\n"
+    + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"        ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
+    + "      </div>\n    </div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "    <p><em>No todo lists yet!</em></p>\n";
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "        <li costId="
+  return "      <li costId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n          <p><span class=\"bold\">"
+    + ">\n        <p><span class=\"bold\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span><span class=\"glyphicon glyphicon-remove remove-cost\"></span></p>\n          <p>Amount: $"
+    + "</span><span class=\"glyphicon glyphicon-remove remove-cost\"></span></p>\n        <p>Amount: $"
     + alias4(((helper = (helper = helpers.amount || (depth0 != null ? depth0.amount : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"amount","hash":{},"data":data}) : helper)))
     + "</p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </li>\n";
+    + "      </li>\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "            <p>Description: "
+  return "          <p>Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "</p>\n";
 },"8":function(container,depth0,helpers,partials,data) {
-    return "        <p>No costs yet.</p>\n";
+    return "      <p>No costs yet.</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : {};
 
   return ((stack1 = container.invokePartial(partials.header,depth0,{"name":"header","hash":{"title":(depth0 != null ? depth0.title : depth0),"currentUser":(depth0 != null ? depth0.currentUser : depth0)},"data":data,"helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "<div id=\"category-container\" eventId="
+    + "<div class=\"row\">\n<div id=\"category-container\" class=\"col m9\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <div class=\"column btn btn-default\" id=\"new_category\">\n    <p>+ Add a new To-Do list</p>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n  <div id=\"event_panel\" eventId="
+    + "\n  <button class=\"col s3 btn btn-default\" id=\"new_category\">+ Add a new To-Do list</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n    <div class=\"error\"></div>\n    <div id=\"event_editable\">\n      <h3 id=\"event_name\">"
+    + ">\n  <div class=\"error\"></div>\n  <div id=\"event_editable\">\n    <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n    <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
-    + "<span class=\"glyphicon glyphicon-pencil\" id=\"edit-event\"></span></h3>\n      <hr>\n      <p id=\"event-start\"><span class=\"bold\">Start:</span> <span id=\"start-date\">"
+    + "</h3>\n    <hr>\n    <p id=\"event-start\"><span class=\"bold\">Start:</span> <span id=\"start-date\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start : stack1), depth0))
     + "</span> @ <span id=\"start-time\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start_time : stack1), depth0))
-    + "</span></p>\n      <p id=\"event-end\"><span class=\"bold\">End:</span> <span id=\"end-date\">"
+    + "</span></p>\n    <p id=\"event-end\"><span class=\"bold\">End:</span> <span id=\"end-date\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end : stack1), depth0))
     + "</span> @ <span id=\"end-time\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end_time : stack1), depth0))
-    + "</span></p>\n      <p id=\"event-loc\"><span class=\"bold\">Location:</span> "
+    + "</span></p>\n    <p id=\"event-loc\"><span class=\"bold\">Location:</span> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
-    + "</p>\n      <p id=\"event-desc\"><span class=\"bold\">Description:</span>  "
+    + "</p>\n    <p id=\"event-desc\"><span class=\"bold\">Description:</span>  "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</p>\n      <p id=\"event-budget\"><span class=\"bold\">Budget:</span> $"
+    + "</p>\n    <p id=\"event-budget\"><span class=\"bold\">Budget:</span> $"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "</p>\n    </div>\n\n    <div id=\"event-edit-form\" style=\"display:none\">\n\n      <h3 id=\"event_name_edit\" class=\"edit\"  contenteditable=\"true\">"
+    + "</p>\n  </div>\n\n  <div id=\"event-edit-form\" style=\"display:none\">\n\n    <h3 id=\"event_name_edit\" class=\"edit\"  contenteditable=\"true\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
-    + "</h3>\n      <hr>\n      <p id=\"event-start\"><span class=\"bold\">Start:</span></p><input type=\"text\" id=\"edit-start-date\" placeholder="
+    + "</h3>\n    <hr>\n    <p id=\"event-start\"><span class=\"bold\">Start:</span></p><input type=\"text\" id=\"edit-start-date\" class=\"datepicker\" data-value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start : stack1), depth0))
     + "> @ <input type=\"time\" id=\"edit-start-time\" value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start_time_24 : stack1), depth0))
-    + ">\n      <br>\n      <br>\n      <p id=\"event-end\"><span class=\"bold\">End:</span></p><input type=\"text\" id=\"edit-end-date\" placeholder="
+    + ">\n    <br>\n    <br>\n    <p id=\"event-end\"><span class=\"bold\">End:</span></p><input type=\"text\" id=\"edit-end-date\" class=\"datepicker\" data-value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end : stack1), depth0))
     + "> @ <input type=\"time\" id=\"edit-end-time\" value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end_time_24 : stack1), depth0))
-    + ">\n      <br>\n      <br>\n      <span class=\"bold\">Location:</span><p id=\"edit-event-loc\" class=\"edit\" contenteditable=\"true\"> "
+    + ">\n    <br>\n    <br>\n    <span class=\"bold\">Location:</span><p id=\"edit-event-loc\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
-    + "</p>\n      <br>\n      <span class=\"bold\">Description:</span> <p id=\"edit-event-desc\" class=\"edit\" contenteditable=\"true\"> "
+    + "</p>\n    <br>\n    <span class=\"bold\">Description:</span> <p id=\"edit-event-desc\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</p>\n      <br>\n      <span class=\"bold\">Budget:</span><p id=\"edit-event-budget\" class=\"edit\" contenteditable=\"true\"> "
+    + "</p>\n    <br>\n    <span class=\"bold\">Budget:</span><p id=\"edit-event-budget\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "</p>\n\n      <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n      <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n    </div>\n    <hr>\n    <div>\n      <p class=\"bold\">Invite link:</p><a href=/events/"
+    + "</p>\n\n    <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n    <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n  </div>\n  <hr>\n  <div>\n    <p class=\"bold\">Invite link:</p><a href=/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + "/attend</a>\n      <p><span class=\"bold\">Number attendees:</span>  "
+    + "/attend</a>\n    <p><span class=\"bold\">Number attendees:</span>  "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1)) != null ? stack1.length : stack1), depth0))
-    + "</p>\n      <hr>\n    </div>\n    <div id=\"cost-list\" eventId="
+    + "</p>\n    <hr>\n  </div>\n  <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n      <p class=\"bold\">Costs</p>\n      <ul>\n"
+    + ">\n    <p class=\"bold\">Costs</p>\n    <ul>\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
-    + "      </ul>\n      <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n    </div>\n    <div id=\"add-cost-form\" style=\"display:none\" eventId="
+    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n  </div>\n  <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n      <div class=\"error\"></div>\n      <br>\n      <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n      <br>\n      <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n      <br>\n      <input id=\"cost-desc\" placeholder=\"Description\">\n      <br>\n\n      <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n      <br>\n      <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n    </div>\n  </div>\n\n</div>\n";
+    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n    <br>\n    <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n    <br>\n    <input id=\"cost-desc\" placeholder=\"Description\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n</div>\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['templates/attendeventsummary'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -400,17 +406,17 @@ templates['templates/event'] = template({"1":function(container,depth0,helpers,p
 
   return "<!-- store event ID info in the event-container -->\n<div class=\"col m3 s12\">\n  <div class=\"card event-container\" eventId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    <div class=\"card-content event\">\n      <span class=\"card-title\">"
-    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span>\n\n      "
+    + ">\n    <div class=\"card-content event\">\n      "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.is_mine : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "\n\n      <hr>\n      <p class=\"host-email\">Host: "
+    + "\n      <p><span class=\"card-title\">"
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</span></p>\n\n\n\n      <hr>\n      <p class=\"host-email\">Host: "
     + alias4(((helper = (helper = helpers.hostEmail || (depth0 != null ? depth0.hostEmail : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"hostEmail","hash":{},"data":data}) : helper)))
-    + "</p>\n      <p class=\"start_date\">Start: "
+    + "</p>\n      <p>Start: "
     + alias4(((helper = (helper = helpers.start || (depth0 != null ? depth0.start : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.start_time || (depth0 != null ? depth0.start_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start_time","hash":{},"data":data}) : helper)))
-    + "</p>\n      <p class=\"end_date\">End: "
+    + "</p>\n      <p>End: "
     + alias4(((helper = (helper = helpers.end || (depth0 != null ? depth0.end : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
@@ -432,7 +438,7 @@ templates['templates/events'] = template({"1":function(container,depth0,helpers,
   return ((stack1 = container.invokePartial(partials.header,depth0,{"name":"header","hash":{"title":(depth0 != null ? depth0.title : depth0),"currentUser":(depth0 != null ? depth0.currentUser : depth0)},"data":data,"helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
     + "\n<div id=\"events\">\n  <div class=\"container\">\n    <div class=\"row\">\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.my_events : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n      <div class=\"col m3 s12\" id=\"new_event\">\n        <div class=\"card\">\n          <div class=\"card-content\">\n            <span class=\"card-title\">Create</span>\n            <p>\n              Create and start planning a new event\n            </p>\n          </div>\n          <div class=\"card-action\">\n            <a class=\"waves-effect waves-light white-text btn\">New Event</a>\n          </div>\n        </div>\n        <!-- <p>+ Add a new event</p> -->\n      </div>\n    </div>\n  </div>\n\n  <div id=\"new-event-modal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <div class=\"row\">\n        <form id=\"new-event-form\">\n          <div class=\"row\">\n            <div class=\"input-field col s12\">\n              <input name='eventname' type=\"text\" class=\"validate\" required>\n              <label for='eventname'>Event Name</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_date' type=\"date\" id='start_date' class=\"datepicker start_date\" required>\n              <label for='start_date'>Start Date</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name='end_date' type=\"date\" id='end_date' class=\"datepicker end_date\" required>\n              <label for='end_date'>End Date</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_time' type=\"time\">\n              <!--<label for='start_time'>Start Time</label>-->\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"end_time\" type=\"time\">\n              <!--<label for=\"end_time\">End Time</label>-->\n            </div>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <a href=\"#!\" class='waves-effect waves-light btn-flat btn' id='add-event-button'>Add event</a>\n      <a href=\"#!\" class='modal-action modal-close waves-effect waves-light btn-flat btn' id='cancel-event-button'>Cancel</a>\n    </div>\n    <script>\n      // Intialization for date widgets\n      console.log('setting the thing');\n      console.log($('.start_date'))\n\n      $('.start_date').pickadate({\n        min: new Date(),\n        selectMonths: true, // Creates a dropdown to control month\n        selectYears: 15 // Creates a dropdown of 15 years to control year\n      });\n\n      $('.end_date').pickadate({\n        selectMonths: true,\n        selectYears: 15,\n        min: $('start_date').val() || new Date(),\n      })\n    </script>\n  </div>\n  <!-- <div class='column' id='new-event-container'>\n    <div class='event'>\n      <div class='error'></div>\n      <input type='text' id='event-name' placeholder='Event name'>\n      <br>\n      <input type='text' id='start-date' placeholder='Start date'>\n      <br>\n      <input type='time' id='start-time' placeholder='Start time'>\n      <br>\n      <input type='text' id='end-date' placeholder='End date'>\n      <br>\n      <input type='time' id='end-time' placeholder='End time'>\n      <div class='btn btn-default' id='add-event-button'>Add event</div>\n      <div class='btn btn-default' id='cancel-event-button'>Cancel</div>\n    </div>\n  </div> -->\n\n</div>\n";
+    + "\n      <div class=\"col m3 s12\" id=\"new_event\">\n        <div class=\"card\">\n          <div class=\"card-content\">\n            <span class=\"card-title\">Create</span>\n            <p>\n              Create and start planning a new event\n            </p>\n          </div>\n          <div class=\"card-action\">\n            <a class=\"waves-effect waves-light white-text btn\">New Event</a>\n          </div>\n        </div>\n        <!-- <p>+ Add a new event</p> -->\n      </div>\n    </div>\n  </div>\n\n  <div id=\"new-event-modal\" class=\"modal\">\n    <div class=\"modal-content\">\n      <div class=\"row\">\n        <form id=\"new-event-form\">\n          <div class=\"row\">\n            <div class=\"input-field col s12\">\n              <input name='eventname' type=\"text\" class=\"validate\" required>\n              <label for='eventname'>Event Name</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_date' type=\"date\" id='start_date' class=\"datepicker start_date\" required>\n              <label for='start_date'>Start Date</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name='end_date' type=\"date\" id='end_date' class=\"datepicker end_date\" required>\n              <label for='end_date'>End Date</label>\n            </div>\n          </div>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name='start_time' type=\"time\">\n              <!--<label for='start_time'>Start Time</label>-->\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"end_time\" type=\"time\">\n              <!--<label for=\"end_time\">End Time</label>-->\n            </div>\n          </div>\n        </form>\n      </div>\n    </div>\n    <div class=\"modal-footer\">\n      <a href=\"#!\" class='waves-effect waves-light btn-flat btn' id='add-event-button'>Add event</a>\n      <a href=\"#!\" class='modal-action modal-close waves-effect waves-light btn-flat btn' id='cancel-event-button'>Cancel</a>\n    </div>\n  </div>\n  <!-- <div class='column' id='new-event-container'>\n    <div class='event'>\n      <div class='error'></div>\n      <input type='text' id='event-name' placeholder='Event name'>\n      <br>\n      <input type='text' id='start-date' placeholder='Start date'>\n      <br>\n      <input type='time' id='start-time' placeholder='Start time'>\n      <br>\n      <input type='text' id='end-date' placeholder='End date'>\n      <br>\n      <input type='time' id='end-time' placeholder='End time'>\n      <div class='btn btn-default' id='add-event-button'>Add event</div>\n      <div class='btn btn-default' id='cancel-event-button'>Cancel</div>\n    </div>\n  </div> -->\n\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['templates/header'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -543,18 +549,24 @@ templates['templates/subscribe'] = template({"compiler":[7,">= 4.0.0"],"main":fu
 templates['templates/todo'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "  <div class=\"todo\">\n    <div class=\"checkbox-container\">\n      <input type=\"checkbox\" "
+  return "  <div class=\"todo\" todoId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n    <i class=\"material-icons right delete-todo\">clear</i>\n    <p>\n      <input class=\"check-todo\" type=\"checkbox\" "
+    + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " todoId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + " id=\"todo-name\" />\n      <label for=\"todo-name\">"
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "</label>\n    </p>\n    <!--<div class=\"checkbox-container\">\n      <input type=\"checkbox\" "
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " class=\"check-todo\" todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    </div>\n    <div class=\"todo-content\" todoId="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n      <p>"
+    + ">\n    </div>-->\n      <!--<p>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<span class=\"glyphicon glyphicon-remove delete-todo\"></span></p>\n"
+    + "<span class=\"glyphicon glyphicon-remove delete-todo\"></span></p>-->\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <br>\n\n  </div>\n";
+    + "    <br>\n\n  </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return " checked=\"true\"";
 },"4":function(container,depth0,helpers,partials,data) {
@@ -579,89 +591,89 @@ templates['templates/todo'] = template({"1":function(container,depth0,helpers,pa
 templates['templates/todos'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "    <div class=\"column todo-container\" categoryId="
+  return "    <div class=\"todo-container col s3\" categoryId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n      <p class=\"category\">"
+    + ">\n      <div class=\"inner-todo-container\">\n        <p class=\"category\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<span class=\"glyphicon glyphicon-remove delete-category\"></span></p>\n      <hr>\n"
-    + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"      ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "    </div>\n";
+    + "<i class=\"material-icons right delete-category\">clear</i></p>\n        <hr>\n"
+    + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"        ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
+    + "      </div>\n    </div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "    <p><em>No todo lists yet!</em></p>\n";
 },"5":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "        <li costId="
+  return "      <li costId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n          <p><span class=\"bold\">"
+    + ">\n        <p><span class=\"bold\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span><span class=\"glyphicon glyphicon-remove remove-cost\"></span></p>\n          <p>Amount: $"
+    + "</span><span class=\"glyphicon glyphicon-remove remove-cost\"></span></p>\n        <p>Amount: $"
     + alias4(((helper = (helper = helpers.amount || (depth0 != null ? depth0.amount : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"amount","hash":{},"data":data}) : helper)))
     + "</p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        </li>\n";
+    + "      </li>\n";
 },"6":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "            <p>Description: "
+  return "          <p>Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "</p>\n";
 },"8":function(container,depth0,helpers,partials,data) {
-    return "        <p>No costs yet.</p>\n";
+    return "      <p>No costs yet.</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : {};
 
   return ((stack1 = container.invokePartial(partials.header,depth0,{"name":"header","hash":{"title":(depth0 != null ? depth0.title : depth0),"currentUser":(depth0 != null ? depth0.currentUser : depth0)},"data":data,"helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "<div id=\"category-container\" eventId="
+    + "<div class=\"row\">\n<div id=\"category-container\" class=\"col m9\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <div class=\"column btn btn-default\" id=\"new_category\">\n    <p>+ Add a new To-Do list</p>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n  <div id=\"event_panel\" eventId="
+    + "\n  <button class=\"col s3 btn btn-default\" id=\"new_category\">+ Add a new To-Do list</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n    <div class=\"error\"></div>\n    <div id=\"event_editable\">\n      <h3 id=\"event_name\">"
+    + ">\n  <div class=\"error\"></div>\n  <div id=\"event_editable\">\n    <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n    <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
-    + "<span class=\"glyphicon glyphicon-pencil\" id=\"edit-event\"></span></h3>\n      <hr>\n      <p id=\"event-start\"><span class=\"bold\">Start:</span> <span id=\"start-date\">"
+    + "</h3>\n    <hr>\n    <p id=\"event-start\"><span class=\"bold\">Start:</span> <span id=\"start-date\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start : stack1), depth0))
     + "</span> @ <span id=\"start-time\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start_time : stack1), depth0))
-    + "</span></p>\n      <p id=\"event-end\"><span class=\"bold\">End:</span> <span id=\"end-date\">"
+    + "</span></p>\n    <p id=\"event-end\"><span class=\"bold\">End:</span> <span id=\"end-date\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end : stack1), depth0))
     + "</span> @ <span id=\"end-time\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end_time : stack1), depth0))
-    + "</span></p>\n      <p id=\"event-loc\"><span class=\"bold\">Location:</span> "
+    + "</span></p>\n    <p id=\"event-loc\"><span class=\"bold\">Location:</span> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
-    + "</p>\n      <p id=\"event-desc\"><span class=\"bold\">Description:</span>  "
+    + "</p>\n    <p id=\"event-desc\"><span class=\"bold\">Description:</span>  "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</p>\n      <p id=\"event-budget\"><span class=\"bold\">Budget:</span> $"
+    + "</p>\n    <p id=\"event-budget\"><span class=\"bold\">Budget:</span> $"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "</p>\n    </div>\n\n    <div id=\"event-edit-form\" style=\"display:none\">\n\n      <h3 id=\"event_name_edit\" class=\"edit\"  contenteditable=\"true\">"
+    + "</p>\n  </div>\n\n  <div id=\"event-edit-form\" style=\"display:none\">\n\n    <h3 id=\"event_name_edit\" class=\"edit\"  contenteditable=\"true\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
-    + "</h3>\n      <hr>\n      <p id=\"event-start\"><span class=\"bold\">Start:</span></p><input type=\"text\" id=\"edit-start-date\" placeholder="
+    + "</h3>\n    <hr>\n    <p id=\"event-start\"><span class=\"bold\">Start:</span></p><input type=\"text\" id=\"edit-start-date\" class=\"datepicker\" data-value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start : stack1), depth0))
     + "> @ <input type=\"time\" id=\"edit-start-time\" value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start_time_24 : stack1), depth0))
-    + ">\n      <br>\n      <br>\n      <p id=\"event-end\"><span class=\"bold\">End:</span></p><input type=\"text\" id=\"edit-end-date\" placeholder="
+    + ">\n    <br>\n    <br>\n    <p id=\"event-end\"><span class=\"bold\">End:</span></p><input type=\"text\" id=\"edit-end-date\" class=\"datepicker\" data-value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end : stack1), depth0))
     + "> @ <input type=\"time\" id=\"edit-end-time\" value="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end_time_24 : stack1), depth0))
-    + ">\n      <br>\n      <br>\n      <span class=\"bold\">Location:</span><p id=\"edit-event-loc\" class=\"edit\" contenteditable=\"true\"> "
+    + ">\n    <br>\n    <br>\n    <span class=\"bold\">Location:</span><p id=\"edit-event-loc\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
-    + "</p>\n      <br>\n      <span class=\"bold\">Description:</span> <p id=\"edit-event-desc\" class=\"edit\" contenteditable=\"true\"> "
+    + "</p>\n    <br>\n    <span class=\"bold\">Description:</span> <p id=\"edit-event-desc\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
-    + "</p>\n      <br>\n      <span class=\"bold\">Budget:</span><p id=\"edit-event-budget\" class=\"edit\" contenteditable=\"true\"> "
+    + "</p>\n    <br>\n    <span class=\"bold\">Budget:</span><p id=\"edit-event-budget\" class=\"edit\" contenteditable=\"true\"> "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "</p>\n\n      <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n      <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n    </div>\n    <hr>\n    <div>\n      <p class=\"bold\">Invite link:</p><a href=/events/"
+    + "</p>\n\n    <button class=\"btn btn-default\" id=\"submit-edit-event\">Submit</button>\n    <button class=\"btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n  </div>\n  <hr>\n  <div>\n    <p class=\"bold\">Invite link:</p><a href=/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + "/attend</a>\n      <p><span class=\"bold\">Number attendees:</span>  "
+    + "/attend</a>\n    <p><span class=\"bold\">Number attendees:</span>  "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1)) != null ? stack1.length : stack1), depth0))
-    + "</p>\n      <hr>\n    </div>\n    <div id=\"cost-list\" eventId="
+    + "</p>\n    <hr>\n  </div>\n  <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n      <p class=\"bold\">Costs</p>\n      <ul>\n"
+    + ">\n    <p class=\"bold\">Costs</p>\n    <ul>\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
-    + "      </ul>\n      <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n    </div>\n    <div id=\"add-cost-form\" style=\"display:none\" eventId="
+    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n  </div>\n  <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n      <div class=\"error\"></div>\n      <br>\n      <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n      <br>\n      <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n      <br>\n      <input id=\"cost-desc\" placeholder=\"Description\">\n      <br>\n\n      <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n      <br>\n      <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n    </div>\n  </div>\n\n</div>\n";
+    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n    <br>\n    <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n    <br>\n    <input id=\"cost-desc\" placeholder=\"Description\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n</div>\n</div>\n";
 },"usePartial":true,"useData":true});
 })();

@@ -30,7 +30,23 @@ nav > div.nav-wrapper {
   color: #ccc;
 }
 
+/*#event_panel{
+  border: 1px solid #ddd;
+  height: 100vh;
+}*/
+
 .event-container:hover{
   background-color:lightgray;
   cursor:pointer;
+}
+
+.todo-container{
+  border: 1px solid #ddd;
+  margin: 10px;
+  border-radius: 10px;
+
+}
+
+.inner-todo-container{
+  padding: 5px;
 }
