@@ -99,6 +99,12 @@
     $(htmlStr).appendTo('#category-container');
   });
 
+  $(document).on('click', '#new_planner', function() {
+    $('#new_planner').remove();
+    var htmlStr = "<div class='column' id='new-planner-container'><div class='event'><div class='error'></div><input id='planner-email' type='text' placeholder='Email of new planner'><br><div class='btn btn-default' id='add-planner-button'>Add Planner</div><div class='btn btn-default' id='cancel-planner-button'>Cancel</div></div>";
+    $(htmlStr).appendTo('#category-container');
+  });
+
   $(document).on("click", "#submit-edit-event", function(){
     event_id = $(this).parent().parent().attr("eventId");
     var start_date = $("#edit-start-date").datepicker("getDate");
@@ -222,6 +228,28 @@
         console.log(response);
         $(this).parent().find('.error').text(response.err);
       })
+    }
+  });
+
+  $(document).on('click', '#cancel-planner-button', function() {
+    $('#new-planner-container').remove();
+    var htmlStr = '<div class="column btn btn-default" id="new_planner"><p>+ Add another planner</p></div>';
+    $(htmlStr).appendTo('#category-container');
+  });
+
+  $(document).on('click', '#add-planner-button', function() {
+    var planner_email = $('#planner-email').val();
+    if (planner_email.length < 1) {
+      $(this).parent().find('.error').text('Planner must have an email');
+    } else {
+      event_id = $("#event_panel").attr("eventId");
+      $.post('events/' + event_id + '/planners', {planner_email: planner_email}).done(function(response) {
+        loadTodosPage(event_id);
+      }).fail(function(responseObject) {
+        var response = $.parseJSON(responseObject.responseText);
+        console.log(response);
+        $(this).parent().find('.error').text(response.err);
+      });
     }
   });
 

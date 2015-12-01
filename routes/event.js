@@ -221,14 +221,6 @@ router.get('/', function(req, res) {
       if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
       } else {
-          my_events.forEach(function(event) {
-              //TODO(erosales): Change this according to what is actualy stored to check user
-              if (event.author === req.user.username) {
-                  event.is_mine = true;
-              } else {
-                  event.is_mine = false;
-              }
-          });
           my_events = my_events.reverse();
           utils.sendSuccessResponse(res, my_events);
       }

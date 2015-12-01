@@ -223,6 +223,25 @@ describe('Event', function() {
         });
       });
     });
+    it('should distinguish between user-owned events and user-planned events', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', "", function(uh, created_user) {
+        User.createNewUser('erosales@mit.edu', 'blah2', "", function(uh, created_user2) {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, new_event) {
+            Event.addPlanner(new_event._id, 'erosales@mit.edu', function() {
+              Event.getEventsByUser('erosolar@mit.edu', function(err, result) {
+                assert.deepEqual(err, undefined);
+                assert.deepEqual(result[0].is_mine, true);
+                Event.getEventsByUser('erosales@mit.edu', function(err, result) {
+                  assert.deepEqual(err, undefined);
+                  assert.deepEqual(result[0].is_mine, false);
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
   });
 
   describe('#deleteEvent', function() {

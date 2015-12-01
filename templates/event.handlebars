@@ -3,7 +3,7 @@
   <div class="card event-container" id={{_id}}>
     <div class="card-content event">
       <span class="card-title">{{name}}</span>
-      <i class="material-icon right">delete</i>
+      {{#if is_mine}}<i class="material-icon right">delete</i> {{/if}}
       <p class="event_name">{{name}}<span class="glyphicon glyphicon-remove delete-event"></span></p>
       <hr>
       <p class="host-email">Host: {{hostEmail}}</p>

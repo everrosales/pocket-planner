@@ -50,12 +50,14 @@ templates['attendfeed'] = template({"1":function(container,depth0,helpers,partia
     + "\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['event'] = template({"1":function(container,depth0,helpers,partials,data) {
+    return "<i class=\"material-icon right\">delete</i> ";
+},"3":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return container.escapeExpression(((helper = (helper = helpers.location || (depth0 != null ? depth0.location : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"location","hash":{},"data":data}) : helper)));
-},"3":function(container,depth0,helpers,partials,data) {
-    return "TBD";
 },"5":function(container,depth0,helpers,partials,data) {
+    return "TBD";
+},"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "        <p class=\"event_desc\">"
@@ -68,7 +70,9 @@ templates['event'] = template({"1":function(container,depth0,helpers,partials,da
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n    <div class=\"card-content event\">\n      <span class=\"card-title\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span>\n      <i class=\"material-icon right\">delete</i>\n      <p class=\"event_name\">"
+    + "</span>\n      "
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.is_mine : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n      <p class=\"event_name\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + "<span class=\"glyphicon glyphicon-remove delete-event\"></span></p>\n      <hr>\n      <p class=\"host-email\">Host: "
     + alias4(((helper = (helper = helpers.hostEmail || (depth0 != null ? depth0.hostEmail : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"hostEmail","hash":{},"data":data}) : helper)))
@@ -81,9 +85,9 @@ templates['event'] = template({"1":function(container,depth0,helpers,partials,da
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
     + "</p>\n      <p class=\"event_loc\">Location: "
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "</p>\n\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    </div>\n  </div>\n</div>\n";
 },"useData":true});
 templates['events'] = template({"1":function(container,depth0,helpers,partials,data) {
@@ -282,7 +286,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <div class=\"column btn btn-default\" id=\"new_category\">\n    <p>+ Add a new To-Do list</p>\n  </div>\n  <div id=\"event_panel\" eventId="
+    + "\n  <div class=\"column btn btn-default\" id=\"new_category\">\n    <p>+ Add a new To-Do list</p>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n  <div id=\"event_panel\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n    <div class=\"error\"></div>\n    <div id=\"event_editable\">\n      <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
@@ -380,12 +384,14 @@ templates['templates/attendfeed'] = template({"1":function(container,depth0,help
     + "\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['templates/event'] = template({"1":function(container,depth0,helpers,partials,data) {
+    return "<i class=\"material-icon right\">delete</i> ";
+},"3":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return container.escapeExpression(((helper = (helper = helpers.location || (depth0 != null ? depth0.location : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"location","hash":{},"data":data}) : helper)));
-},"3":function(container,depth0,helpers,partials,data) {
-    return "TBD";
 },"5":function(container,depth0,helpers,partials,data) {
+    return "TBD";
+},"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
   return "        <p class=\"event_desc\">"
@@ -398,7 +404,9 @@ templates['templates/event'] = template({"1":function(container,depth0,helpers,p
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n    <div class=\"card-content event\">\n      <span class=\"card-title\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span>\n      <i class=\"material-icon right\">delete</i>\n      <p class=\"event_name\">"
+    + "</span>\n      "
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.is_mine : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "\n      <p class=\"event_name\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + "<span class=\"glyphicon glyphicon-remove delete-event\"></span></p>\n      <hr>\n      <p class=\"host-email\">Host: "
     + alias4(((helper = (helper = helpers.hostEmail || (depth0 != null ? depth0.hostEmail : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"hostEmail","hash":{},"data":data}) : helper)))
@@ -411,9 +419,9 @@ templates['templates/event'] = template({"1":function(container,depth0,helpers,p
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
     + "</p>\n      <p class=\"event_loc\">Location: "
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
     + "</p>\n\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "    </div>\n  </div>\n</div>\n";
 },"useData":true});
 templates['templates/events'] = template({"1":function(container,depth0,helpers,partials,data) {
@@ -612,7 +620,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <div class=\"column btn btn-default\" id=\"new_category\">\n    <p>+ Add a new To-Do list</p>\n  </div>\n  <div id=\"event_panel\" eventId="
+    + "\n  <div class=\"column btn btn-default\" id=\"new_category\">\n    <p>+ Add a new To-Do list</p>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n  <div id=\"event_panel\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n    <div class=\"error\"></div>\n    <div id=\"event_editable\">\n      <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))

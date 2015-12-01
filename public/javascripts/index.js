@@ -108,6 +108,11 @@ var loadEventsPage = function() {
           r.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
           r.end = r.end.toLocaleDateString();
 
+          if (r.hostEmail == currentUser) {
+            r.is_mine = true;
+          } else {
+            r.is_mine = false;
+          }
         })
         loadPage('events', {
           my_events: response.content,
