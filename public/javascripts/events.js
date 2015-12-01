@@ -2,24 +2,22 @@
 (function() {
 
   $(document).on('click', '#new_event', function(){
-    // $('#new_event').();
-    // TODO(ajliu): Make the new DOM element using Javascript DOM elements
-    // var htmlStr = "<div class='column' id='new-event-container'><div class='event'><div class='error'></div><input type='text' id='event-name' placeholder='Event name'><br><input type='text' id='start-date' placeholder='Start date'><br><input type='time' id='start-time' placeholder='Start time'><br><input type='text' id='end-date' placeholder='End date'><br><input type='time' id='end-time' placeholder='End time'><div class='btn btn-default' id='add-event-button'>Add event</div><div class='btn btn-default' id='cancel-event-button'>Cancel</div></div></div>";
+
     $('#new-event-modal').openModal();
-
-    // $(htmlStr).appendTo("#events");
-    // $('#start-date').datepicker({
-    //   minDate: new Date(),
-    //   onClose: function( selectedDate ) {
-    //     $( "#end-date" ).datepicker( "option", "minDate", selectedDate );
-    //   }
-    // });
-    // $('#end-date').datepicker({
-    //   onClose: function( selectedDate ) {
-    //     $( "#start-date" ).datepicker( "option", "maxDate", selectedDate );
-    //   }
-    // });
-
+    $('#end_date').pickadate({
+      closeOnSelect: true,
+      onSet: function(){
+        console.log("end date");
+        $('#start_date').set("max", $('#end_date').get());
+      }
+    })
+    $('#start_date').pickadate({
+      closeOnSelect: true,
+      onSet: function(){
+        console.log("start date");
+        $('#end_date').set("min", $('#start_date').get());
+      }
+    });
 
   });
 
@@ -30,7 +28,8 @@
       $('#cancel-event-button')[0].classList.add('disabled');
       var formData = helpers.getFormData($('#new-event-form')[0]);
       var event_name = formData.eventname;//$('.eventname').val();
-      var start_date = formData.start_date;//$('.start_date').value;
+      console.log(event_name);
+      var start_date = new Date(formData.start_date);//$('.start_date').value;
       var hr_min = formData.start_time.split(":");//($('.start_time').val()).split(':');
       var hour = parseInt(hr_min[0]);
       var min = parseInt(hr_min[1]);
@@ -41,7 +40,7 @@
         start_date.setMinutes(parseInt(hr_min[1]));
       }
 
-      var end_date = formData.end_date;//$('.end_date').value;
+      var end_date = new Date(formData.end_date);//$('.end_date').value;
       hr_min = formData.end_time.split(":");//($('.end_time').val()).split(':');
       hour = parseInt(hr_min[0]);
       min = parseInt(hr_min[1]);
@@ -79,7 +78,7 @@
   $(document).on('click', '.delete-event', function(e){
     e.stopPropagation();
     console.log("deleting event");
-    var del_id = $(this).parent().parent().parent().attr('id');
+    var del_id = $(this).parent().parent().attr("eventId");
     $.ajax({
       url: 'events/' + del_id,
       type: 'DELETE',

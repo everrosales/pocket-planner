@@ -1,10 +1,9 @@
 <!-- store event ID info in the event-container -->
 <div class="col m3 s12">
-  <div class="card event-container" id={{_id}}>
+  <div class="card event-container" eventId={{_id}}>
     <div class="card-content event">
       <span class="card-title">{{name}}</span>
-      <i class="material-icon right">delete</i>
-      <p class="event_name">{{name}}<span class="glyphicon glyphicon-remove delete-event"></span></p>
+      <i class="material-icons right delete-event">clear</i>
       <hr>
       <p class="host-email">Host: {{hostEmail}}</p>
       <p class="start_date">Start: {{start}} @ {{start_time}}</p>

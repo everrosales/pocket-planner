@@ -21,3 +21,7 @@ nav > div.nav-wrapper {
   position: absolute;
   z-index: 100001;
 }
+
+.delete-event {
+  cursor:pointer;
+}
