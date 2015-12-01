@@ -2,14 +2,15 @@
 <div class="col m3 s12">
   <div class="card event-container" eventId={{_id}}>
     <div class="card-content event">
-      <span class="card-title">{{name}}</span>
-
       {{#if is_mine}}<i class="material-icons right delete-event">clear</i>{{/if}}
+      <p><span class="card-title">{{name}}</span></p>
+
+
 
       <hr>
       <p class="host-email">Host: {{hostEmail}}</p>
-      <p class="start_date">Start: {{start}} @ {{start_time}}</p>
-      <p class="end_date">End: {{end}} @ {{end_time}}</p>
+      <p>Start: {{start}} @ {{start_time}}</p>
+      <p>End: {{end}} @ {{end_time}}</p>
       <p class="event_loc">Location: {{#if location}}{{location}}{{else}}TBD{{/if}}</p>
 
       {{#if description}}

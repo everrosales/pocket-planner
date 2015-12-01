@@ -19,7 +19,8 @@
   <div id="event_panel" eventId={{event._id}}>
     <div class="error"></div>
     <div id="event_editable">
-      <h3 id="event_name">{{event.name}}<span class="glyphicon glyphicon-pencil" id="edit-event"></span></h3>
+      <i class="material-icons right" id="edit-event">edit</i>
+      <h3 id="event_name">{{event.name}}</h3>
       <hr>
       <p id="event-start"><span class="bold">Start:</span> <span id="start-date">{{event.start}}</span> @ <span id="start-time">{{event.start_time}}</span></p>
       <p id="event-end"><span class="bold">End:</span> <span id="end-date">{{event.end}}</span> @ <span id="end-time">{{event.end_time}}</span></p>
@@ -32,10 +33,10 @@
 
       <h3 id="event_name_edit" class="edit"  contenteditable="true">{{event.name}}</h3>
       <hr>
-      <p id="event-start"><span class="bold">Start:</span></p><input type="text" id="edit-start-date" placeholder={{event.start}}> @ <input type="time" id="edit-start-time" value={{event.start_time_24}}>
+      <p id="event-start"><span class="bold">Start:</span></p><input type="text" id="edit-start-date" class="datepicker" placeholder={{event.start}}> @ <input type="time" id="edit-start-time" value={{event.start_time_24}}>
       <br>
       <br>
-      <p id="event-end"><span class="bold">End:</span></p><input type="text" id="edit-end-date" placeholder={{event.end}}> @ <input type="time" id="edit-end-time" value={{event.end_time_24}}>
+      <p id="event-end"><span class="bold">End:</span></p><input type="text" id="edit-end-date" class="datepicker" placeholder={{event.end}}> @ <input type="time" id="edit-end-time" value={{event.end_time_24}}>
       <br>
       <br>
       <span class="bold">Location:</span><p id="edit-event-loc" class="edit" contenteditable="true"> {{event.location}}</p>

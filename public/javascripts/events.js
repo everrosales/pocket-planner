@@ -4,20 +4,30 @@
   $(document).on('click', '#new_event', function(){
 
     $('#new-event-modal').openModal();
-    $('#end_date').pickadate({
-      closeOnSelect: true,
-      onSet: function(){
-        console.log("end date");
-        $('#start_date').set("max", $('#end_date').get());
-      }
-    })
     $('#start_date').pickadate({
-      closeOnSelect: true,
-      onSet: function(){
-        console.log("start date");
-        $('#end_date').set("min", $('#start_date').get());
+      min: new Date(),
+      /*onSet: function(){
+        $('#end_date').pickadate.set('min', $(this).val());
+      },*/
+      max: $('#end_date').val() || new Date(8640000000000000),
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year
+      onClose: function(){
+        $('#end_date').pickadate('picker').set('min', $('#start_date').val());
       }
     });
+
+    $('#end_date').pickadate({
+      selectMonths: true,
+      selectYears: 15,
+      /*onSet: function(){
+        $('#start_date').pickadate.set('max', $(this).val());
+      }*/
+      min: $('#start_date').val() || new Date(),
+      onClose: function(){
+        $('#start_date').pickadate('picker').set('max', $('#end_date').val());
+      }
+    })
 
   });
 
@@ -91,7 +101,7 @@
   });
 
   $(document).on('click', '.event-container', function(){
-    event_id = ($(this).attr('id'));
+    event_id = ($(this).attr('eventId'));
     //go to edit that event
     //get that event's info. for now, populated with dummy data.
     //make requests for each of the Todos

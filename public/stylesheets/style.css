@@ -24,4 +24,13 @@ nav > div.nav-wrapper {
 
 .delete-event {
   cursor:pointer;
+
+}
+.delete-event:hover{
+  color: #ccc;
+}
+
+.event-container:hover{
+  background-color:lightgray;
+  cursor:pointer;
 }

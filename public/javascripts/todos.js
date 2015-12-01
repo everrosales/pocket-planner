@@ -69,7 +69,7 @@
 
 
   $(document).on('click', '#edit-event', function(){
-    event_id = $(this).parent().parent().attr("eventId");
+    event_id = $('#event_panel').attr("eventId");
     var event_name = $('#event_name').text();
     console.log($('#start-date').text());
     var start_date = ($('#start-date').text());
@@ -79,8 +79,13 @@
     //console.log(event_name);
     $("#event_editable").hide();
     $("#event-edit-form").show();
-    $("#edit-start-date").datepicker();
-    $("#edit-start-date").datepicker("setDate", start_date);
+    $("#edit-start-date").pickadate({
+      min: new Date(),
+      max: $('#edit-end-date').val() || new Date(),
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year
+    });
+
     $("#edit-end-date").datepicker();
     $("#edit-end-date").datepicker("setDate", end_date);
 

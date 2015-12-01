@@ -63,23 +63,6 @@
       <a href="#!" class='waves-effect waves-light btn-flat btn' id='add-event-button'>Add event</a>
       <a href="#!" class='modal-action modal-close waves-effect waves-light btn-flat btn' id='cancel-event-button'>Cancel</a>
     </div>
-    <script>
-      // Intialization for date widgets
-      console.log('setting the thing');
-      console.log($('.start_date'))
-
-      $('.start_date').pickadate({
-        min: new Date(),
-        selectMonths: true, // Creates a dropdown to control month
-        selectYears: 15 // Creates a dropdown of 15 years to control year
-      });
-
-      $('.end_date').pickadate({
-        selectMonths: true,
-        selectYears: 15,
-        min: $('start_date').val() || new Date(),
-      })
-    </script>
   </div>
   <!-- <div class='column' id='new-event-container'>
     <div class='event'>
