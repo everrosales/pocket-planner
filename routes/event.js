@@ -130,6 +130,7 @@ router.get('/:event/details', function(req, res) {
 })
 
 // POST requests
+
 /*
     POST /events/:event/attend[?accesscode=]
     Request parameters:
@@ -167,6 +168,29 @@ router.post('/:event/attend', function(req, res) {
   }
 });
 
+/*
+    Post /events/:event/planners
+    Request parameters:
+     - event ID: the unique ID of the event we're going to change
+     - planner_email: the email of the planner being added
+    Response:
+     - success: true if surver succeeded in adding planner to the event
+     - err: on failure, an error message
+*/
+router.post('/:event/planners', function(req, res) {
+  if (!req.body.planner_email) {
+    utils.sendErrResponse(res, 500, 'Email of planner required.');
+  } else {
+    Event.addPlanner(req.event, req.body.planner_email, function(err, result) {
+      if (err) {
+        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+      } else {
+        utils.sendSuccessResponse(res, result);
+      }
+    });
+  }
+});
+
 // PUT requests
 
 // DELETE requests
@@ -197,14 +221,6 @@ router.get('/', function(req, res) {
       if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
       } else {
-          my_events.forEach(function(event) {
-              //TODO(erosales): Change this according to what is actualy stored to check user
-              if (event.author === req.user.username) {
-                  event.is_mine = true;
-              } else {
-                  event.is_mine = false;
-              }
-          });
           my_events = my_events.reverse();
           utils.sendSuccessResponse(res, my_events);
       }
