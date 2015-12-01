@@ -6,38 +6,43 @@ var Event = (function Event() {
   var mongoose = require('mongoose');
   var Schema = require('mongoose').Schema;
 
+  // Schema for a todo (a task that should be accomplished)
   var todoSchema = new Schema({
-    name          : String,     //required
-    deadline      : Date,     //required (in database)
-    status        : {type:Number, default:0}, // default unchecked (0: unchecked, 1: checked)
+    name          : {type:String, required:true},
+    deadline      : {type:Date, required:true},
+    status        : {type:Number, default:0}, // (0: unchecked, 1: checked)
     priority      : {type:Number, default:0}  //default none
   });
+  // Schema for a category (a collection of related todos)
   var categorySchema = new Schema({
-    name          : String,     //required
+    name          : {type:String, required:true},
     todos         : {type:[todoSchema], default:[]}
   });
+  // Schema for a cost object (a description of a particular expense)
   var costSchema = new Schema({
-    name          : String,     //required
-    amount        : Number,     //required
+    name          : {type:String, required:true},
+    amount        : {type:Number, required:true},
     description   : {type:String, default:""},
   });
+  // Schema for an attendee (someone attending an event)
   var attendeeSchema = new Schema({
     userId        : Schema.Types.ObjectId, //link to user database (default = nonexistent)
     name          : {type:String, default:""},
-    email         : String,   //required
+    email         : {type:String, required:true},   //required
     attending     : {type:Number, default:0},
     //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
     note          : {type:String, default:""},
   });
+  // Schema for an entire event, including (multiples of) the above schemas
   var eventSchema = new Schema({
-    name          : String,     //required
+    name          : {type:String, required:true},
     description   : {type:String, default:""},
-    host          : Schema.Types.ObjectId,   //required, link to user database
-    hostEmail     : String,     //required (in database)
-    planners      : {type:[Schema.Types.ObjectId], default:[]},   //     ^
+    host          : {type:Schema.Types.ObjectId, required:true}, //link to user database
+    hostEmail     : {type:String, required:true},
+    planners      : {type:[Schema.Types.ObjectId], default:[]},  //     ^
 
-    start         : Date,     //required
-    end           : Date,     //required (can be same as start)
+    start         : {type:Date, required:true},
+    end           : {type:Date, required:true}, // can be same as, but not earlier than, start
     location      : {type:String, default:""},
     budget        : {type:Number, default:0},
     cost          : {type:[costSchema], default:[]},
@@ -50,6 +55,7 @@ var Event = (function Event() {
   var _model = mongoose.model('event', eventSchema);
 
 //PRIVATE METHODS
+// returns true/false: event with given id exists/doesn't exist
   var _ifEventExists = function(id, callback) {
     _model.count({_id : id}, function(err, count) {
       if (count == 1) {
@@ -60,6 +66,7 @@ var Event = (function Event() {
     });
   };
 
+  // returns event with given id, if exists, or error if doesn't exist
   var _getEvent = function(id, callback) {
     _ifEventExists(id, function(err, exists) {
       if (exists) {
@@ -70,11 +77,7 @@ var Event = (function Event() {
     });
   };
 
-  // returns an object that is
-  // {
-  //  event: _event
-  //  category: _category
-  // }
+  // returns {event: <event>, category:<category>} for given eventid, categoryid
   var _getCategory = function(eventId, categoryId, callback) {
     _getEvent(eventId, function(err, event) {
       if (event) {
@@ -91,19 +94,34 @@ var Event = (function Event() {
     });
   };
 
+  // returns all events that a given user is planning (or helping to plan)
   var _getEventsByUserId = function(userid, callback) {
     _model.find({$or:[{'host':userid}, {'planners':userid}]}, callback);
   };
 
 //PUBLIC METHODS
+
+  /** Finds and passes through an event
+   *  Arguments:
+   *    id: the id of the event to be found
+   *    callback: a function to pass the found event to
+   *  Returns:
+   *    event, if found, else 'no event found' error
+   */
   var _findById = function(id, callback) {
     _getEvent(id, callback);
   };
 
-  /*
-    event_name is a string,
-    event_time is a Date object
-  */
+  /** Creates a new event in the database
+   *  Arguments:
+   *    host_email: the email of the main planner for the new event
+   *    event_name: the name of the event (a string)
+   *    event_start: when the event starts (a Date object)
+   *    event_end: when the event ends (also a Date object)
+   *    callback: a function to call once the event is created
+   *  Returns:
+   *    undefined.
+   */
   var _createNewEvent = function(host_email, event_name, event_start, event_end, callback) {
     User.findByEmail(host_email, function(err, user) {
       if (err) {
@@ -120,10 +138,24 @@ var Event = (function Event() {
     });
   };
 
+  /** Removes all events from the database. Used for testing purposes.
+   *  Arguments:
+   *    callback: a function to call once the database is cleared
+   *  Returns:
+   *    undefined
+   */
   var _clearAllEvents = function(callback) {
     _model.remove({}, callback);
   };
 
+  /** Gets all events being planned by a particular user
+   *  Arguments:
+   *    email: the email of the planner for whom to find events
+   *    callback: a function to pass found events to
+   *  Returns:
+   *    list of found events (or [] if no events found), or error if
+   *    user doesn't exist.
+   */
   var _getEventsByUser = function(email, callback) {
     User.findByEmail(email, function(err, user) {
       if (err) {
@@ -134,11 +166,24 @@ var Event = (function Event() {
     });
   };
 
+  /** Finds all public events (events that anyone can see)
+   *  Arguments:
+   *    callback: a function to pass found events to
+   *  Returns:
+   *    list of events found (or [] if no public events found)
+   */
   var _getPublicEvents = function(callback) {
     // for now return all events (no private events for now)
     _model.find({}, callback);
   };
 
+  /** Finds a specific public event by id
+   *  Arguments:
+   *    event_id: the id of the event to be found
+   *    callback: a function to pass the found event to
+   *  Returns:
+   *    event, if exists and is public. else, 'event not found' error
+   */
   var _getPublicEventById = function(eventid, callback) {
     _getEvent(eventid, function(err, event) {
       // TODO(erosolar): implement this check
@@ -148,6 +193,16 @@ var Event = (function Event() {
     });
   };
 
+  /** Removes an event from the database
+   *  Arguments:
+   *    userid: the id of the user trying to delete the event
+   *    eventid: the id corresponding to the event that should be deleted
+   *    callback: a function to call once the event is deleted
+   *  Returns:
+   *    undefined on success; 'incorrect authority' error if user doesn't
+   *    have proper authority (isn't planning given event), or 'no such event'
+   *    error if event not found.
+   */
   var _deleteEvent = function(userid, eventid, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -164,9 +219,17 @@ var Event = (function Event() {
     });
   };
 
-  // information is an object with keys in the schemas above
-  // CANNOT USE THIS METHOD TO ADD PLANNERS OR COSTS OR INVITEES
-  //    (OR ANYTHING IN A LIST)
+  /** Updates or adds information to an event in the database
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    information: an object containing the fields that should be changed and
+   *      their new values (eg {name: "new name"})
+   *        Note: this cannot be used with array fields (eg. planners, costs,
+   *          etc) - use the specified methods for adding/removing those.
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _setInformation = function(eventid, information, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -177,6 +240,14 @@ var Event = (function Event() {
     });
   };
 
+  /** Adds a planner to an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    planner_email: the email of the planner being added
+   *    callback: a function to call once the planner is added
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _addPlanner = function(eventid, planner_email, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -193,6 +264,15 @@ var Event = (function Event() {
     });
   };
 
+  /** Removes a planner from an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    plannerid: the id of the planner to be removed
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    undefined on success; 'no such planner' error if planner not attached
+   *    to event; 'no such event' error if event not found.
+   */
   var _deletePlanner = function(eventid, plannerid, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -212,7 +292,16 @@ var Event = (function Event() {
     });
   };
 
-  //description is optional
+  /** Adds a cost to an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    name: the name of the cost object (eg. "venue")
+   *    amount: how much the cost is (in dollars)
+   *    description: a description of the cost object
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _addCost = function(eventid, name, amount, description, callback) {
     var cost = {
       'name': name,
@@ -228,6 +317,15 @@ var Event = (function Event() {
     });
   };
 
+  /** Removes a cost from an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    costid: the id of the cost to be removed
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if deleted successfully; false if error while deleting; error if
+   *    event not found
+   */
   var _deleteCost = function(eventId, costid, callback) {
     _getEvent(eventId, function(err, result) {
       if (err) {
@@ -245,6 +343,13 @@ var Event = (function Event() {
     });
   };
 
+  /** Returns the sum of all costs in an event
+   *  Arguments:
+   *    eventid: the id of the event to get information from
+   *    callback: a function to pass information to
+   *  Returns:
+   *    total cost; 'no such event' error if event not found.
+   */
   var _getTotalCost = function(eventId, callback) {
     _getEvent(eventid, function(err, event) {
       if (err) {
@@ -261,6 +366,13 @@ var Event = (function Event() {
     });
   };
 
+  /** Returns the budget remaining for an event
+   *  Arguments:
+   *    eventid: the id of the event to get information from
+   *    callback: a function to pass information to
+   *  Returns:
+   *    budget - total cost; 'no such event' error if event not found.
+   */
   var _getBudgetRemaining = function(eventId, callback) {
     _getEvent(eventid, function(err, event) {
       if (err) {
@@ -273,6 +385,14 @@ var Event = (function Event() {
     });
   };
 
+  /** Adds an invitee to an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    attendee_email: the email of the invited person being added
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _addInvite = function(eventid, attendee_email, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -291,7 +411,16 @@ var Event = (function Event() {
     });
   };
 
-  //note from attendee is optional
+  /** Marks an invitee (or person in general) as attending an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    attendee_email: the email of the attendee being marked
+   *    attendee_name: the name of the person attending
+   *    note_from_attendee: a note from the person attending (optional)
+   *    callback: a function to call once the planner is added
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _markAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -316,6 +445,16 @@ var Event = (function Event() {
     });
   };
 
+  /** Marks an invitee (or person in general) as not attending an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    attendee_email: the email of the attendee being marked
+   *    attendee_name: the name of the person (not) attending
+   *    note_from_attendee: a note from the person (not) attending (optional)
+   *    callback: a function to call once the planner is added
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _markNotAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
@@ -335,6 +474,13 @@ var Event = (function Event() {
     });
   };
 
+  /** Gets the number of people attending an event
+   *  Arguments:
+   *    eventid: the id of the event to get information from
+   *    callback: a function to pass information to
+   *  Returns:
+   *    number of people attending; 'no such event' error if event not found.
+   */
   var _getAttendingCount = function(eventid, callback) {
     _getEvent(eventid, function(err, given_event) {
       if (err) {
@@ -352,6 +498,13 @@ var Event = (function Event() {
     });
   };
 
+  /** Gets the number of people invited to an event
+   *  Arguments:
+   *    eventid: the id of the event to get information from
+   *    callback: a function to pass information to
+   *  Returns:
+   *    number of people invited; 'no such event' error if event not found.
+   */
   var _getInvitedCount = function(eventid, callback) {
     _getEvent(eventid, function(err, event) {
       if (err) {
@@ -362,6 +515,14 @@ var Event = (function Event() {
     });
   };
 
+  /** Gets the emails of people invited to an event
+   *  Arguments:
+   *    eventid: the id of the event to get information from
+   *    callback: a function to pass information to
+   *  Returns:
+   *    list of emails of people invited (or [] if none); 'no such event'
+   *    error if event not found.
+   */
   var _getInviteeEmails = function(eventid, callback) {
     _getEvent(eventid, function(err, event) {
       if (err) {
@@ -374,6 +535,14 @@ var Event = (function Event() {
     });
   };
 
+  /** Gets the emails of people attending an event
+   *  Arguments:
+   *    eventid: the id of the event to get information from
+   *    callback: a function to pass information to
+   *  Returns:
+   *    list of emails of people attending (or [] if none); 'no such event'
+   *    error if event not found.
+   */
   var _getAttendeeEmails = function(eventid, callback) {
     _getEvent(eventid, function(err, event) {
       if (err) {
@@ -392,6 +561,14 @@ var Event = (function Event() {
     });
   };
 
+  /** Adds a category to an event (to put todos in)
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    category_name: the name of the category to be added
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _addCategory = function(eventid, category_name, callback) {
     _getEvent(eventid, function(err, event) {
       if (event) {
@@ -410,6 +587,15 @@ var Event = (function Event() {
     });
   };
 
+  /** Removes a category from an event
+   *  Arguments:
+   *    eventId: the id of the event to be updated
+   *    categoryId: the id of the category to be removed
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if deleted successfully; false if error while deleting; error if
+   *    event not found
+   */
   var _deleteCategory = function(eventId, categoryId, callback) {
     _getCategory(eventId, categoryId, function(err, result) {
       if (err) {
@@ -427,6 +613,17 @@ var Event = (function Event() {
     });
   };
 
+  /** Adds a todo to an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    categoryid: the id of the category to which to add the todo
+   *    todo_name: the name of the todo to be added
+   *    todo_deadline: a date by which the todo should be done
+   *    todo_priority: the priority of the todo
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    undefined on success; 'no such event' error if event not found.
+   */
   var _addTodo = function(eventId, categoryId, todo_name, todo_deadline, todo_priority, callback) {
     _getCategory(eventId, categoryId, function(err, result) {
       if (err) {
@@ -450,6 +647,16 @@ var Event = (function Event() {
     });
   };
 
+  /** Marks a todo as completed
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    categoryid: the id of the category to which to add the todo
+   *    todoId: the id of the todo to be updated
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if success; false if error during deletion; 'no such event'
+   *    error if event not found.
+   */
   var _checkTodo = function(eventId, categoryId, todoId, callback) {
     _getCategory(eventId, categoryId, function(err, result) {
       if (err) {
@@ -467,6 +674,16 @@ var Event = (function Event() {
     });
   };
 
+  /** Marks a todo as uncompleted
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    categoryid: the id of the category to which to add the todo
+   *    todoId: the id of the todo to be updated
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if success; false if error during deletion; 'no such event'
+   *    error if event not found.
+   */
   var _uncheckTodo = function(eventId, categoryId, todoId, callback) {
     _getCategory(eventId, categoryId, function(err, result) {
       if (err) {
@@ -484,6 +701,16 @@ var Event = (function Event() {
     });
   };
 
+  /** Removes a todo from an event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    categoryid: the id of the cost to be removed
+   *    todoId: the id of the todo to be removed
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if deleted successfully; false if error while deleting; error if
+   *    event not found
+   */
   var _deleteTodo = function(eventId, categoryId, todoId, callback) {
     _getCategory(eventId, categoryId, function(err, result) {
       if(err) {
@@ -502,7 +729,7 @@ var Event = (function Event() {
     });
   };
 
-  return {
+  return Object.freeze({
     findById            : _findById,
     createNewEvent      : _createNewEvent,
     clearAllEvents      : _clearAllEvents,
@@ -528,6 +755,6 @@ var Event = (function Event() {
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,
     deleteCategory      : _deleteCategory,
-  };
+  });
 })();
 module.exports = Event;

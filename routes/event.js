@@ -64,7 +64,7 @@ router.param('cost', function (req, res, next, costId) {
 
 // GET requests
 /*
-    GET /events
+    GET /events/public
     No request parameters
     Response:
      - success: true if the server succeeded in getting the user's events
@@ -342,7 +342,7 @@ router.post('/:event/categories', function (req, res) {
 });
 
 /*
-    POST /events/:event/addinvite
+    POST /events/:event/invite
     Request parameters:
      - event ID: the unique ID of the event we're going to change
     Response:
@@ -425,28 +425,22 @@ router.put('/:event', function(req, res) {
      - err: on failure, an error message
 */
 router.put('/:event/categories/:category/todos/:todo', function(req, res) {
-  console.log(req.body);
   if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck')) {
     utils.sendErrResponse(res, 500, 'Status missing from the URL')
   }
-  console.log('still alive');
   if (req.body.status == 'check') {
     Event.checkTodo(req.event, req.category, req.todo, function(err, success) {
       if (err) {
-        console.log('sadness_check');
         utils.sendErrResponse(res, 500, err);
       } else {
-        console.log('wait you are suppose to be alive_check');
         utils.sendSuccessResponse(res, success);
       }
     });
   } else if (req.body.status == 'uncheck') {
     Event.uncheckTodo(req.event, req.category, req.todo, function(err, success) {
       if (err) {
-        console.log('sadness_uncheck');
         utils.sendErrResponse(res, 500, err);
       } else {
-        console.log('wait you are suppose to be alive_uncheck');
         utils.sendSuccessResponse(res, success);
       }
     });
@@ -458,7 +452,7 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
 // DELETE requests
 
 /*
-    DELETE /events/:event/cost/:cost
+    DELETE /events/:event/costs/:cost
     Request parameters:
      - event ID: the unique ID of the event within the logged-in user's collection
      - cost ID: the identifier for the cost of an event.
@@ -481,7 +475,7 @@ router.delete('/:event/costs/:cost', function(req, res) {
 );
 
 /*
-    DELETE /events/:event/planner/:planner
+    DELETE /events/:event/planners/:planner
     Request parameters:
      - event ID: the unique ID of the event within the logged-in user's collection
      - planner ID: the unique ID of the planner who will be removed for the list of planners
@@ -495,7 +489,7 @@ router.delete('/:event/planners/:planner', function(req, res) {
 });
 
 /*
-    DELETE /events/:event/category/:category
+    DELETE /events/:event/categories/:category
     Request parameters:
      - event ID: the unique ID of the event within the logged-in user's collection
      - category ID: the unique ID of the category in the event.
@@ -515,7 +509,7 @@ router.delete('/:event/categories/:category', function (req, res) {
 });
 
 /*
-    DELETE /events/:event/category/:category/todo/:todo
+    DELETE /events/:event/categories/:category/todos/:todo
     Request parameters:
      - event ID: the unique ID of the event within the logged-in user's collection
     Response:
