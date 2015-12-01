@@ -1,0 +1,24 @@
+Meeting notes for TA meeting November 30, 2015
+
+
+ta looked over her feedback, synchronized with other TAs, and gave us more points (yay!)
+
+event model -> files because industry standard, so no points taken off
+  - difference of opinion (many files vs. long file) so don't have to change
+
+modularizing :event code
+  misunderstanding - put into model file vs. put into separate method
+
+idiot-proof vs. restrictive
+  - attending own event should be possible (argued with ta for this)
+    although invite page should have something special to signify that user is planner
+  - duplicate todos probably fine
+
+don't need to require account for attendee (but should be optional - for saving information for future events)
+
+object.freeze probably unnecessary (so won't take off points), but should add it anyway
+
+
+
+
+reminder to do default todos?
