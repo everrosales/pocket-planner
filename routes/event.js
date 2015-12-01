@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router({mergeParams:true});
 var utils = require('../utils/utils');
+var mailer = require('../config/mailer.js');
 
 var User = require('../models/User');
 var Event = require('../models/Event');
@@ -173,9 +174,7 @@ router.post('/:event/attend', function(req, res) {
 // DELETE requests
 
 
-// Register the middleware handlers above
 router.all('*', requireAuthentication);
-
 /*
   At this point, all requests are authenticated and checked:
   1. Clients must be logged into some account
@@ -373,6 +372,78 @@ router.post('/:event/categories/:category/todos', function (req, res) {
   }
   // Add Event todo
 
+});
+
+var mailerCallback = function(err, info) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('Email sent.');
+  }
+};
+
+/*
+    POST /events/:event/email/invitee
+    Request body:
+     - subject: email subject
+     - text: email body text
+     - date: when the emails will be sent
+    Response:
+     - success: true if email sent or scheduled
+     - err: on failure, an error message
+*/
+router.post('/:event/email/invitee', function(req, res) {
+  if (!req.body.subject || !req.body.text) {
+    utils.sendErrResponse(res, 400, 'Email subject and text are required.');
+  } else {
+    Event.getInviteeEmails(req.event, function(err, emails) {
+      emails.forEach(function(email) {
+        if (req.body.date) {
+          if (req.body.date < Date.now()) {
+            utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+          } else {
+            mailer.sendEmailAt(email, req.body.subject, req.body.text, req.body.date, mailerCallback);
+            utils.sendSuccessResponse(res, true);
+          }
+        } else {
+          mailer.sendEmail(email, req.body.subject, req.body.text, mailerCallback);
+          utils.sendSuccessResponse(res, true);
+        }
+      });
+    });
+  }
+});
+
+/*
+    POST /events/:event/email/attendee
+    Request body:
+     - subject: email subject
+     - text: email body text
+     - date: when the emails will be sent
+    Response:
+     - success: true if email sent or scheduled
+     - err: on failure, an error message
+*/
+router.post('/:event/email/attendee', function(req, res) {
+  if (!req.body.subject || !req.body.text) {
+    utils.sendErrResponse(res, 400, 'Email subject and text are required.');
+  } else {
+    Event.getAttendeeEmails(req.event, function(err, emails) {
+      emails.forEach(function(email) {
+        if (req.body.date) {
+          if (req.body.date < Date.now()) {
+            utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+          } else {
+            mailer.sendEmailAt(email, req.body.subject, req.body.text, req.body.date, mailerCallback);
+            utils.sendSuccessResponse(res, true);
+          }
+        } else {
+          mailer.sendEmail(email, req.body.subject, req.body.text, mailerCallback);
+          utils.sendSuccessResponse(res, true);
+        }
+      });
+    });
+  }
 });
 
 // PUT requests
