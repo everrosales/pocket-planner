@@ -34,6 +34,27 @@ nav > div.nav-wrapper {
   border: 1px solid #ddd;
   height: 100vh;
 }*/
+#rsvp-summary-content {
+  max-height: none;
+}
+
+#rsvp-summary-image {
+  min-height: 100px;
+}
+
+#rsvp-summary-card {
+  height: auto;
+  min-height: 500px;
+  max-height: none;
+}
+
+#rsvp-summary-card>div.card-action {
+  position: relative;
+}
+
+#rsvp-summary-details {
+  border-left: 5px solid #009688;
+}
 
 .event-container:hover{
   background-color:lightgray;

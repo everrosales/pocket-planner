@@ -169,27 +169,27 @@ templates['rsvp'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "<div class=\"rsvp\">\n"
     + ((stack1 = container.invokePartial(partials.header,depth0,{"name":"header","hash":{"currentUser":(depth0 != null ? depth0.currentUser : depth0)},"data":data,"indent":"  ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "  <div class=\"container center grey lighten-3\">\n    <div class=\"card-panel large\">\n      <div class=\"card-content\">\n          <h2 class=\"event_name\"><span class=\"card-title\">"
+    + "  <div class=\"container grey lighten-3\">\n    <div id=\"rsvp-summary-card\" class=\"card large\">\n      <div id=\"rsvp-summary-image\" class=\"card-image teal\">\n        <span class=\"card-title\">event details</span>\n      </div>\n      <div id=\"rsvp-summary-content\" class=\"card-content\">\n          <div class=\"row\">\n            <h2>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span></h2>\n          <div class=\"row\">\n            Host: "
+    + "</h2>\n            <blockquote id=\"rsvp-summary-details\">\n              Host: "
     + alias4(((helper = (helper = helpers.hostEmail || (depth0 != null ? depth0.hostEmail : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"hostEmail","hash":{},"data":data}) : helper)))
-    + "\n          </div>\n          <div class=\"row\">\n            Start: "
+    + " <br>\n              Start: "
     + alias4(((helper = (helper = helpers.start || (depth0 != null ? depth0.start : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.start_time || (depth0 != null ? depth0.start_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start_time","hash":{},"data":data}) : helper)))
-    + "\n          </div>\n          <div class=\"row\">\n            End: "
+    + " <br>\n              End: "
     + alias4(((helper = (helper = helpers.end || (depth0 != null ? depth0.end : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
-    + "\n          </div>\n          <div class=\"row\">\n            Location: "
+    + " <br>\n              Location: "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n          </div>\n"
+    + "\n            </blockquote>\n          </div>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        <form id=\"attendee-status\" action=\"#\">\n          <input name=\"email\" type=\"email\" class=\"validate\" placeholder=\"Email [required]\">\n          <input name=\"name\" placeholder=\"Your name [required]\">\n          <textarea id=\"rsvp-comments\" name=\"note\" placeholder=\"Comments\"></textarea>\n          <button eventId = \""
+    + "        <form id=\"attendee-status\" action=\"#\">\n          <h3>Are you going?</h3>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name=\"email\" type=\"email\" class=\"validate\">\n              <label for=\"email\">Email</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"name\" type=\"text\" class=\"validate\">\n              <label for=\"name\">Name</label>\n            </div>\n            <div class=\"input-field col s12\">\n              <textarea id=\"rsvp-comments\" name=\"note\" class=\"materialize-textarea\"></textarea>\n              <label for=\"note\">Comments</label>\n            </div>\n          </div>\n        </form>\n      </div>\n      <div class=\"card-action\">\n        <button eventId = \""
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" class=\"rsvp-attend\" type=\"submit\" name=\"attending\" value=\"1\">Yes</button>\n          <button eventId = \""
+    + "\" class=\"rsvp-attend waves-effect waves-light btn-flat\" name=\"attending\" value=\"1\">Yes</button>\n        <button eventId = \""
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" class=\"rsvp-attend\" type=\"submit\" name=\"attending\" value=\"0\">No</button>\n        </form>\n      </div>\n      <div class=\"card-action\">\n\n      </div>\n\n    </div>\n  </div>\n  <div>\n\n  </div>\n</div>\n";
+    + "\" class=\"rsvp-attend waves-effect waves-light btn-flat\" name=\"attending\" value=\"0\">No</button>\n      </div>\n\n    </div>\n  </div>\n  <div>\n\n  </div>\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['signin'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -316,7 +316,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <button class=\"col s3 btn btn-default\" id=\"new_category\">+ Add a new to-do list</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
+    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n  <div class=\"error\"></div>\n  <div id=\"event_editable\">\n    <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n    <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
@@ -539,27 +539,27 @@ templates['templates/rsvp'] = template({"1":function(container,depth0,helpers,pa
 
   return "<div class=\"rsvp\">\n"
     + ((stack1 = container.invokePartial(partials.header,depth0,{"name":"header","hash":{"currentUser":(depth0 != null ? depth0.currentUser : depth0)},"data":data,"indent":"  ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "  <div class=\"container center grey lighten-3\">\n    <div class=\"card-panel large\">\n      <div class=\"card-content\">\n          <h2 class=\"event_name\"><span class=\"card-title\">"
+    + "  <div class=\"container grey lighten-3\">\n    <div id=\"rsvp-summary-card\" class=\"card large\">\n      <div id=\"rsvp-summary-image\" class=\"card-image teal\">\n        <span class=\"card-title\">event details</span>\n      </div>\n      <div id=\"rsvp-summary-content\" class=\"card-content\">\n          <div class=\"row\">\n            <h2>"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</span></h2>\n          <div class=\"row\">\n            Host: "
+    + "</h2>\n            <blockquote id=\"rsvp-summary-details\">\n              Host: "
     + alias4(((helper = (helper = helpers.hostEmail || (depth0 != null ? depth0.hostEmail : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"hostEmail","hash":{},"data":data}) : helper)))
-    + "\n          </div>\n          <div class=\"row\">\n            Start: "
+    + " <br>\n              Start: "
     + alias4(((helper = (helper = helpers.start || (depth0 != null ? depth0.start : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.start_time || (depth0 != null ? depth0.start_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"start_time","hash":{},"data":data}) : helper)))
-    + "\n          </div>\n          <div class=\"row\">\n            End: "
+    + " <br>\n              End: "
     + alias4(((helper = (helper = helpers.end || (depth0 != null ? depth0.end : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
-    + "\n          </div>\n          <div class=\"row\">\n            Location: "
+    + " <br>\n              Location: "
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n          </div>\n"
+    + "\n            </blockquote>\n          </div>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "        <form id=\"attendee-status\" action=\"#\">\n          <input name=\"email\" type=\"email\" class=\"validate\" placeholder=\"Email [required]\">\n          <input name=\"name\" placeholder=\"Your name [required]\">\n          <textarea id=\"rsvp-comments\" name=\"note\" placeholder=\"Comments\"></textarea>\n          <button eventId = \""
+    + "        <form id=\"attendee-status\" action=\"#\">\n          <h3>Are you going?</h3>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name=\"email\" type=\"email\" class=\"validate\">\n              <label for=\"email\">Email</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"name\" type=\"text\" class=\"validate\">\n              <label for=\"name\">Name</label>\n            </div>\n            <div class=\"input-field col s12\">\n              <textarea id=\"rsvp-comments\" name=\"note\" class=\"materialize-textarea\"></textarea>\n              <label for=\"note\">Comments</label>\n            </div>\n          </div>\n        </form>\n      </div>\n      <div class=\"card-action\">\n        <button eventId = \""
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" class=\"rsvp-attend\" type=\"submit\" name=\"attending\" value=\"1\">Yes</button>\n          <button eventId = \""
+    + "\" class=\"rsvp-attend waves-effect waves-light btn-flat\" name=\"attending\" value=\"1\">Yes</button>\n        <button eventId = \""
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" class=\"rsvp-attend\" type=\"submit\" name=\"attending\" value=\"0\">No</button>\n        </form>\n      </div>\n      <div class=\"card-action\">\n\n      </div>\n\n    </div>\n  </div>\n  <div>\n\n  </div>\n</div>\n";
+    + "\" class=\"rsvp-attend waves-effect waves-light btn-flat\" name=\"attending\" value=\"0\">No</button>\n      </div>\n\n    </div>\n  </div>\n  <div>\n\n  </div>\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['templates/signin'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
@@ -686,7 +686,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <button class=\"col s3 btn btn-default\" id=\"new_category\">+ Add a new to-do list</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
+    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n  <div class=\"error\"></div>\n  <div id=\"event_editable\">\n    <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n    <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))

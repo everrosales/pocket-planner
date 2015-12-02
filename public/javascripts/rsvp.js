@@ -60,7 +60,7 @@ $(document).on("click",".rsvp-attend", function(e){
     }).fail(function(responseObject) {
       console.log('oops');
       var response = $.parseJSON(responseObject.responseText);
-      Materialize(response.err, 4000);
+      Materialize.toast(response.err, 4000);
     });
 });
 
