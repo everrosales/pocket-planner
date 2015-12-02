@@ -1,38 +1,8 @@
 (function () {
   var event_id = undefined;
 
-  $(document).on("click", ".edit-category", function(){
-    $(this).parent().hide();
-    $(this).parent().parent().find(".add_todo").hide();
-    $(this).parent().parent().find('.edit-category-form').show();
-  });
-
-  $(document).on("click", ".cancel-edit-category", function(){
-    event_id = $("#event-panel").attr("eventId");
-    loadTodosPage(event_id);
-  });
-
-  $(document).on("click", ".submit-edit-category", function(){
-    event_id = $("#event-panel").attr("eventId");
-    var cat_id = $(this).parent().parent().parent().attr("categoryId");
-    var new_category_name = $(this).parent().find(".edit-category-name").val();
-    if (!new_category_name){
-      Materialize.toast("Category must have a name.", 2000);
-    }else{
-      $.ajax({
-        url: "/events/"+event_id+"/categories/"+cat_id,
-        type: "PUT",
-        data: {new_name:new_category_name}
-      }).done(function(response){
-        loadTodosPage(event_id);
-      }).fail(function(responseObject){
-        var response = $.parseJSON(responseObject.responseText);
-        Materialize.toast(response.err, 2000);
-      });
-
-    }
-  });
-
+//Edit Todo
+  //Open edit todo form.
   $(document).on("click", ".edit-todo", function(){
     $(this).parent().hide();
     var edit_form = $(this).parent().parent().find(".edit-todo-form");
@@ -47,12 +17,16 @@
 
   });
 
+  //Cancel editing todo.
   $(document).on("click", ".cancel-edit-todo", function(){
     event_id = $("#event-panel").attr("eventId");
     loadTodosPage(event_id);
   });
 
+  //Submit edit todo form.
   $(document).on("click", ".submit-edit-todo", function(){
+
+    //get all info for request.
     event_id = $("#event-panel").attr("eventId");
     var cat_id = $(this).parent().parent().parent().parent().attr("categoryId");
 
@@ -71,54 +45,29 @@
     }else{
       var info = {name: todo_name, deadline: todo_deadline};
 
-      if(todo_priority){
-        info.priority = todo_priority
-      };
-      $.ajax({
-        url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
-        type: 'PUT',
-        data: {status: 'edit', information: info}
-      }).done(function(response){
-        loadTodosPage(event_id);
-      }).fail(function(responseObject){
-        console.log("failed");
-        var response = $.parseJSON(responseObject.responseText);
-        Materialize.toast(response.err, 2000);
-      });
+      if(todo_priority && (todo_priority < 1 || todo_priority > 10)){
+        Materialize.toast("Priority must be between 1 and 10.", 2000);
+      }else{
+        //add priority if applicable.
+        if(todo_priority){
+          info.priority = todo_priority;
+        }
+
+        $.ajax({
+          url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
+          type: 'PUT',
+          data: {status: 'edit', information: info}
+        }).done(function(response){
+          loadTodosPage(event_id);
+        }).fail(function(responseObject){
+          console.log("failed");
+          var response = $.parseJSON(responseObject.responseText);
+          Materialize.toast(response.err, 2000);
+        });
+      }
+
     }
 
-  });
-
-  $(document).on("click", ".remove-cost", function(){
-    event_id = $("#event-panel").attr("eventId");
-    var cost_id = $(this).parent().parent().parent().attr("costId");
-    $.ajax({
-      url: 'events/'+event_id+'/costs/'+cost_id,
-      type: 'DELETE'
-    }).done(function(response){
-      window.location.href = "#event-costs";
-      loadTodosPage(event_id);
-    }).fail(function(responseObject){
-      console.log("failed");
-      var response = $.parseJSON(responseObject.responseText);
-      Materialize.toast(response.err, 2000);
-    });
-  });
-
-  $(document).on("click", ".remove-planner", function(){
-    event_id = $('#event-panel').attr("eventId");
-    var planner_id = $(this).parent().parent().attr("plannerId");
-    $.ajax({
-      url: 'events/'+event_id+'/planners/'+planner_id,
-      type: 'DELETE'
-    }).done(function(response){
-      window.location.href = "#event-planners";
-      loadTodosPage(event_id);
-    }).fail(function(responseObject){
-      console.log("failed");
-      var response = $.parseJSON(responseObject.responseText);
-      Materialize.toast(response.err, 2000);
-    });
   });
 
   $(document).on("change", ".check-todo", function(){
@@ -154,58 +103,6 @@
     }
   });
 
-  $(document).on("click", "#add-cost", function(){
-    $("#add-cost").hide();
-    $("#add-cost-form").show();
-  });
-
-  $(document).on("click", "#cancel-cost", function(){
-    event_id = $(this).parent().attr("eventId");
-    window.location.href = "#event-costs";
-    loadTodosPage(event_id);
-  });
-
-  $(document).on("click", "#submit-cost", function(){
-    event_id = $(this).parent().attr("eventId");
-    var name = $("#cost-name").val();
-    var amount = $("#cost-amount").val();
-    var desc = $("#cost-desc").val();
-    $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){
-      window.location.href = "#event-costs";
-      loadTodosPage(event_id);
-    }).fail(function(responseObject){
-      console.log(responseObject);
-      var response = $.parseJSON(responseObject.responseText);
-      // $("#add-cost-form").find(".error").text(response.err);
-      Materialize.toast(response.err, 2000);
-    });
-  });
-
-  $(document).on("click", "#add-planner", function(){
-    $("#add-planner").hide();
-    $("#add-planner-form").show();
-  });
-
-  $(document).on("click", "#cancel-planner", function(){
-    event_id = $("#event-panel").attr("eventId");
-    window.location.href = "#event-planners";
-    loadTodosPage(event_id);
-  });
-
-  $(document).on("click", "#submit-planner", function(){
-    event_id = $("#event-panel").attr("eventId");
-    var email = $("#planner-email").val();
-    $.post("/events/"+event_id+"/planners", {planner_email:email}).done(function(response){
-      window.location.href = "#event-planners";
-      loadTodosPage(event_id);
-    }).fail(function(responseObject){
-      console.log(responseObject);
-      var response = $.parseJSON(responseObject.responseText);
-      // $("#add-planner-form").find(".error").text(response.err)
-      console.log(response);
-      Materialize.toast(response.err, 2000);
-    });
-  });
 
   $(document).on('click', '#edit-event', function(){
     event_id = $('#event-panel').attr("eventId");
@@ -248,12 +145,8 @@
     loadTodosPage(event_id);
   });
 
-  //when press cancel, loadTodosPage
 
-  $(document).on('click', '#new_category', function() {
-    $('#new_category').hide();
-    $("#new-category-container").show();
-  });
+
 
   $(document).on("click", "#submit-edit-event", function(){
     event_id = $("#event-panel").attr("eventId");
@@ -333,13 +226,13 @@
   });
 
   $(document).on('click', '#add-todo', function(){
-    console.log("adding todo");
     var categoryId = $(this).parent().parent().parent().attr('categoryId');
     event_id = $('#event-panel').attr("eventId");
     // var error_div = $(this).parent().find('.error');
     var form = $(this).parent();
     var todo_name = form.find('.todo-name').val();
-    var deadline = new Date(form.find('.deadline').val());
+    var deadline = (form.find('.deadline').val());
+    console.log(deadline);
     var priority = form.find(".priority").val();
     if (todo_name.length < 1 || !deadline){
 
@@ -347,7 +240,7 @@
 
 
     }else{
-
+      deadline = new Date(deadline);
       info = {name: todo_name, deadline:deadline};
 
       if(priority && (priority <= 0 || priority > 10)){
@@ -360,6 +253,7 @@
         $.post('events/'+event_id+'/categories/'+categoryId+'/todos', info).done(function(response){
           loadTodosPage(event_id);
         }).fail(function(responseObject){
+          console.log(responseObject);
           var response = $.parseJSON(responseObject.responseText);
           Materialize.toast(response.err, 2000);
           // error_div.text(response.err);
@@ -380,41 +274,5 @@
     $(this).parent().parent().find(".add_todo").show();
   });
 
-  $(document).on('click', '#cancel-category-button', function(){
-    $("#category-title").val("");
-    $("#new-category-container").hide();
-    $("#new_category").show();
-  });
-
-  $(document).on('click', '#add-category-button', function() {
-    var category_title = $('#category-title').val();
-    if (category_title.length < 1){
-
-      Materialize.toast('To-Do List must have a title.', 2000);
-    }else{
-      event_id = $("#event-panel").attr("eventId");
-      $.post('events/' + event_id + '/categories', {name: category_title}).done(function(response){
-        loadTodosPage(event_id);
-      }).fail(function(responseObject){
-        var response = $.parseJSON(responseObject.responseText);
-        // $(this).parent().find('.error').text(response.err);
-        Materialize.toast(response.err, 2000);
-      });
-    }
-  });
-
-  $(document).on('click', '.delete-category', function(){
-    var category_id = $(this).parent().parent().parent().attr('categoryId');
-    event_id = $('#event-panel').attr('eventId');
-    $.ajax({
-      url: 'events/' + event_id + '/categories/' + category_id,
-      type: 'DELETE',
-    }).done(function(response){
-      loadTodosPage(event_id);
-    }).fail(function(responseObject) {
-      var response = $.parseJSON(responseObject.responseText);
-      Materialize.toast(response.err, 2000);
-    });
-  });
 
 })();

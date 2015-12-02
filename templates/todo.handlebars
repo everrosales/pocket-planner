@@ -12,7 +12,7 @@
       <small>Deadline: {{deadline}}</small>
       {{/if}}
       {{#if priority}}
-      <br><small>Priority: {{priority}}</small>
+      <br><small>Priority (1-10): {{priority}}</small>
       {{/if}}
     </div>
     <div class="edit-todo-form" style="display:none">
@@ -23,7 +23,7 @@
       <label class="active" for="edit-todo-deadline">Deadline</label>
       <input class="edit-todo-deadline" type="text" name="edit-todo-deadline" value={{#if deadline}}{{deadline}}{{/if}}>
 
-      <label class="active" for="edit-todo-priority">Priority</label>
+      <label class="active" for="edit-todo-priority">Priority (1-10)</label>
       <input class="edit-todo-priority" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
 
       <br>
