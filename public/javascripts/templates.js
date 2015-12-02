@@ -288,6 +288,26 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + "</p>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     return "      <p>No costs yet.</p>\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
+
+  return "        <li plannerId="
+    + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n          <p><span class=\"bold\">"
+    + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
+    + "</span><span class=\"glyphicon glyphicon-remove remove-planner\"></span></p>\n        </li>\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)));
+},"13":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return alias4(((helper = (helper = helpers.username || (depth0 != null ? depth0.username : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"username","hash":{},"data":data}) : helper)))
+    + " "
+    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)));
+},"15":function(container,depth0,helpers,partials,data) {
+    return "        <p>No other planners yet.</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : {};
 
@@ -296,7 +316,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
+    + "\n  <button class=\"col s3 btn btn-default\" id=\"new_category\">+ Add a new to-do list</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n  <div class=\"error\"></div>\n  <div id=\"event_editable\">\n    <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n    <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
@@ -340,9 +360,15 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n    <p class=\"bold\">Costs</p>\n    <ul>\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
-    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n  </div>\n  <div id=\"add-cost-form\" style=\"display:none\" eventId="
+    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n    <hr>\n  </div>\n  <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n    <br>\n    <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n    <br>\n    <input id=\"cost-desc\" placeholder=\"Description\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n</div>\n</div>\n";
+    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n    <br>\n    <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n    <br>\n    <input id=\"cost-desc\" placeholder=\"Description\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n  </div>\n  <div id=\"planner-list\" eventId = "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
+    + ">\n    <p class=\"bold\">Planners</p>\n    <ul>\n"
+    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.planners : stack1),{"name":"each","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(15, data, 0),"data":data})) != null ? stack1 : "")
+    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-planner\">Add Planner</button>\n  </div>\n  <div id=\"add-planner-form\" style=\"display:none\" eventId="
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
+    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"planner-email\" placeholder=\"Email of planner [required]\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-planner\">Submit Planner</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-planner\">Cancel</button>\n  </div>\n</div>\n</div>\n";
 },"usePartial":true,"useData":true});
 templates['templates/attendeventsummary'] = template({"1":function(container,depth0,helpers,partials,data) {
     return "<i class=\"material-icons right delete-event\">star</i>";
@@ -632,6 +658,26 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + "</p>\n";
 },"8":function(container,depth0,helpers,partials,data) {
     return "      <p>No costs yet.</p>\n";
+},"10":function(container,depth0,helpers,partials,data) {
+    var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
+
+  return "        <li plannerId="
+    + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n          <p><span class=\"bold\">"
+    + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
+    + "</span><span class=\"glyphicon glyphicon-remove remove-planner\"></span></p>\n        </li>\n";
+},"11":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)));
+},"13":function(container,depth0,helpers,partials,data) {
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+
+  return alias4(((helper = (helper = helpers.username || (depth0 != null ? depth0.username : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"username","hash":{},"data":data}) : helper)))
+    + " "
+    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)));
+},"15":function(container,depth0,helpers,partials,data) {
+    return "        <p>No other planners yet.</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1, alias1=container.lambda, alias2=container.escapeExpression, alias3=depth0 != null ? depth0 : {};
 
@@ -640,7 +686,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
+    + "\n  <button class=\"col s3 btn btn-default\" id=\"new_category\">+ Add a new to-do list</button>\n\n</div>\n<div id=\"event_panel\" class=\"col m3\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n  <div class=\"error\"></div>\n  <div id=\"event_editable\">\n    <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n    <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
@@ -684,8 +730,14 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n    <p class=\"bold\">Costs</p>\n    <ul>\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
-    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n  </div>\n  <div id=\"add-cost-form\" style=\"display:none\" eventId="
+    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n    <hr>\n  </div>\n  <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n    <br>\n    <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n    <br>\n    <input id=\"cost-desc\" placeholder=\"Description\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n  </div>\n  <div class=\"i dont even know\" id=\"new_planner\">\n    <p>+ Add another planner</p>\n  </div>\n</div>\n</div>\n";
+    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"cost-name\" placeholder=\"Name of cost [required]\">\n    <br>\n    <input id=\"cost-amount\" placeholder=\"Amount (in $) [required]\">\n    <br>\n    <input id=\"cost-desc\" placeholder=\"Description\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-cost\">Cancel</button>\n  </div>\n  <div id=\"planner-list\" eventId = "
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
+    + ">\n    <p class=\"bold\">Planners</p>\n    <ul>\n"
+    + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.planners : stack1),{"name":"each","hash":{},"fn":container.program(10, data, 0),"inverse":container.program(15, data, 0),"data":data})) != null ? stack1 : "")
+    + "    </ul>\n    <button class=\"btn btn-default\" id=\"add-planner\">Add Planner</button>\n  </div>\n  <div id=\"add-planner-form\" style=\"display:none\" eventId="
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
+    + ">\n    <div class=\"error\"></div>\n    <br>\n    <input id=\"planner-email\" placeholder=\"Email of planner [required]\">\n    <br>\n\n    <button class=\"btn btn-default\"  id=\"submit-planner\">Submit Planner</button>\n    <br>\n    <button class=\"btn btn-default\" id=\"cancel-planner\">Cancel</button>\n  </div>\n</div>\n</div>\n";
 },"usePartial":true,"useData":true});
 })();

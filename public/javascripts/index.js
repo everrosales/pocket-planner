@@ -45,37 +45,38 @@ var zero_pad = function(str){
 var loadTodosPage = function(event_id) {
 
   $.get('/events/' + event_id).done(function(response){
-    console.log(response.content);
+    console.log(response.content.event);
 
-    response.content.start = new Date(response.content.start);
-    response.content.end = new Date(response.content.end);
-    response.content.start_time_24 = zero_pad(response.content.start.getHours().toString()) + ":" + zero_pad(response.content.start.getMinutes().toString());
-    response.content.end_time_24 = zero_pad(response.content.end.getHours().toString()) + ":" + zero_pad(response.content.end.getMinutes().toString());
+    response.content.event.start = new Date(response.content.event.start);
+    response.content.event.end = new Date(response.content.event.end);
+    response.content.event.start_time_24 = zero_pad(response.content.event.start.getHours().toString()) + ":" + zero_pad(response.content.event.start.getMinutes().toString());
+    response.content.event.end_time_24 = zero_pad(response.content.event.end.getHours().toString()) + ":" + zero_pad(response.content.event.end.getMinutes().toString());
 
 
-    response.content.start_time = response.content.start.toLocaleTimeString();
-    var tmp_time = response.content.start_time.split(' ');
+    response.content.event.start_time = response.content.event.start.toLocaleTimeString();
+    var tmp_time = response.content.event.start_time.split(' ');
     var am_pm = tmp_time[1];
-    tmp_time = response.content.start_time.split(':');
-    response.content.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-    response.content.start = response.content.start.toLocaleDateString();
+    tmp_time = response.content.event.start_time.split(':');
+    response.content.event.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+    response.content.event.start = response.content.event.start.toLocaleDateString();
 
 
-    response.content.end_time = response.content.end.toLocaleTimeString();
-    tmp_time = response.content.end_time.split(' ');
+    response.content.event.end_time = response.content.event.end.toLocaleTimeString();
+    tmp_time = response.content.event.end_time.split(' ');
     am_pm = tmp_time[1];
-    tmp_time = response.content.end_time.split(':');
-    response.content.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+    tmp_time = response.content.event.end_time.split(':');
+    response.content.event.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
 
 
-    response.content.end = response.content.end.toLocaleDateString();
-    response.content.categories.forEach(function(c){
+    response.content.event.end = response.content.event.end.toLocaleDateString();
+    response.content.event.categories.forEach(function(c){
       c.todos.forEach(function(t){
         t.deadline = new Date(t.deadline);
         t.deadline = t.deadline.toLocaleDateString();
-      })
-    })
-    loadPage('todos', {event: response.content, title:"Your Todos for " + response.content.name, currentUser: currentUser});
+      });
+    });
+    response.content.event.planners = response.content.planners;
+    loadPage('todos', {event: response.content.event, title:"Your Todos for " + response.content.event.name, currentUser: currentUser});
   }).fail(function(responseObject){
     console.log(responseObject);
     console.log("failed");

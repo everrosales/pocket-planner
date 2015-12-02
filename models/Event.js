@@ -264,6 +264,24 @@ var Event = (function Event() {
     });
   };
 
+  var _getPlanners = function(eventid, callback) {
+    _getEvent(eventid, function(err, found_event) {
+      if (err) {
+        callback(err);
+      } else {
+        found_event.populate('planners', function(err, new_event) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(err, new_event.planners.map(function(planner) {
+              return {email:planner.email, _id:planner._id, username:planner.username};
+            }));
+          }
+        });
+      }
+    });
+  };
+
   /** Gets emails of all planners of an event (not including host)
    *  Arguments:
    *    eventid: the id of the event to get planners' emails from
@@ -794,6 +812,7 @@ var Event = (function Event() {
     deleteEvent         : _deleteEvent,
     setInformation      : _setInformation,
     addPlanner          : _addPlanner,
+    getPlanners         : _getPlanners,
     getPlannerEmails    : _getPlannerEmails,
     deletePlanner       : _deletePlanner,
     addCost             : _addCost,

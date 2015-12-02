@@ -111,23 +111,6 @@ router.get('/public', function(req, res) {
      - err: on failure, an error message
 */
 router.get('/:event/attend', function(req, res) {
-  // var evt = req.event;
-  // evt.start = new Date(evt.start);
-  // evt.start_time = evt.start.toLocaleTimeString();
-  // var tmp_time = evt.start_time.split(' ');
-  // var am_pm = tmp_time[1];
-  // tmp_time = evt.start_time.split(':');
-  // evt.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-  // evt.start = evt.start.toLocaleDateString();
-  //
-  // evt.end = new Date(evt.end);
-  // evt.end_time = evt.end.toLocaleTimeString();
-  // tmp_time = evt.end_time.split(' ');
-  // am_pm = tmp_time[1];
-  // tmp_time = evt.end_time.split(':');
-  // evt.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-  // evt.end = evt.end.toLocaleDateString();
-  // //console.log(evt.end.toLocaleDateString());
   res.render('rsvp');
 });
 
@@ -221,6 +204,7 @@ router.get('/', function(req, res) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
       } else {
           my_events = my_events.reverse();
+
           utils.sendSuccessResponse(res, my_events);
       }
   });
@@ -244,7 +228,14 @@ router.get('/:event', function(req, res) {
   if (!req.event) {
     utils.sendErrResponse(res, 404, "Invalid event id.");
   } else {
-    utils.sendSuccessResponse(res, req.event);
+    Event.getPlanners(req.event._id, function(err, new_planners) {
+      if (err) {
+        utils.sendErrResponse(res, 500, "An unknown error occurred.");
+      } else {
+        req.event.planners = new_planners;
+        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners});
+      }
+    });
   }
 });
 
@@ -321,7 +312,7 @@ router.post('/:event/planners', function(req, res) {
       } else {
         utils.sendSuccessResponse(res, true);
       }
-    })
+    });
   }
 });
 
@@ -454,8 +445,8 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     // Error response has already sent in isAuthorized.
     return false;
   }
-  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck')) {
-    utils.sendErrResponse(res, 500, 'Status missing from the URL')
+  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit')) {
+    utils.sendErrResponse(res, 500, 'Status missing from the URL');
   }
   if (req.body.status == 'check') {
     Event.checkTodo(req.event, req.category, req.todo, function(err, success) {
@@ -467,6 +458,14 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     });
   } else if (req.body.status == 'uncheck') {
     Event.uncheckTodo(req.event, req.category, req.todo, function(err, success) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, success);
+      }
+    });
+  } else if (req.body.status == 'edit') {
+    Event.editTodo(req.event, req.category, req.todo, req.information, function(err, success) {
       if (err) {
         utils.sendErrResponse(res, 500, err);
       } else {

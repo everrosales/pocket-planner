@@ -70,6 +70,7 @@
     {{/each}}
     </ul>
     <button class="btn btn-default" id="add-cost">Add Cost</button>
+    <hr>
   </div>
   <div id="add-cost-form" style="display:none" eventId={{event._id}}>
     <div class="error"></div>
@@ -85,8 +86,28 @@
     <br>
     <button class="btn btn-default" id="cancel-cost">Cancel</button>
   </div>
-  <div class="i dont even know" id="new_planner">
-    <p>+ Add another planner</p>
+  <div id="planner-list" eventId = {{event._id}}>
+    <p class="bold">Planners</p>
+    <ul>
+      {{#each event.planners}}
+        <li plannerId={{_id}}>
+          <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="glyphicon glyphicon-remove remove-planner"></span></p>
+        </li>
+      {{else}}
+        <p>No other planners yet.</p>
+      {{/each}}
+    </ul>
+    <button class="btn btn-default" id="add-planner">Add Planner</button>
+  </div>
+  <div id="add-planner-form" style="display:none" eventId={{event._id}}>
+    <div class="error"></div>
+    <br>
+    <input id="planner-email" placeholder="Email of planner [required]">
+    <br>
+
+    <button class="btn btn-default"  id="submit-planner">Submit Planner</button>
+    <br>
+    <button class="btn btn-default" id="cancel-planner">Cancel</button>
   </div>
 </div>
 </div>
