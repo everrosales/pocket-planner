@@ -3,6 +3,7 @@
     $(document).on('click', '#login-cancel', function(evt) {
       if (!$('#login-cancel')[0].classList.contains('disabled')) {
         $('#signin-form')[0].reset();
+        $('#login-modal').closeModal();
       }
     });
 
@@ -21,7 +22,7 @@
             $('#login-cancel')[0].classList.remove('disabled');
             $('#login-modal').closeModal();
             Materialize.toast('Logged in as ' + currentUser, 4000);
-            loadHomePage();
+            window.location.reload();
         }).fail(function(responseObject) {
             console.log(responseObject);
             console.log(responseObject.responseText);
@@ -36,6 +37,7 @@
     $(document).on('click', '#signup-cancel', function(evt) {
       if (!$('#signup-cancel')[0].classList.contains('disabled')) {
         $('#signup-form')[0].reset();
+        $('#signup-modal').closeModal();
       }
     });
 
@@ -67,7 +69,7 @@
             currentUser = response.content.user;
             $('#signup-modal').closeModal();
             Materialize.toast('Logged in as ' + currentUser, 4000);
-            loadHomePage();
+            window.location.reload();
         }).fail(function(responseObject) {
             $('#signup-submit')[0].classList.remove('disabled');
             $('#signup-cancel')[0].classList.remove('disabled');
@@ -83,7 +85,7 @@
             '/users/logout'
         ).done(function(response) {
             currentUser = undefined;
-            loadHomePage();
+            window.location.reload();
         }).fail(function(responseObject) {
             var response = $.parseJSON(responseObject.responseText);
             $('.error').text(response.err);

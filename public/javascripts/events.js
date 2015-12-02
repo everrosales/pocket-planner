@@ -109,12 +109,10 @@
     //$.get()
     $.get('/events/'+ event_id).done(function(response){
       console.log("success!");
-      console.log(response.content);
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
       var response = $.parseJSON(responseObject.responseText);
-      console.log(response);
       $('.error').text(response.err);
     });
   });

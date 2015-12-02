@@ -17,6 +17,22 @@ var requireAuthentication = function(req, res, next) {
   }
 };
 
+var isAuthorized = function(req, res) {
+  if(req.isAuthenticated()) {
+    // Do the comparison of req.user and event to insure that the user is
+    // authenticated and authorized
+    if (req.event.host.equals(req.user._id) || req.event.planners.indexOf(req.user._id) > -1) {
+      return true;
+    } else {
+      utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+      return false;
+    }
+  } else {
+    utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
+    return false;
+  }
+}
+
 /*
     Grab a event from the store whenever one is referenced with an ID in the
     request path (any routes defined with :event as a parameter).
@@ -127,7 +143,9 @@ router.get('/:event/attend', function(req, res) {
 */
 router.get('/:event/details', function(req, res) {
   if (req.event) {
-    utils.sendSuccessResponse(res, {'event' : req.event});
+    // Remove the details that we shouldnt send.
+    var event = utils.packageEventDetails(req);
+    utils.sendSuccessResponse(res, {'event' : event});
   } else {
     utils.sendErrResponse(res, 500, 'Couldnt find the event');
   }
@@ -169,29 +187,6 @@ router.post('/:event/attend', function(req, res) {
         }
       });
     }
-  }
-});
-
-/*
-    Post /events/:event/planners
-    Request parameters:
-     - event ID: the unique ID of the event we're going to change
-     - planner_email: the email of the planner being added
-    Response:
-     - success: true if surver succeeded in adding planner to the event
-     - err: on failure, an error message
-*/
-router.post('/:event/planners', function(req, res) {
-  if (!req.body.planner_email) {
-    utils.sendErrResponse(res, 500, 'Email of planner required.');
-  } else {
-    Event.addPlanner(req.event, req.body.planner_email, function(err, result) {
-      if (err) {
-        utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-      } else {
-        utils.sendSuccessResponse(res, result);
-      }
-    });
   }
 });
 
@@ -242,6 +237,10 @@ router.get('/', function(req, res) {
      - err: on failure, an error message
 */
 router.get('/:event', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   if (!req.event) {
     utils.sendErrResponse(res, 404, "Invalid event id.");
   } else {
@@ -268,8 +267,6 @@ router.post('/', function(req, res) {
         utils.sendSuccessResponse(res, event);
       });
     }
-
-
 });
 
 /*
@@ -281,6 +278,10 @@ router.post('/', function(req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/costs', function (req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   // add cost to the event
   if (!req.body.name || !req.body.amount) {
     utils.sendErrResponse(res, 400, 'Name and amount are required.');
@@ -300,16 +301,21 @@ router.post('/:event/costs', function (req, res) {
     POST /events/:event/planners
     Request parameters:
      - event ID: the unique ID of the event we're going to change
+     - planner_email: the email of the planner being added
     Response:
      - success: true if server succeeded in adding a planner to the Event
      - err: on failure, an error message
 */
 router.post('/:event/planners', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   // add another planner to the event
   if (!req.body.planner) {
     utils.sendErrResponse(res, 404, 'Planner is required');
   }else{
-    Events.addPlanner(req.event._id, req.body.planner, function(err) {
+    Events.addPlanner(req.event._id, req.body.planner_email, function(err) {
       if (err) {
         utils.sendErrResponse(res, 404, err);
       } else {
@@ -317,7 +323,6 @@ router.post('/:event/planners', function(req, res) {
       }
     })
   }
-
 });
 
 
@@ -330,6 +335,10 @@ router.post('/:event/planners', function(req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/categories', function (req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   if (!req.body.name) {
     utils.sendErrResponse(res, 500, 'Name is required.');
   }else{
@@ -354,6 +363,10 @@ router.post('/:event/categories', function (req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/invite', function (req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   if (!req.body.attendee) {
     utils.sendErrResponse(res, 400, 'Attendee email required.');
   }
@@ -376,6 +389,10 @@ router.post('/:event/invite', function (req, res) {
      - err: on failure, an error message
 */
 router.post('/:event/categories/:category/todos', function (req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   if (!req.body.name || !req.body.deadline) {
     utils.sendErrResponse(res, 500, 'Name and deadline are required.');
   }else{
@@ -403,6 +420,10 @@ router.post('/:event/categories/:category/todos', function (req, res) {
      - err: on failure, an error message
 */
 router.put('/:event', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   // add information to the event
   if (!req.body.information) {
     utils.sendErrResponse(res, 404, 'Information is required.');
@@ -429,6 +450,10 @@ router.put('/:event', function(req, res) {
      - err: on failure, an error message
 */
 router.put('/:event/categories/:category/todos/:todo', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck')) {
     utils.sendErrResponse(res, 500, 'Status missing from the URL')
   }
@@ -465,6 +490,10 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/costs/:cost', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   // Delete cost
   Event.deleteCost(req.event._id, req.cost,
       function(err) {
@@ -488,6 +517,10 @@ router.delete('/:event/costs/:cost', function(req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/planners/:planner', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   // Delete Planner
   utils.sendErrResponse(res, 404, 'Route not configured');
 });
@@ -502,6 +535,10 @@ router.delete('/:event/planners/:planner', function(req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/categories/:category', function (req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   // Delete category
   Event.deleteCategory(req.event, req.category, function(err, success) {
     if (err) {
@@ -521,6 +558,10 @@ router.delete('/:event/categories/:category', function (req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event/categories/:category/todos/:todo', function (req, res) {
+    if (! isAuthorized(req, res)) {
+      // Error response has already sent in isAuthorized.
+      return false;
+    }
     // Delete todo
     Event.deleteTodo(req.event, req.category, req.todo, function(err, success) {
       if (err) {
@@ -540,6 +581,10 @@ router.delete('/:event/categories/:category/todos/:todo', function (req, res) {
      - err: on failure, an error message
 */
 router.delete('/:event', function(req, res) {
+    if (! isAuthorized(req, res)) {
+      // Error response has already sent in isAuthorized.
+      return false;
+    }
     // Delete the event and verify that its owned by the user
     Event.deleteEvent(req.user._id, req.body.event_id, function(err) {
       if (err) {
