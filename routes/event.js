@@ -95,24 +95,24 @@ router.get('/public', function(req, res) {
      - err: on failure, an error message
 */
 router.get('/:event/attend', function(req, res) {
-  var evt = req.event;
-  evt.start = new Date(evt.start);
-  evt.start_time = evt.start.toLocaleTimeString();
-  var tmp_time = evt.start_time.split(' ');
-  var am_pm = tmp_time[1];
-  tmp_time = evt.start_time.split(':');
-  evt.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-  evt.start = evt.start.toLocaleDateString();
-
-  evt.end = new Date(evt.end);
-  evt.end_time = evt.end.toLocaleTimeString();
-  tmp_time = evt.end_time.split(' ');
-  am_pm = tmp_time[1];
-  tmp_time = evt.end_time.split(':');
-  evt.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-  evt.end = evt.end.toLocaleDateString();
-  //console.log(evt.end.toLocaleDateString());
-  res.render('rsvp', {date: new Date(), locals: evt});
+  // var evt = req.event;
+  // evt.start = new Date(evt.start);
+  // evt.start_time = evt.start.toLocaleTimeString();
+  // var tmp_time = evt.start_time.split(' ');
+  // var am_pm = tmp_time[1];
+  // tmp_time = evt.start_time.split(':');
+  // evt.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+  // evt.start = evt.start.toLocaleDateString();
+  //
+  // evt.end = new Date(evt.end);
+  // evt.end_time = evt.end.toLocaleTimeString();
+  // tmp_time = evt.end_time.split(' ');
+  // am_pm = tmp_time[1];
+  // tmp_time = evt.end_time.split(':');
+  // evt.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
+  // evt.end = evt.end.toLocaleDateString();
+  // //console.log(evt.end.toLocaleDateString());
+  res.render('rsvp');
 });
 
 /*
@@ -126,7 +126,11 @@ router.get('/:event/attend', function(req, res) {
      - err: on failure, an error message
 */
 router.get('/:event/details', function(req, res) {
-  utils.sendSuccessResponse(res, {'event' : req.event });
+  if (req.event) {
+    utils.sendSuccessResponse(res, {'event' : req.event});
+  } else {
+    utils.sendErrResponse(res, 500, 'Couldnt find the event');
+  }
 })
 
 // POST requests

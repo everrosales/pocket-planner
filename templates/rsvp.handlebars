@@ -1,25 +1,41 @@
-<div class="rsvp-container" id={{locals._id}}>
-  <div class="column attend-event-container" id={{locals._id}}>
-    <div class="event">
-      <p class="event_name">{{locals.name}}</span></p>
-      <hr>
-      <p class="host-email">Host: {{locals.hostEmail}}</p>
-      <p class="start_date">Start: {{locals.start}} @ {{locals.start_time}}</p>
-      <p class="end_date">End: {{locals.end}} @ {{locals.end_time}}</p>
-      <p class="event_loc">Location: {{#if locals.location}}{{locals.location}}{{else}}TBD{{/if}}</p>
+<div class="rsvp">
+  {{> header currentUser=currentUser}}
+  <div class="container center grey lighten-3">
+    <div class="card-panel large">
+      <div class="card-content">
+          <h2 class="event_name"><span class="card-title">{{name}}</span></h2>
+          <div class="row">
+            Host: {{hostEmail}}
+          </div>
+          <div class="row">
+            Start: {{ start}} @ {{ start_time}}
+          </div>
+          <div class="row">
+            End: {{ end}} @ {{ end_time}}
+          </div>
+          <div class="row">
+            Location: {{#if  location}}{{ location}}{{else}}TBD{{/if}}
+          </div>
+          {{#if description}}
+            <div class="row">
+              {{ description}}
+            </div>
+          {{/if}}
+        <form id="attendee-status" action="#">
+          <input name="email" type="email" class="validate" placeholder="Email [required]">
+          <input name="name" placeholder="Your name [required]">
+          <textarea id="rsvp-comments" name="note" placeholder="Comments"></textarea>
+          <button eventId = "{{_id }}" class="rsvp-attend" type="submit" name="attending" value="1">Yes</button>
+          <button eventId = "{{ _id }}" class="rsvp-attend" type="submit" name="attending" value="0">No</button>
+        </form>
+      </div>
+      <div class="card-action">
 
-      {{#if description}}
-        <p class="event_desc">{{locals.description}}</p>
-      {{/if}}
+      </div>
+
     </div>
   </div>
   <div>
-    <form name="attendee-status">
-      <input name="email" placeholder="Email [required]">
-      <input name="name" placeholder="Your name [required]">
-      <textarea name="note" placeholder="Comments"></textarea>
-      <button type="submit" name="attending" value="1">Yes</button>
-      <button type="submit" name="attending" value="0">No</button>
-    </form>
+
   </div>
 </div>
