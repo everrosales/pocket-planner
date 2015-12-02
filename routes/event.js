@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router({mergeParams:true});
 var utils = require('../utils/utils');
+var mailer = require('../config/mailer.js');
 
 var User = require('../models/User');
 var Event = require('../models/Event');
@@ -399,6 +400,65 @@ router.post('/:event/categories/:category/todos', function (req, res) {
   }
   // Add Event todo
 
+});
+
+var mailerCallback = function(err, info) {
+  if (err) {
+    console.log(err);
+  } else {
+    console.log('Email sent.');
+  }
+};
+
+/*
+    Send email from user to user, and bcc invitees or just attendees
+
+    POST /events/:event/email
+    Request body:
+     - subject: email subject
+     - html: email body html
+     - date: if given, when the emails will be sent
+     - attendee: if true, send bcc email to only attendees
+    Response:
+     - success: true if email sent or scheduled
+     - err: on failure, an error message
+*/
+router.post('/:event/email', function(req, res) {
+  var addressesCallback = function(err, email_addresses) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else {
+      var email_message = {
+        from: req.user.email,
+        to: req.user.email,
+        bcc: email_addresses,
+        subject: req.body.subject,
+        html: req.body.html,
+        generateTextFromHTML: true
+      };
+
+      if (req.body.date) {
+        var date = new Date(req.body.date);
+        if (date < new Date()) {
+          utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+        } else {
+          mailer.sendEmailAt(email_message, date, mailerCallback);
+          utils.sendSuccessResponse(res, true);
+        }
+      } else {
+        mailer.sendEmail(email_message, mailerCallback);
+        utils.sendSuccessResponse(res, true);
+      }
+    }
+  };
+
+  if (!req.body.subject || !req.body.html) {
+    utils.sendErrResponse(res, 400, 'Email subject and content are required.');
+  } else if (req.body.attendee) {
+    Event.getAttendeeEmails(req.event, addressesCallback);
+  } else {
+    Event.getInviteeEmails(req.event, addressesCallback);
+  }
 });
 
 // PUT requests

@@ -1,18 +1,22 @@
 var nodemailer = require('nodemailer');
+var schedule = require('node-schedule');
 var transporter = nodemailer.createTransport();
+//'Pocket Planner <pocketplanner-team@pocketplanner.herokuapp.com>'
 
 var Mailer = (function Mailer() {
-  var _sendEmail = function(receiver_address, email_subject, email_text, callback) {
-    transporter.sendMail({
-      from: 'pocketplanner-team@pocketplanner.herokuapp.com',
-      to: receiver_address,
-      subject: email_subject,
-      text: email_text
-    }, callback);
-  }
+  var _sendEmail = function(email_message, callback) {
+    transporter.sendMail(email_message, callback);
+  };
+
+  var _sendEmailAt = function(email_message, date, callback) {
+    var emailOrder = schedule.scheduleJob(date, function() {
+      _sendEmail(email_message, callback);
+    });
+  };
 
   return {
-    sendEmail   :   _sendEmail
+    sendEmail   :   _sendEmail,
+    sendEmailAt :   _sendEmailAt
   }
 })();
 
