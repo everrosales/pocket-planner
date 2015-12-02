@@ -303,10 +303,10 @@ router.post('/:event/planners', function(req, res) {
     return false;
   }
   // add another planner to the event
-  if (!req.body.planner) {
+  if (!req.body.planner_email) {
     utils.sendErrResponse(res, 404, 'Planner is required');
   }else{
-    Events.addPlanner(req.event._id, req.body.planner_email, function(err) {
+    Event.addPlanner(req.event._id, req.body.planner_email, function(err) {
       if (err) {
         utils.sendErrResponse(res, 404, err);
       } else {

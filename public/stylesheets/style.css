@@ -1,5 +1,10 @@
-body {
+#main-container {
+  height: 100%;
+}
+
+body, html {
   width: 100%;
+  height: 100%;
 }
 
 .error {
@@ -70,4 +75,21 @@ nav > div.nav-wrapper {
 
 .inner-todo-container{
   padding: 5px;
+}
+
+/* Main Dashboard CSS */
+div .tabs .indicator {
+  background-color: #009688;
+}
+
+#event-panel, #event-row-container, #event-row-container {
+  /*height: 100%;*/
+}
+
+#event-row-container {
+  margin-bottom: 0;
+}
+
+.invite-link {
+  word-break: break-word;
 }
