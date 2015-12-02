@@ -433,8 +433,8 @@ router.put('/:event', function(req, res) {
      - err: on failure, an error message
 */
 router.put('/:event/categories/:category/todos/:todo', function(req, res) {
-  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck')) {
-    utils.sendErrResponse(res, 500, 'Status missing from the URL')
+  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit')) {
+    utils.sendErrResponse(res, 500, 'Status missing from the URL');
   }
   if (req.body.status == 'check') {
     Event.checkTodo(req.event, req.category, req.todo, function(err, success) {
@@ -446,6 +446,14 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     });
   } else if (req.body.status == 'uncheck') {
     Event.uncheckTodo(req.event, req.category, req.todo, function(err, success) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, success);
+      }
+    });
+  } else if (req.body.status == 'edit') {
+    Event.editTodo(req.event, req.category, req.todo, req.information, function(err, success) {
       if (err) {
         utils.sendErrResponse(res, 500, err);
       } else {
