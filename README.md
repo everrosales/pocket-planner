@@ -75,6 +75,8 @@ POST
 /events/:event/categories                  // Add a category to an event
 /events/:event/invite                      // Add an invite to an event
 /events/:event/categories/:category/todos  // Add a todo to a category
+/events/:event/email/invitee               // Send or schedule to send emails to invitees
+/events/:event/email/attendee              // Send or schedule to send emails to attendees
 
 PUT
 /events/:event                             // Add information to an event
