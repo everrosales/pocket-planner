@@ -1,15 +1,27 @@
 (function(){
+  /*
+  Categories UI functions.
+    -Open form to add new category
+    -Cancel adding category
+    -Submit new category
+    -Delete category
+    -Edit category
+  */
+
+  //Open form to add new category.
   $(document).on('click', '#new_category', function() {
     $('#new_category').hide();
     $("#new-category-container").show();
   });
 
+  //Cancel adding category.
   $(document).on('click', '#cancel-category-button', function(){
     $("#category-title").val("");
     $("#new-category-container").hide();
     $("#new_category").show();
   });
 
+  //Submit new category.
   $(document).on('click', '#add-category-button', function() {
     var category_title = $('#category-title').val();
     if (category_title.length < 1){
@@ -27,6 +39,7 @@
     }
   });
 
+  //Delete category.
   $(document).on('click', '.delete-category', function(){
     var category_id = $(this).parent().parent().parent().attr('categoryId');
     event_id = $('#event-panel').attr('eventId');

@@ -1,4 +1,14 @@
 (function(){
+
+  /*
+  * Planner UI functions.
+  *   -Remove a Planner
+  *   -Open form to add a Planner
+  *   -Cancel adding Planner
+  *   -Submit form to add Planner
+  */
+  
+  //Remove planner when clicking the "remove" button next to the planner name.
   $(document).on("click", ".remove-planner", function(){
     event_id = $('#event-panel').attr("eventId");
     var planner_id = $(this).parent().parent().attr("plannerId");
@@ -15,17 +25,20 @@
     });
   });
 
+  //Open form to add planner.
   $(document).on("click", "#add-planner", function(){
     $("#add-planner").hide();
     $("#add-planner-form").show();
   });
 
+  //Cancel adding planner.
   $(document).on("click", "#cancel-planner", function(){
     event_id = $("#event-panel").attr("eventId");
     window.location.href = "#event-planners";
     loadTodosPage(event_id);
   });
 
+  //Submit add planner form.
   $(document).on("click", "#submit-planner", function(){
     event_id = $("#event-panel").attr("eventId");
     var email = $("#planner-email").val();
