@@ -3,7 +3,7 @@ var loadAttendDialogue = function(event_id) {
 }
 
 $(document).on('click', '.attend-event-container', function(){
-  event_id = ($(this).attr('id'));
+  event_id = ($(this).attr('eventId'));
   console.log(event_id);
   //go to edit that event
   //get that event's info. for now, populated with dummy data.

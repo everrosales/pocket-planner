@@ -27,8 +27,10 @@ var internalPassport = function(passport) {
           } else {
             User.createNewUser(email, password, email, function(err, newUser) {
               if (err) {
-                return done(err);
+                return done(null, false, err);
               }
+              // req.login(newUser);
+              req.user = newUser;
               return done(null, newUser);
             });
           }
@@ -43,7 +45,7 @@ var internalPassport = function(passport) {
   }, function(req, email, password, done) {
     User.findByEmail(email, function(err, user) {
       if (err) {
-        return done(err);
+        return done(null, false, err);
       } else if (!user) {
         return done(null, false, { message: 'No user found.'});
       } else if (!User.validPassword(user, password)) {

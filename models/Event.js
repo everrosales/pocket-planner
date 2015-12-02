@@ -26,7 +26,7 @@ var Event = (function Event() {
   });
   // Schema for an attendee (someone attending an event)
   var attendeeSchema = new Schema({
-    userId        : Schema.Types.ObjectId, //link to user database (default = nonexistent)
+    userId        : {type:Schema.Types.ObjectId, ref:'user'}, //link to user database (default = nonexistent)
     name          : {type:String, default:""},
     email         : {type:String, required:true},   //required
     attending     : {type:Number, default:0},
@@ -37,9 +37,9 @@ var Event = (function Event() {
   var eventSchema = new Schema({
     name          : {type:String, required:true},
     description   : {type:String, default:""},
-    host          : {type:Schema.Types.ObjectId, required:true}, //link to user database
+    host          : {type:Schema.Types.ObjectId, required:true, ref:User}, //link to user database
     hostEmail     : {type:String, required:true},
-    planners      : {type:[Schema.Types.ObjectId], default:[]},  //     ^
+    planners      : {type:[{type:Schema.Types.ObjectId, ref:'user'}], default:[]},  //     ^
 
     start         : {type:Date, required:true},
     end           : {type:Date, required:true}, // can be same as, but not earlier than, start
@@ -260,6 +260,50 @@ var Event = (function Event() {
         });
       } else {
         callback({msg:"No such event."});
+      }
+    });
+  };
+
+  var _getPlanners = function(eventid, callback) {
+    _getEvent(eventid, function(err, found_event) {
+      if (err) {
+        callback(err);
+      } else {
+        found_event.populate('planners', function(err, new_event) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(err, new_event.planners.map(function(planner) {
+              return {email:planner.email, _id:planner._id, username:planner.username};
+            }));
+          }
+        });
+      }
+    });
+  };
+
+  /** Gets emails of all planners of an event (not including host)
+   *  Arguments:
+   *    eventid: the id of the event to get planners' emails from
+   *    callback: a function to pass the list of planner emails to
+   *  Returns:
+   *    a list of planners' emails if event exists ([] if none), or 'no such event'
+   *    error if event not found.
+   */
+  var _getPlannerEmails = function(eventid, callback) {
+    _getEvent(eventid, function(err, found_event) {
+      if (err) {
+        callback(err);
+      } else {
+        found_event.populate('planners', function(err, new_event) {
+          if (err) {
+            callback(err);
+          } else {
+            callback(err, new_event.planners.map(function(planner) {
+              return planner.email;
+            }));
+          }
+        });
       }
     });
   };
@@ -587,6 +631,33 @@ var Event = (function Event() {
     });
   };
 
+  /** Changes the name of a category
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    categoryid: the id of the category to be updated
+   *    new_category_name: the intended new name of the category
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if error occured while saving; 'no such event'
+   *    error if event not found.
+   */
+  var _editCategory = function(eventid, categoryId, new_category_name, callback) {
+    _getCategory(eventid, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        result.event.categories.id(result.category._id).set('name', new_category_name);
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Removes a category from an event
    *  Arguments:
    *    eventId: the id of the event to be updated
@@ -643,6 +714,35 @@ var Event = (function Event() {
             callback(err, newTodo);
         }
       });
+      }
+    });
+  };
+
+  /** Edits the name, deadline, and priority of a todo
+   *  Arguments:
+   *    eventId: the id of the event to be updated
+   *    categoryId: the id of the category that this todo is in
+   *    todoId: the todo to be updated
+   *    information: an object containing fields to be updated (ex. {name:<new name>})
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if error while saving event;
+   *    'no such event' error if event not found.
+   */
+  var _editTodo = function(eventId, categoryId, todoId, information, callback) {
+    _getCategory(eventId, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        // (event -> category -> todo).set(fields)
+        result.event.categories.id(result.category._id).todos.id(todoId).set(information);
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
       }
     });
   };
@@ -739,6 +839,8 @@ var Event = (function Event() {
     deleteEvent         : _deleteEvent,
     setInformation      : _setInformation,
     addPlanner          : _addPlanner,
+    getPlanners         : _getPlanners,
+    getPlannerEmails    : _getPlannerEmails,
     deletePlanner       : _deletePlanner,
     addCost             : _addCost,
     deleteCost          : _deleteCost,
@@ -751,6 +853,8 @@ var Event = (function Event() {
     getAttendeeEmails   : _getAttendeeEmails,
     addTodo             : _addTodo,
     addCategory         : _addCategory,
+    editCategory        : _editCategory,
+    editTodo            : _editTodo,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,

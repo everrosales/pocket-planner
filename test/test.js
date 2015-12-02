@@ -223,6 +223,25 @@ describe('Event', function() {
         });
       });
     });
+    it('should return both user-owned events and user-planned events', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', "", function(uh, created_user) {
+        User.createNewUser('erosales@mit.edu', 'blah2', "", function(uh, created_user2) {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, new_event) {
+            Event.addPlanner(new_event._id, 'erosales@mit.edu', function() {
+              Event.getEventsByUser('erosolar@mit.edu', function(err, result) {
+                assert.deepEqual(err, undefined);
+                assert.deepEqual(result.length, 1);
+                Event.getEventsByUser('erosales@mit.edu', function(err, result) {
+                  assert.deepEqual(err, undefined);
+                  assert.deepEqual(result.length, 1);
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
   });
 
   describe('#deleteEvent', function() {
@@ -345,6 +364,80 @@ describe('Event', function() {
             Event.addPlanner(n_event._id, 'erosales@mit.edu', function(err, result) {
               Event.findById(n_event._id, function(err, result) {
                 assert.deepEqual(result.planners.toObject(), [planner._id]);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('#getPlanners', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.getPlanners(0, function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return [] if no planners', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.getPlanners(n_event._id, function(err, result) {
+            assert.deepEqual(err, null);
+            assert.deepEqual(result, []);
+            done();
+          });
+        });
+      });
+    });
+    it('should return planner objects (without passwords)', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function() {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+            Event.addPlanner(n_event._id, 'erosales@mit.edu', function() {
+              Event.getPlanners(n_event._id, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result.length, 1);
+                assert.deepEqual(result[0].email, "erosales@mit.edu");
+                assert.deepEqual(result[0].username, "erosales");
+                assert.deepEqual(result[0].password, undefined);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('#getPlannerEmails', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.getPlannerEmails(0, function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return [] if no planners', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.getPlannerEmails(n_event._id, function(err, result) {
+            assert.deepEqual(err, null);
+            assert.deepEqual(result, []);
+            done();
+          });
+        });
+      });
+    });
+    it('should return the emails of planners', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        User.createNewUser('erosales@mit.edu', 'blah2', '', function() {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+            Event.addPlanner(n_event._id, 'erosales@mit.edu', function() {
+              Event.getPlannerEmails(n_event._id, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result.length, 1);
+                assert.deepEqual(result[0], "erosales@mit.edu");
                 done();
               });
             });
@@ -844,9 +937,56 @@ describe('Event', function() {
     });
   });
 
+  describe('#editCategory', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.editCategory(0, 0, 'blah', function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return an error if category doesn\'t exist', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.editCategory(n_event._id, 0, 'blah', function(err, result) {
+            assert.deepEqual(err.msg, 'Category doesn\'t exist');
+            done();
+          });
+        });
+      });
+    });
+    it('should return true if category updated successfully', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.editCategory(n_event._id, new_category._id, 'blah', function(err, result) {
+              assert.deepEqual(err, null);
+              assert.deepEqual(result, true);
+              done();
+            });
+          });
+        });
+      });
+    });
+    it('should change the result of future getEvent calls', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.editCategory(n_event._id, new_category._id, 'blah', function() {
+              Event.findById(n_event._id, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result.categories[0].name, 'blah');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
   describe('#deleteCategory', function() {
     it('should return a no event error if event doesn\'t exist', function(done) {
-      Event.deleteCategory(0, 'venue', function(err, result) {
+      Event.deleteCategory(0, 0, function(err, result) {
         assert.deepEqual(err.msg, "No such event.");
         done();
       });
@@ -1057,6 +1197,75 @@ describe('Event', function() {
       });
     });
 
+  });
+
+  describe('#editTodo', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.editTodo(0, 0, 0, {}, function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return an error if category doesn\'t exist', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.editTodo(n_event._id, 0, 0, {}, function(err, result) {
+            assert.deepEqual(err.msg, 'Category doesn\'t exist');
+            done();
+          });
+        });
+      });
+    });
+    it('should return true if todo edited successfully', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
+              Event.editTodo(n_event._id, new_category._id, new_todo._id, {name:"blah2"}, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result, true);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should change the result of future getEvent calls', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
+              Event.editTodo(n_event._id, new_category._id, new_todo._id, {name:"blah2"}, function() {
+                Event.findById(n_event._id, function(err, result) {
+                  assert.deepEqual(err, null);
+                  assert.deepEqual(result.categories[0].todos[0].name, "blah2");
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should work with multiple bits of information', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
+              Event.editTodo(n_event._id, new_category._id, new_todo._id, {name:"blah2", priority:1}, function() {
+                Event.findById(n_event._id, function(err, result) {
+                  assert.deepEqual(err, null);
+                  assert.deepEqual(result.categories[0].todos[0].name, "blah2");
+                  assert.deepEqual(result.categories[0].todos[0].priority, 1);
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
   });
 
   describe('#deleteTodo', function() {

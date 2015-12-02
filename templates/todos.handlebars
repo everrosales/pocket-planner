@@ -1,86 +1,221 @@
 {{> header currentUser=currentUser title=title}}
-<div id="category-container" eventId={{event._id}}>
+<div id="event-row-container" class="row">
+<div id="category-container" class="col m9" eventId={{event._id}}>
   {{#each event.categories}}
-    <div class="column todo-container" categoryId={{_id}}>
-      <p class="category">{{name}}<span class="glyphicon glyphicon-remove delete-category"></span></p>
-      <hr>
-      {{> todo}}
+    <div class="todo-container card-panel col s12 m6 l3" categoryId={{_id}}>
+      <div class="inner-todo-container">
+
+        <p class="category">{{name}}<i class="material-icons right delete-category">clear</i><i class="material-icons right edit-category">edit</i></p>
+
+        <div class="edit-category-form" style="display:none">
+          <label for="edit-category-name" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" name="edit-category-name" type="text"></label>
+
+
+          <button class="waves-effect waves-light btn btn-default submit-edit-category">Submit</button>
+          <button class="waves-effect waves-light btn btn-default cancel-edit-category">Cancel</button>
+        </div>
+
+        <hr>
+        {{> todo}}
+        <br>
+        <br>
+        <div class="new-todo-form" style="display:none">
+          <div class="input-field col s12">
+            <input type="text" name="todo-name" class="todo-name">
+            <label for="todo-name">Todo name</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" class="deadline">
+            <label for="deadline">Deadline</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="number" min="1" max="10" class="priority">
+            <label for="priority">Priority (1-10)</label>
+          </div>
+          <button class="btn btn-default" id="add-todo">Add Todo</button>
+          <button class="btn btn-default" id="cancel-add-todo">Cancel</button>
+        </div>
+        <button class="waves-effect waves-light btn btn-default add_todo">Add a To-Do</button>
+      </div>
     </div>
   {{else}}
     <p><em>No todo lists yet!</em></p>
   {{/each}}
 
-  <div class="column btn btn-default" id="new_category">
-    <p>+ Add a new To-Do list</p>
-  </div>
-  <div id="event_panel" eventId={{event._id}}>
-    <div class="error"></div>
-    <div id="event_editable">
-      <h3 id="event_name">{{event.name}}<span class="glyphicon glyphicon-pencil" id="edit-event"></span></h3>
-      <hr>
-      <p id="event-start"><span class="bold">Start:</span> <span id="start-date">{{event.start}}</span> @ <span id="start-time">{{event.start_time}}</span></p>
-      <p id="event-end"><span class="bold">End:</span> <span id="end-date">{{event.end}}</span> @ <span id="end-time">{{event.end_time}}</span></p>
-      <p id="event-loc"><span class="bold">Location:</span> {{event.location}}</p>
-      <p id="event-desc"><span class="bold">Description:</span>  {{event.description}}</p>
-      <p id="event-budget"><span class="bold">Budget:</span> ${{event.budget}}</p>
-    </div>
-
-    <div id="event-edit-form" style="display:none">
-
-      <h3 id="event_name_edit" class="edit"  contenteditable="true">{{event.name}}</h3>
-      <hr>
-      <p id="event-start"><span class="bold">Start:</span></p><input type="text" id="edit-start-date" placeholder={{event.start}}> @ <input type="time" id="edit-start-time" value={{event.start_time_24}}>
-      <br>
-      <br>
-      <p id="event-end"><span class="bold">End:</span></p><input type="text" id="edit-end-date" placeholder={{event.end}}> @ <input type="time" id="edit-end-time" value={{event.end_time_24}}>
-      <br>
-      <br>
-      <span class="bold">Location:</span><p id="edit-event-loc" class="edit" contenteditable="true"> {{event.location}}</p>
-      <br>
-      <span class="bold">Description:</span> <p id="edit-event-desc" class="edit" contenteditable="true"> {{event.description}}</p>
-      <br>
-      <span class="bold">Budget:</span><p id="edit-event-budget" class="edit" contenteditable="true"> {{event.budget}}</p>
-
-      <button class="btn btn-default" id="submit-edit-event">Submit</button>
-      <button class="btn btn-default" id="cancel-edit-event">Cancel</button>
-    </div>
-    <hr>
+  <button class="btn btn-default" id="new_category">+ New To-Do List</button>
+  <div id='new-category-container' style="display:none">
     <div>
-      <p class="bold">Invite link:</p><a href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
-      <p><span class="bold">Number attendees:</span>  {{event.attendees.length}}</p>
-      <hr>
-    </div>
-    <div id="cost-list" eventId={{event._id}}>
-      <p class="bold">Costs</p>
-      <ul>
-      {{#each event.cost}}
-        <li costId={{_id}}>
-          <p><span class="bold">{{name}}</span><span class="glyphicon glyphicon-remove remove-cost"></span></p>
-          <p>Amount: ${{amount}}</p>
-          {{#if description}}
-            <p>Description: {{description}}</p>
-          {{/if}}
-        </li>
-      {{else}}
-        <p>No costs yet.</p>
-      {{/each}}
-      </ul>
-      <button class="btn btn-default" id="add-cost">Add Cost</button>
-    </div>
-    <div id="add-cost-form" style="display:none" eventId={{event._id}}>
-      <div class="error"></div>
+      <input id='category-title' type='text' placeholder='To-Do List Title'>
       <br>
-      <input id="cost-name" placeholder="Name of cost [required]">
-      <br>
-      <input id="cost-amount" placeholder="Amount (in $) [required]">
-      <br>
-      <input id="cost-desc" placeholder="Description">
-      <br>
-
-      <button class="btn btn-default"  id="submit-cost">Submit Cost</button>
-      <br>
-      <button class="btn btn-default" id="cancel-cost">Cancel</button>
+      <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
+      <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
     </div>
   </div>
 
+</div>
+<div id="event-panel" class="col m3 s12 z-depth-2" eventId={{event._id}}>
+  <div class="row">
+    <div class="col s12">
+      <!-- <div class="error"></div> -->
+      <ul class="tabs">
+        <li class="tab col s4 tab-accent-cyan">
+          <a class="active teal-text" href="#event-details">Details</a>
+        </li>
+        <li class="tab col s4 tab-accent-cyan">
+          <a class="teal-text" href="#event-costs">Costs</a>
+        </li>
+        <li class="tab col s4 tab-accent-cyan">
+          <a class="teal-text" href="#event-planners">Planners</a>
+        </li>
+      </ul>
+    </div>
+    <div id="event-details" class="col s12">
+      <div id="event_editable">
+        <i class="material-icons right" id="edit-event">edit</i>
+        <!-- Event Summary Info (not editable) -->
+        <h3 id="event_name">{{event.name}}</h3>
+        <hr>
+        <span id="event-start">Start: <span id="start-date">{{event.start}}</span> @ <span id="start-time">{{event.start_time}}</span></span><br>
+        <span id="event-end">End: <span id="end-date">{{event.end}}</span> @ <span id="end-time">{{event.end_time}}</span></span><br>
+        <span id="event-loc">Location: {{event.location}}</span><br>
+        <span id="event-desc">Description: {{event.description}}</span><br>
+        <span id="event-budget">Budget: ${{event.budget}}</span><br>
+      </div>
+
+      <!-- Input form to update the Event description and information -->
+      <div id="event-edit-form" style="display:none">
+        <div class="input-field col s12">
+          <input id="event_name_edit" name="event_name_edit" value="{{event.name}}" class="validate" type="text">
+          <label class="active" for="event_name_edit">Event Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input type="text" name="edit-start-date" id="edit-start-date" class="validate datepicker" value="{{event.start}}">
+          <label class="active" for="edit-start-date">Start Date</label>
+        </div>
+        <div class="input-field col s6">
+          <input type="time" name="edit-start-time" id="edit-start-time" class="validate" value="{{event.start_time_24}}">
+          <label class="active" for="edit-start-time">Start Time</label>
+        </div>
+        <div class="input-field col s6">
+          <input type="text" name="edit-end-date" id="edit-end-date" class="datepicker" value="{{event.end}}">
+          <label class="active" for="edit-end-date">End Date</label>
+        </div>
+        <div class="input-field col s6">
+          <input type="time" name="edit-end-time" id="edit-end-time" class="validate" value="{{event.end_time_24}}">
+          <label class="active" for="edit-end-time">End Time</label>
+        </div>
+        <div class="input-field col s12">
+          <input type="text" name="edit-event-loc" id="edit-event-loc" class="validate" value="{{event.location}}">
+          <label class="active" for="edit-event-loc">Location</label>
+        </div>
+        <div class="input-field col s12">
+          <textarea id="edit-event-desc" class="materialize-textarea">{{event.description}}</textarea>
+          <label class="active" for="edit-event-desc">Description</label>
+        </div>
+        <div class="input-field col s12">
+          <input type="number" id="edit-event-budget" class="validate" value="{{event.budget}}">
+          <label class="active" for="edit-event-budget">Budget</label>
+        </div>
+        <button class="waves-effect waves-light btn btn-default" id="submit-edit-event">Submit</button>
+        <button class="waves-effect waves-light btn btn-default" id="cancel-edit-event">Cancel</button>
+      </div>
+      <hr>
+      <div>
+        <p class="bold">Invite link: <br>
+          <a class="invite-link" href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
+        </p>
+        <p><span class="bold">Number attendees:</span>  {{event.attendees.length}}</p>
+      </div>
+    </div>
+
+    <div id="event-costs" class="col s12">
+      <!-- Costs for the event -->
+      <div id="cost-list" eventId={{event._id}}>
+        <h3>Costs</h3>
+        Budget: ${{event.budget}}
+        <ul class="collapsible" data-collapsible="accordion">
+        {{#each event.cost}}
+            <li costId="{{_id}}">
+              <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
+              <div class="collapsible-body">
+                <p>Amount: ${{amount}}
+                {{#if description}}
+                  <br>Description: {{description}}
+                {{/if}}
+                </p>
+              </div>
+            </li>
+        {{else}}
+          <p>No costs yet.</p>
+        {{/each}}
+        </ul>
+        <script>
+          $(document).ready(function(){
+            $('.collapsible').collapsible({
+              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
+            });
+          });
+          </script>
+        <button class="btn btn-default" id="add-cost">Add Cost</button>
+      </div>
+      <div id="add-cost-form" style="display:none" eventId={{event._id}}>
+        <h4>New Cost</h4>
+        <div class="input-field col s6">
+          <input id="cost-name" type="text" class="validate">
+          <label for="cost-name">Name</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="cost-amount" type="number" class="validate">
+          <label for="cost-amount">Amount (in $)</label>
+        </div>
+        <div class="input-field col s12">
+          <input id="cost-desc" type="text" class="validate">
+          <label for="cost-desc">Description</label>
+        </div>
+        <button class="waves-effect waves-light btn btn-default"  id="submit-cost">Submit Cost</button>
+        <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
+      </div>
+    </div>
+
+    <div id="event-planners" class="col s12">
+      <!-- Planner adminstration -->
+      <div id="planner-list" eventId = {{event._id}}>
+        <h3>Planners</h3>
+        <p> Host: {{event.hostEmail}} </p>
+        <ul>
+          {{#each event.planners}}
+            <li plannerId={{_id}}>
+              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">clear</i></span></p>
+            </li>
+          {{else}}
+            <p>No other planners yet.</p>
+          {{/each}}
+        </ul>
+        <button class="btn btn-default" id="add-planner">Add Planner</button>
+      </div>
+      <div id="add-planner-form" style="display:none" eventId={{event._id}}>
+        <h4>New Planner</h4>
+        <div class="input-field col s6">
+          <input id="planner-email" type="email" class="validate">
+          <label for="planner-email">Email</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="planner-email-confirm" type="email" class="validate">
+          <label for="planner-email-confirm">Confirm Email</label>
+        </div>
+        <!-- <input id="planner-email" placeholder="Email of planner [required]"> -->
+        <!-- <br> -->
+        <button class="waves-effect waves-light btn btn-default"  id="submit-planner">Submit Planner</button>
+        <!-- <br> -->
+        <button class="waves-effect waves-light btn btn-default" id="cancel-planner">Cancel</button>
+      </div>
+    </div>
+    <script>
+      // Initialize the tabs
+      $(document).ready(function(){
+        $('ul.tabs').tabs();
+      });
+    </script>
+  </div>
+</div>
 </div>

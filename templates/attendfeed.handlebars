@@ -1,10 +1,14 @@
 {{>header currentUser=currentUser title=title}}
-<br><br> <!-- Remove these after you do all of the css -->
+<!-- <br><br>  Remove these after you do all of the css -->
 <div id="attendfeed">
-  {{#each my_events}}
-    {{> attendeventsummary}}
-  {{else}}
-    <p><em>No events yet!</em></p>
-  {{/each}}
-
+  <div class="container">
+    <h1>Upcoming Events</h1>
+    <div class="row">
+      {{#each my_events}}
+        {{> attendeventsummary}}
+      {{else}}
+        <p><em>No events yet!</em></p>
+      {{/each}}
+    </div>
+  </div>
 </div>
