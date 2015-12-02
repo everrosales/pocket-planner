@@ -219,26 +219,26 @@ templates['todo'] = template({"1":function(container,depth0,helpers,partials,dat
 
   return "  <div class=\"todo\" todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    <i class=\"material-icons right delete-todo\">clear</i>\n    <p>\n      <input class=\"check-todo\" type=\"checkbox\" "
+    + ">\n\n    <div class=\"todo-info\">\n      <i class=\"material-icons right delete-todo\">clear</i><i class=\"material-icons right edit-todo\">edit</i>\n      <p>\n        <input class=\"check-todo\" type=\"checkbox\" "
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + " id=\"todo-name-"
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" />\n      <label for=\"todo-name-"
+    + "\" >\n        <label for=\"todo-name-"
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + "\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</label>\n    </p>\n    <!--<div class=\"checkbox-container\">\n      <input type=\"checkbox\" "
-    + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + " class=\"check-todo\" todoId="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    </div>-->\n      <!--<p>"
-    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<span class=\"glyphicon glyphicon-remove delete-todo\"></span></p>-->\n"
+    + "</label>\n      </p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "  </div>\n";
+    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value="
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + " type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n\n      <label class=\"active\" for=\"edit-todo-priority\">Priority (1-10)</label>\n      <input class=\"edit-todo-priority\" type=\"number\" max=\"10\" min=\"1\" value="
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n\n      <br>\n      <button class=\"waves-effect waves-light btn btn-default submit-edit-todo\">Submit</button>\n      <button class=\"waves-effect waves-light btn btn-default cancel-edit-todo\">Cancel</button>\n\n    </div>\n  </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return " checked=\"true\"";
 },"4":function(container,depth0,helpers,partials,data) {
@@ -250,26 +250,36 @@ templates['todo'] = template({"1":function(container,depth0,helpers,partials,dat
 },"6":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "      <br><small>Priority: "
+  return "      <br><small>Priority (1-10): "
     + container.escapeExpression(((helper = (helper = helpers.priority || (depth0 != null ? depth0.priority : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"priority","hash":{},"data":data}) : helper)))
     + "</small>\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.deadline || (depth0 != null ? depth0.deadline : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"deadline","hash":{},"data":data}) : helper)));
+},"10":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.priority || (depth0 != null ? depth0.priority : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"priority","hash":{},"data":data}) : helper)));
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.todos : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "<button class=\"waves-effect waves-light btn btn-default add_todo\">Add a To-Do</button>\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- <div id='new-category-container'>\n  <div class='event'>\n    <div class='input-field col s3'>\n      <input id='category-title' type='text' placeholder='To-Do List Title'>\n      <label for='category-title'>New Category Title</label>\n    </div>\n    <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n    <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n    </div>\n  </div>\n</div> -->\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- var htmlStr =\n  \"<div class='new-todo-form'>\" +\n  \"<div class='input-field col s12'>\" +\n  \"  <input type='text' id='todo-name'> \" +\n  \"  <label for='todo-name'>Name</label> \" +\n  \"</div>\" +\n  \"<div class='input-field col s12'> \" +\n  \"  <input type='text' id='deadline'> \" +\n  \"  <label for='deadline'>Deadline</label> \" +\n  \"</div>\" +\n  \"<div class='btn btn-default' id='add-todo'>Add To-do</div> \" +\n  \"<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>\" -->\n";
+    + "\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- <div id='new-category-container'>\n  <div class='event'>\n    <div class='input-field col s3'>\n      <input id='category-title' type='text' placeholder='To-Do List Title'>\n      <label for='category-title'>New Category Title</label>\n    </div>\n    <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n    <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n    </div>\n  </div>\n</div> -->\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- var htmlStr =\n  \"<div class='new-todo-form'>\" +\n  \"<div class='input-field col s12'>\" +\n  \"  <input type='text' id='todo-name'> \" +\n  \"  <label for='todo-name'>Name</label> \" +\n  \"</div>\" +\n  \"<div class='input-field col s12'> \" +\n  \"  <input type='text' id='deadline'> \" +\n  \"  <label for='deadline'>Deadline</label> \" +\n  \"</div>\" +\n  \"<div class='btn btn-default' id='add-todo'>Add To-do</div> \" +\n  \"<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>\" -->\n";
 },"useData":true});
 templates['todos'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "    <div class=\"todo-container card-panel col s3\" categoryId="
+  return "    <div class=\"todo-container card-panel col s12 m6 l3\" categoryId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n      <div class=\"inner-todo-container\">\n        <p class=\"category\">"
+    + ">\n      <div class=\"inner-todo-container\">\n\n        <p class=\"category\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<i class=\"material-icons right delete-category\">clear</i></p>\n        <hr>\n"
+    + "<i class=\"material-icons right delete-category\">clear</i><i class=\"material-icons right edit-category\">edit</i></p>\n\n        <div class=\"edit-category-form\" style=\"display:none\">\n          <label for=\"edit-category-name\" class=\"active\">Todo List Name<input class=\"edit-category-name\" value=\""
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "\" name=\"edit-category-name\" type=\"text\"></label>\n\n\n          <button class=\"waves-effect waves-light btn btn-default submit-edit-category\">Submit</button>\n          <button class=\"waves-effect waves-light btn btn-default cancel-edit-category\">Cancel</button>\n        </div>\n\n        <hr>\n"
     + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"        ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "      </div>\n    </div>\n";
+    + "        <br>\n        <br>\n        <div class=\"new-todo-form\" style=\"display:none\">\n          <div class=\"input-field col s12\">\n            <input type=\"text\" name=\"todo-name\" class=\"todo-name\">\n            <label for=\"todo-name\">Todo name</label>\n          </div>\n          <div class=\"input-field col s12\">\n            <input type=\"text\" class=\"deadline\">\n            <label for=\"deadline\">Deadline</label>\n          </div>\n          <div class=\"input-field col s12\">\n            <input type=\"number\" min=\"1\" max=\"10\" class=\"priority\">\n            <label for=\"priority\">Priority (1-10)</label>\n          </div>\n          <button class=\"btn btn-default\" id=\"add-todo\">Add Todo</button>\n          <button class=\"btn btn-default\" id=\"cancel-add-todo\">Cancel</button>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default add_todo\">Add a To-Do</button>\n      </div>\n    </div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "    <p><em>No todo lists yet!</em></p>\n";
 },"5":function(container,depth0,helpers,partials,data) {
@@ -281,7 +291,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " - $"
     + alias4(((helper = (helper = helpers.amount || (depth0 != null ? depth0.amount : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"amount","hash":{},"data":data}) : helper)))
-    + "<span class=\"badge\"><i class=\"material-icons remove-cost\">delete</i></span></div>\n              <div class=\"collapsible-body\">\n                <p>Amount: $"
+    + "<span class=\"badge\"><i class=\"material-icons remove-cost\">clear</i></span></div>\n              <div class=\"collapsible-body\">\n                <p>Amount: $"
     + alias4(((helper = (helper = helpers.amount || (depth0 != null ? depth0.amount : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"amount","hash":{},"data":data}) : helper)))
     + "\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -301,7 +311,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n              <p><span class=\"bold\">"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
-    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">delete</i></span></p>\n            </li>\n";
+    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">clear</i></span></p>\n            </li>\n";
 },"11":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -322,7 +332,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n\n</div>\n<div id=\"event-panel\" class=\"col m3 s12 z-depth-2\" eventId="
+    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n  <div id='new-category-container' style=\"display:none\">\n    <div>\n      <input id='category-title' type='text' placeholder='To-Do List Title'>\n      <br>\n      <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n      <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n    </div>\n  </div>\n\n</div>\n<div id=\"event-panel\" class=\"col m3 s12 z-depth-2\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n  <div class=\"row\">\n    <div class=\"col s12\">\n      <!-- <div class=\"error\"></div> -->\n      <ul class=\"tabs\">\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"active teal-text\" href=\"#event-details\">Details</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-costs\">Costs</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-planners\">Planners</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"event-details\" class=\"col s12\">\n      <div id=\"event_editable\">\n        <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n        <!-- Event Summary Info (not editable) -->\n        <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
@@ -599,26 +609,26 @@ templates['templates/todo'] = template({"1":function(container,depth0,helpers,pa
 
   return "  <div class=\"todo\" todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    <i class=\"material-icons right delete-todo\">clear</i>\n    <p>\n      <input class=\"check-todo\" type=\"checkbox\" "
+    + ">\n\n    <div class=\"todo-info\">\n      <i class=\"material-icons right delete-todo\">clear</i><i class=\"material-icons right edit-todo\">edit</i>\n      <p>\n        <input class=\"check-todo\" type=\"checkbox\" "
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + " todoId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + " id=\"todo-name-"
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + "\" />\n      <label for=\"todo-name-"
+    + "\" >\n        <label for=\"todo-name-"
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + "\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "</label>\n    </p>\n    <!--<div class=\"checkbox-container\">\n      <input type=\"checkbox\" "
-    + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.status : depth0),1,{"name":"equal","hash":{},"fn":container.program(2, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + " class=\"check-todo\" todoId="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n    </div>-->\n      <!--<p>"
-    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<span class=\"glyphicon glyphicon-remove delete-todo\"></span></p>-->\n"
+    + "</label>\n      </p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "  </div>\n";
+    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value="
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + " type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n\n      <label class=\"active\" for=\"edit-todo-priority\">Priority (1-10)</label>\n      <input class=\"edit-todo-priority\" type=\"number\" max=\"10\" min=\"1\" value="
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + ">\n\n      <br>\n      <button class=\"waves-effect waves-light btn btn-default submit-edit-todo\">Submit</button>\n      <button class=\"waves-effect waves-light btn btn-default cancel-edit-todo\">Cancel</button>\n\n    </div>\n  </div>\n";
 },"2":function(container,depth0,helpers,partials,data) {
     return " checked=\"true\"";
 },"4":function(container,depth0,helpers,partials,data) {
@@ -630,26 +640,36 @@ templates['templates/todo'] = template({"1":function(container,depth0,helpers,pa
 },"6":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "      <br><small>Priority: "
+  return "      <br><small>Priority (1-10): "
     + container.escapeExpression(((helper = (helper = helpers.priority || (depth0 != null ? depth0.priority : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"priority","hash":{},"data":data}) : helper)))
     + "</small>\n";
+},"8":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.deadline || (depth0 != null ? depth0.deadline : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"deadline","hash":{},"data":data}) : helper)));
+},"10":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.priority || (depth0 != null ? depth0.priority : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"priority","hash":{},"data":data}) : helper)));
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
     var stack1;
 
   return "\n"
     + ((stack1 = helpers.each.call(depth0 != null ? depth0 : {},(depth0 != null ? depth0.todos : depth0),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "<button class=\"waves-effect waves-light btn btn-default add_todo\">Add a To-Do</button>\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- <div id='new-category-container'>\n  <div class='event'>\n    <div class='input-field col s3'>\n      <input id='category-title' type='text' placeholder='To-Do List Title'>\n      <label for='category-title'>New Category Title</label>\n    </div>\n    <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n    <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n    </div>\n  </div>\n</div> -->\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- var htmlStr =\n  \"<div class='new-todo-form'>\" +\n  \"<div class='input-field col s12'>\" +\n  \"  <input type='text' id='todo-name'> \" +\n  \"  <label for='todo-name'>Name</label> \" +\n  \"</div>\" +\n  \"<div class='input-field col s12'> \" +\n  \"  <input type='text' id='deadline'> \" +\n  \"  <label for='deadline'>Deadline</label> \" +\n  \"</div>\" +\n  \"<div class='btn btn-default' id='add-todo'>Add To-do</div> \" +\n  \"<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>\" -->\n";
+    + "\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- <div id='new-category-container'>\n  <div class='event'>\n    <div class='input-field col s3'>\n      <input id='category-title' type='text' placeholder='To-Do List Title'>\n      <label for='category-title'>New Category Title</label>\n    </div>\n    <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n    <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n    </div>\n  </div>\n</div> -->\n\n<!-- Using this to temporarily hold state -->\n<!-- DEPRECATED -->\n<!-- var htmlStr =\n  \"<div class='new-todo-form'>\" +\n  \"<div class='input-field col s12'>\" +\n  \"  <input type='text' id='todo-name'> \" +\n  \"  <label for='todo-name'>Name</label> \" +\n  \"</div>\" +\n  \"<div class='input-field col s12'> \" +\n  \"  <input type='text' id='deadline'> \" +\n  \"  <label for='deadline'>Deadline</label> \" +\n  \"</div>\" +\n  \"<div class='btn btn-default' id='add-todo'>Add To-do</div> \" +\n  \"<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>\" -->\n";
 },"useData":true});
 templates['templates/todos'] = template({"1":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "    <div class=\"todo-container card-panel col s3\" categoryId="
+  return "    <div class=\"todo-container card-panel col s12 m6 l3\" categoryId="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n      <div class=\"inner-todo-container\">\n        <p class=\"category\">"
+    + ">\n      <div class=\"inner-todo-container\">\n\n        <p class=\"category\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + "<i class=\"material-icons right delete-category\">clear</i></p>\n        <hr>\n"
+    + "<i class=\"material-icons right delete-category\">clear</i><i class=\"material-icons right edit-category\">edit</i></p>\n\n        <div class=\"edit-category-form\" style=\"display:none\">\n          <label for=\"edit-category-name\" class=\"active\">Todo List Name<input class=\"edit-category-name\" value=\""
+    + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
+    + "\" name=\"edit-category-name\" type=\"text\"></label>\n\n\n          <button class=\"waves-effect waves-light btn btn-default submit-edit-category\">Submit</button>\n          <button class=\"waves-effect waves-light btn btn-default cancel-edit-category\">Cancel</button>\n        </div>\n\n        <hr>\n"
     + ((stack1 = container.invokePartial(partials.todo,depth0,{"name":"todo","data":data,"indent":"        ","helpers":helpers,"partials":partials,"decorators":container.decorators})) != null ? stack1 : "")
-    + "      </div>\n    </div>\n";
+    + "        <br>\n        <br>\n        <div class=\"new-todo-form\" style=\"display:none\">\n          <div class=\"input-field col s12\">\n            <input type=\"text\" name=\"todo-name\" class=\"todo-name\">\n            <label for=\"todo-name\">Todo name</label>\n          </div>\n          <div class=\"input-field col s12\">\n            <input type=\"text\" class=\"deadline\">\n            <label for=\"deadline\">Deadline</label>\n          </div>\n          <div class=\"input-field col s12\">\n            <input type=\"number\" min=\"1\" max=\"10\" class=\"priority\">\n            <label for=\"priority\">Priority (1-10)</label>\n          </div>\n          <button class=\"btn btn-default\" id=\"add-todo\">Add Todo</button>\n          <button class=\"btn btn-default\" id=\"cancel-add-todo\">Cancel</button>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default add_todo\">Add a To-Do</button>\n      </div>\n    </div>\n";
 },"3":function(container,depth0,helpers,partials,data) {
     return "    <p><em>No todo lists yet!</em></p>\n";
 },"5":function(container,depth0,helpers,partials,data) {
@@ -661,7 +681,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " - $"
     + alias4(((helper = (helper = helpers.amount || (depth0 != null ? depth0.amount : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"amount","hash":{},"data":data}) : helper)))
-    + "<span class=\"badge\"><i class=\"material-icons remove-cost\">delete</i></span></div>\n              <div class=\"collapsible-body\">\n                <p>Amount: $"
+    + "<span class=\"badge\"><i class=\"material-icons remove-cost\">clear</i></span></div>\n              <div class=\"collapsible-body\">\n                <p>Amount: $"
     + alias4(((helper = (helper = helpers.amount || (depth0 != null ? depth0.amount : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"amount","hash":{},"data":data}) : helper)))
     + "\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -681,7 +701,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n              <p><span class=\"bold\">"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(11, data, 0),"inverse":container.program(13, data, 0),"data":data})) != null ? stack1 : "")
-    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">delete</i></span></p>\n            </li>\n";
+    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">clear</i></span></p>\n            </li>\n";
 },"11":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -702,7 +722,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n\n</div>\n<div id=\"event-panel\" class=\"col m3 s12 z-depth-2\" eventId="
+    + "\n  <button class=\"btn btn-default\" id=\"new_category\">+ New To-Do List</button>\n  <div id='new-category-container' style=\"display:none\">\n    <div>\n      <input id='category-title' type='text' placeholder='To-Do List Title'>\n      <br>\n      <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n      <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n    </div>\n  </div>\n\n</div>\n<div id=\"event-panel\" class=\"col m3 s12 z-depth-2\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n  <div class=\"row\">\n    <div class=\"col s12\">\n      <!-- <div class=\"error\"></div> -->\n      <ul class=\"tabs\">\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"active teal-text\" href=\"#event-details\">Details</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-costs\">Costs</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-planners\">Planners</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"event-details\" class=\"col s12\">\n      <div id=\"event_editable\">\n        <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n        <!-- Event Summary Info (not editable) -->\n        <h3 id=\"event_name\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))

@@ -7,7 +7,7 @@
   *   -Cancel adding Planner
   *   -Submit form to add Planner
   */
-  
+
   //Remove planner when clicking the "remove" button next to the planner name.
   $(document).on("click", ".remove-planner", function(){
     event_id = $('#event-panel').attr("eventId");
@@ -48,8 +48,10 @@
     }).fail(function(responseObject){
       console.log(responseObject);
       var response = $.parseJSON(responseObject.responseText);
-      // $("#add-planner-form").find(".error").text(response.err)
       console.log(response);
+      if (response.err.msg) {
+        response.err = response.err.msg;
+      }
       Materialize.toast(response.err, 2000);
     });
   });
