@@ -13,11 +13,23 @@
   });
 
   $(document).on("click", ".submit-edit-category", function(){
+    event_id = $("#event-panel").attr("eventId");
+    var cat_id = $(this).parent().parent().parent().attr("categoryId");
     var new_category_name = $(this).parent().find(".edit-category-name").val();
     if (!new_category_name){
-      $(this).parent().find(".error").text("Category must have a name.")
+      Materialize.toast("Category must have a name.", 2000);
     }else{
-      //TODO(ajliu): make the put request after the database function is done.
+      $.ajax({
+        url: "/events/"+event_id+"/categories/"+cat_id,
+        type: "PUT",
+        data: {new_name:new_category_name}
+      }).done(function(response){
+        loadTodosPage(event_id);
+      }).fail(function(responseObject){
+        var response = $.parseJSON(responseObject.responseText);
+        Materialize.toast(response.err, 2000);
+      });
+
     }
   });
 
@@ -239,9 +251,8 @@
   //when press cancel, loadTodosPage
 
   $(document).on('click', '#new_category', function() {
-    $('#new_category').remove();
-    var htmlStr = "<div class='column' id='new-category-container'><div class='event'><div class='error'></div><input id='category-title' type='text' placeholder='To-Do List Title'><br><div class='btn btn-default' id='add-category-button'>Add To-Do List</div><div class='btn btn-default' id='cancel-category-button'>Cancel</div></div>";
-    $(htmlStr).appendTo('#category-container');
+    $('#new_category').hide();
+    $("#new-category-container").show();
   });
 
   $(document).on("click", "#submit-edit-event", function(){
@@ -297,27 +308,10 @@
   $(document).on('click', '.add_todo', function() {
 
     var parent = $(this).parent();
-    $(this).remove();
+    $(this).hide();
 
-
-    /*var htmlStr =
-      "<div class='new-todo-form'>" +
-      "<div class='input-field col s12'>" +
-      "  <input type='text' id='todo-name'> " +
-      "  <label for='todo-name'>Name</label> " +
-      "</div>" +
-      "<div class='input-field col s12'> " +
-      "  <input type='text' id='deadline'> " +
-      "  <label for='deadline'>Deadline</label> " +
-      "</div>" +
-      "<div class='btn btn-default' id='add-todo'>Add To-do</div> " +
-      "<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>"
-
-
-    $(htmlStr).appendTo(parent);
-*/
     parent.find(".new-todo-form").show();
-    $('#deadline').pickadate({
+    $('.deadline').pickadate({
       min: new Date()
     });
     //use $.find() to find error div
@@ -344,11 +338,11 @@
     event_id = $('#event-panel').attr("eventId");
     // var error_div = $(this).parent().find('.error');
     var form = $(this).parent();
-    var todo_name = form.find('#todo-name').val();
-    var deadline = new Date(form.find('#deadline').val());
-    var priority = form.find("#priority").val();
+    var todo_name = form.find('.todo-name').val();
+    var deadline = new Date(form.find('.deadline').val());
+    var priority = form.find(".priority").val();
     if (todo_name.length < 1 || !deadline){
-      // error_div.text('To-Do must have a name and deadline.');
+
       Materialize.toast('Todo must have a name and deadline.', 2000);
 
 
@@ -378,23 +372,25 @@
   $(document).on('click', '#cancel-add-todo', function(){
 
 
-    var container = $(this).parent().parent();
-    $(this).parent().remove(); //remove form
-    var htmlStr = '<button class="btn btn-default add_todo">Add a To-Do</button>';
-    $(htmlStr).appendTo(container);
+    var container = $(this).parent();
+    container.find(".todo-name").val("");
+    container.find(".deadline").val("");
+    container.find(".priority").val("");
+    $(this).parent().hide(); //remove form
+    $(this).parent().parent().find(".add_todo").show();
   });
 
   $(document).on('click', '#cancel-category-button', function(){
-    $('#new-category-container').remove();
-    var htmlStr = '<div class="column btn btn-default" id="new_category"><p>+ Add a new To-Do list</p></div>';
-    $(htmlStr).appendTo('#category-container');
+    $("#category-title").val("");
+    $("#new-category-container").hide();
+    $("#new_category").show();
   });
 
   $(document).on('click', '#add-category-button', function() {
     var category_title = $('#category-title').val();
     if (category_title.length < 1){
 
-      $(this).parent().find('.error').text('To-Do List must have a title.');
+      Materialize.toast('To-Do List must have a title.', 2000);
     }else{
       event_id = $("#event-panel").attr("eventId");
       $.post('events/' + event_id + '/categories', {name: category_title}).done(function(response){

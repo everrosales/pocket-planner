@@ -8,7 +8,6 @@
         <p class="category">{{name}}<i class="material-icons right delete-category">clear</i><i class="material-icons right edit-category">edit</i></p>
 
         <div class="edit-category-form" style="display:none">
-          <div class="error"></div>
           <label for="edit-category-name" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" name="edit-category-name" type="text"></label>
 
 
@@ -22,15 +21,15 @@
         <br>
         <div class="new-todo-form" style="display:none">
           <div class="input-field col s12">
-            <input type="text" name="todo-name" id="todo-name">
+            <input type="text" name="todo-name" class="todo-name">
             <label for="todo-name">Todo name</label>
           </div>
           <div class="input-field col s12">
-            <input type="text" id="deadline">
+            <input type="text" class="deadline">
             <label for="deadline">Deadline</label>
           </div>
           <div class="input-field col s12">
-            <input type="number" min="1" max="10" id="priority">
+            <input type="number" min="1" max="10" class="priority">
             <label for="priority">Priority</label>
           </div>
           <button class="btn btn-default" id="add-todo">Add Todo</button>
@@ -44,6 +43,14 @@
   {{/each}}
 
   <button class="btn btn-default" id="new_category">+ New To-Do List</button>
+  <div id='new-category-container' style="display:none">
+    <div>
+      <input id='category-title' type='text' placeholder='To-Do List Title'>
+      <br>
+      <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
+      <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
+    </div>
+  </div>
 
 </div>
 <div id="event-panel" class="col m3 s12 z-depth-2" eventId={{event._id}}>
@@ -129,7 +136,7 @@
         <ul class="collapsible" data-collapsible="accordion">
         {{#each event.cost}}
             <li costId="{{_id}}">
-              <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">delete</i></span></div>
+              <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
               <div class="collapsible-body">
                 <p>Amount: ${{amount}}
                 {{#if description}}
@@ -178,7 +185,7 @@
         <ul>
           {{#each event.planners}}
             <li plannerId={{_id}}>
-              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">delete</i></span></p>
+              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">clear</i></span></p>
             </li>
           {{else}}
             <p>No other planners yet.</p>
