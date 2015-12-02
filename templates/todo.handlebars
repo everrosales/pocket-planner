@@ -3,21 +3,48 @@
   <div class="todo" todoId={{_id}}>
     <i class="material-icons right delete-todo">clear</i>
     <p>
-      <input class="check-todo" type="checkbox" {{#equal status 1}} checked="true"{{/equal}} todoId={{_id}} id="todo-name" />
-      <label for="todo-name">{{name}}</label>
+      <input class="check-todo" type="checkbox" {{#equal status 1}} checked="true"{{/equal}} todoId={{_id}} id="todo-name-{{_id}}" />
+      <label for="todo-name-{{_id}}">{{name}}</label>
     </p>
     <!--<div class="checkbox-container">
       <input type="checkbox" {{#equal status 1}} checked="true"{{/equal}} class="check-todo" todoId={{_id}}>
     </div>-->
       <!--<p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>-->
       {{#if deadline}}
-      <p><small>Deadline: {{deadline}}</small></p>
+      <small>Deadline: {{deadline}}</small>
       {{/if}}
       {{#if priority}}
-      <p><small>Priority: {{priority}}</small></p>
+      <br><small>Priority: {{priority}}</small>
       {{/if}}
-    <br>
-
   </div>
 {{/each}}
-  <button class="btn btn-default add_todo">Add a To-Do</button>
+<button class="waves-effect waves-light btn btn-default add_todo">Add a To-Do</button>
+
+<!-- Using this to temporarily hold state -->
+<!-- DEPRECATED -->
+<!-- <div id='new-category-container'>
+  <div class='event'>
+    <div class='input-field col s3'>
+      <input id='category-title' type='text' placeholder='To-Do List Title'>
+      <label for='category-title'>New Category Title</label>
+    </div>
+    <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
+    <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
+    </div>
+  </div>
+</div> -->
+
+<!-- Using this to temporarily hold state -->
+<!-- DEPRECATED -->
+<!-- var htmlStr =
+  "<div class='new-todo-form'>" +
+  "<div class='input-field col s12'>" +
+  "  <input type='text' id='todo-name'> " +
+  "  <label for='todo-name'>Name</label> " +
+  "</div>" +
+  "<div class='input-field col s12'> " +
+  "  <input type='text' id='deadline'> " +
+  "  <label for='deadline'>Deadline</label> " +
+  "</div>" +
+  "<div class='btn btn-default' id='add-todo'>Add To-do</div> " +
+  "<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>" -->

@@ -2,33 +2,39 @@
   var event_id = undefined;
 
   $(document).on("click", ".remove-cost", function(){
-    event_id = $(this).parent().parent().parent().parent().attr("eventId");
-    var cost_id = $(this).parent().parent().attr("costId");
+    event_id = $("#event-panel").attr("eventId");
+    var cost_id = $(this).parent().parent().parent().attr("costId");
     $.ajax({
       url: 'events/'+event_id+'/costs/'+cost_id,
       type: 'DELETE'
     }).done(function(response){
+      window.location.href = "#event-costs";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
     });
   });
 
   $(document).on("click", ".remove-planner", function(){
-    event_id = $(this).parent().parent().parent().parent().attr("eventId");
+    event_id = $('#event-panel').attr("eventId");
     var planner_id = $(this).parent().parent().attr("plannerId");
     $.ajax({
       url: 'events/'+event_id+'/planners/'+planner_id,
       type: 'DELETE'
     }).done(function(response){
+      window.location.href = "#event-planners";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
     });
   });
 
   $(document).on("change", ".check-todo", function(){
-    event_id = $("#event_panel").attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
     var cat_id=$(this).parent().parent().parent().parent().attr("categoryId");
     var todo_id = $(this).attr("todoId");
     var checked = $(this).is(":checked");
@@ -42,6 +48,8 @@
         console.log("success");
       }).fail(function(responseObject){
         console.log("failed");
+        var response = $.parseJSON(responseObject.responseText);
+        Materialize.toast(response.err, 2000);
       });
     }else{
       $.ajax({
@@ -52,6 +60,8 @@
         console.log("success");
       }).fail(function(responseObject){
         console.log("failed");
+        var response = $.parseJSON(responseObject.responseText);
+        Materialize.toast(response.err, 2000);
       });
     }
   });
@@ -63,6 +73,7 @@
 
   $(document).on("click", "#cancel-cost", function(){
     event_id = $(this).parent().attr("eventId");
+    window.location.href = "#event-costs";
     loadTodosPage(event_id);
   });
 
@@ -72,11 +83,13 @@
     var amount = $("#cost-amount").val();
     var desc = $("#cost-desc").val();
     $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){
+      window.location.href = "#event-costs";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log(responseObject);
-      var response = $.parseJSON(responseObject.responseText).err;
-      $("#add-cost-form").find(".error").text(response);
+      var response = $.parseJSON(responseObject.responseText);
+      // $("#add-cost-form").find(".error").text(response.err);
+      Materialize.toast(response.err, 2000);
     });
   });
 
@@ -86,24 +99,28 @@
   });
 
   $(document).on("click", "#cancel-planner", function(){
-    event_id = $(this).parent().attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
+    window.location.href = "#event-planners";
     loadTodosPage(event_id);
   });
 
   $(document).on("click", "#submit-planner", function(){
-    event_id = $(this).parent().attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
     var email = $("#planner-email").val();
     $.post("/events/"+event_id+"/planners", {planner_email:email}).done(function(response){
+      window.location.href = "#event-planners";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log(responseObject);
-      var response = $.parseJSON(responseObject.responseText).err;
-      $("#add-planner-form").find(".error").text(response);
+      var response = $.parseJSON(responseObject.responseText);
+      // $("#add-planner-form").find(".error").text(response.err)
+      console.log(response);
+      Materialize.toast(response.err, 2000);
     });
   });
 
   $(document).on('click', '#edit-event', function(){
-    event_id = $('#event_panel').attr("eventId");
+    event_id = $('#event-panel').attr("eventId");
     var event_name = $('#event_name').text();
     console.log($('#start-date').text());
     var start_date = ($('#start-date').text());
@@ -138,7 +155,8 @@
   });
 
   $(document).on('click', '#cancel-edit-event', function(){
-    event_id = $(this).parent().parent().attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
+    window.location.href = "#";
     loadTodosPage(event_id);
   });
 
@@ -151,12 +169,12 @@
   });
 
   $(document).on("click", "#submit-edit-event", function(){
-    event_id = $(this).parent().parent().attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
     var start_date = new Date($("#edit-start-date").val());
     var end_date = new Date($("#edit-end-date").val());
 
-    var name = $("#event_name_edit").text();
-    console.log($("#event_name_edit").text());
+    var name = $("#event_name_edit").val();
+    console.log($("#event_name_edit").val());
 
     var hr_min = ($('#start-time').val()).split(':');
     var hour = parseInt(hr_min[0]);
@@ -178,10 +196,10 @@
       end_date.setMinutes(parseInt(hr_min[1]));
     }
 
-    var location = $("#edit-event-loc").text();
-    var budget = $("#edit-event-budget").text();
+    var location = $("#edit-event-loc").val();
+    var budget = $("#edit-event-budget").val();
 
-    var desc = $("#edit-event-desc").text();
+    var desc = $("#edit-event-desc").val();
 
     var info = {name:name, start:start_date, end:end_date, location:location, budget:budget, description: desc};
     console.log(info);
@@ -191,10 +209,12 @@
       type: 'PUT',
       data: {information: info}
     }).done(function(response){
+      window.location.href = "#";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
-      $("#event_panel").find(".error").text("Invalid input format.");
+      // $("#event-panel").find(".error").text("Invalid input format.");
+      Materialize.toast('Invalid input format', 2000);
     });
   });
 
@@ -202,7 +222,29 @@
 
     var parent = $(this).parent();
     $(this).remove();
-    var htmlStr = "<div class='new-todo-form'><div class='error'></div><input type='text' id='todo-name' placeholder='Todo'><br><input type='text' placeholder='Deadline' id='deadline'><br><div class='btn btn-default' id='add-todo'>Add To-do</div><br><div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>";
+
+
+    var htmlStr =
+      "<div class='new-todo-form'>" +
+      "<div class='input-field col s12'>" +
+      "  <input type='text' id='todo-name'> " +
+      "  <label for='todo-name'>Name</label> " +
+      "</div>" +
+      "<div class='input-field col s12'> " +
+      "  <input type='text' id='deadline'> " +
+      "  <label for='deadline'>Deadline</label> " +
+      "</div>" +
+      "<div class='btn btn-default' id='add-todo'>Add To-do</div> " +
+      "<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>"
+    // var htmlStr =
+    //
+    // <div class='new-todo-form'>
+    // <div class='error'></div>
+    // <input type='text' id='todo-name' placeholder='Todo'><br>
+    // <input type='text' placeholder='Deadline' id='deadline'><br>
+    // <div class='btn btn-default' id='add-todo'>Add To-do</div><br>
+    // <div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>
+
     $(htmlStr).appendTo(parent);
 
     $('#deadline').pickadate({
@@ -214,29 +256,34 @@
   $(document).on('click', '.delete-todo', function(){
     var todoId = $(this).parent().attr('todoId');
     var categoryId = $(this).parent().parent().parent().attr('categoryId');
-    event_id = $('#event_panel').attr('eventId');
+    event_id = $('#event-panel').attr('eventId');
     $.ajax({
       url:'events/'+event_id+'/categories/'+categoryId+'/todos/'+todoId,
       type: 'DELETE'
     }).done(function(response){
       loadTodosPage(event_id);
+    }).fail(function(responseObject) {
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
     });
   });
 
   $(document).on('click', '#add-todo', function(){
     var categoryId = $(this).parent().parent().parent().attr('categoryId');
-    event_id = $('#event_panel').attr("eventId");
-    var error_div = $(this).parent().find('.error');
+    event_id = $('#event-panel').attr("eventId");
+    // var error_div = $(this).parent().find('.error');
     var todo_name = $('#todo-name').val();
     var deadline = new Date($('#deadline').val());
     if (todo_name.length < 1){
-      error_div.text('To-Do must have a name and deadline.');
+      // error_div.text('To-Do must have a name and deadline.');
+      Materialize.toast('To-Do must have a name and deadline.', 2000);
     }else{
       $.post('events/'+event_id+'/categories/'+categoryId+'/todos', {name:todo_name, deadline: deadline}).done(function(response){
         loadTodosPage(event_id);
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
-        error_div.text(response.err);
+        Materialize.toast(response.err, 2000);
+        // error_div.text(response.err);
       });
     }
   });
@@ -263,7 +310,7 @@
       $(this).parent().find('.error').text('To-Do List must have a title.');
     }else{
       console.log(event_id);
-      event_id = $("#event_panel").attr("eventId");
+      event_id = $("#event-panel").attr("eventId");
       $.post('events/' + event_id + '/categories', {name: category_title}).done(function(response){
         console.log("woo, added category");
         console.log(event_id);
@@ -271,19 +318,23 @@
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
         console.log(response);
-        $(this).parent().find('.error').text(response.err);
+        // $(this).parent().find('.error').text(response.err);
+        Materialize.toast(response.err, 2000);
       });
     }
   });
 
   $(document).on('click', '.delete-category', function(){
     var category_id = $(this).parent().parent().parent().attr('categoryId');
-    event_id = $('#event_panel').attr('eventId');
+    event_id = $('#event-panel').attr('eventId');
     $.ajax({
       url: 'events/' + event_id + '/categories/' + category_id,
       type: 'DELETE',
     }).done(function(response){
       loadTodosPage(event_id);
+    }).fail(function(responseObject) {
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
     });
   });
 

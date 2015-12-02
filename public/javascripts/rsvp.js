@@ -21,29 +21,10 @@ var loadRsvpPage = function() {
   var event_id = window.location.pathname.split('/')[2];
   $.get('/events/' + event_id + '/details').done(function(response) {
     console.log('success!');
-    var evt = response.content.event;
-    evt.start = new Date(evt.start);
-    evt.start_time = evt.start.toLocaleTimeString();
-    var tmp_time = evt.start_time.split(' ');
-    var am_pm = tmp_time[1];
-    tmp_time = evt.start_time.split(':');
-    evt.start_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-    evt.start = evt.start.toLocaleDateString();
-
-    evt.end = new Date(evt.end);
-    evt.end_time = evt.end.toLocaleTimeString();
-    tmp_time = evt.end_time.split(' ');
-    am_pm = tmp_time[1];
-    tmp_time = evt.end_time.split(':');
-    evt.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
-    evt.end = evt.end.toLocaleDateString();
-    //console.log(evt.end.toLocaleDateString());
-
-    if (currentUser) {
-      evt[currentUser] = currentUser;
-    }
+    evt = response.content.event;
     loadPage('rsvp', evt);
   }).fail(function(responseObject) {
+    console.log(responseObject);
     var response = $.parseJSON(responseObject.responseText);
     console.log(response);
     Materialize.toast(response.err, 4000);
@@ -79,7 +60,7 @@ $(document).on("click",".rsvp-attend", function(e){
     }).fail(function(responseObject) {
       console.log('oops');
       var response = $.parseJSON(responseObject.responseText);
-      Materialize(response.err, 4000);
+      Materialize.toast(response.err, 4000);
     });
 });
 
@@ -94,5 +75,13 @@ $(document).ready(function() {
       currentUser = response.content.user;
     }
     loadRsvpPage();
-  })
-})
+  });
+});
+
+$(document).on('click', '#signin-btn', function(evt) {
+    $('#login-modal').openModal();
+});
+
+$(document).on('click', '#register-btn', function(evt) {
+    $('#signup-modal').openModal();
+});
