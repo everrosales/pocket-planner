@@ -79,6 +79,8 @@ var loadTodosPage = function(event_id) {
     loadPage('todos', {event: response.content.event, title:"Your Todos for " + response.content.event.name, currentUser: currentUser});
   }).fail(function(responseObject){
     console.log("failed");
+    var response = $.parseJSON(responseObject.responseText);
+    Materialize.toast(response.err, 4000);
   });
 };
 
