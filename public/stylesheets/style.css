@@ -27,7 +27,7 @@ nav > div.nav-wrapper {
   z-index: 100001;
 }
 
-.delete-event {
+.delete-event, .delete-todo, .delete-category, .edit-todo, #edit-event, .edit-category {
   cursor:pointer;
 
 }

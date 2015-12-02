@@ -1,24 +1,39 @@
 
 {{#each todos}}
   <div class="todo" todoId={{_id}}>
-    <i class="material-icons right delete-todo">clear</i>
-    <p>
-      <input class="check-todo" type="checkbox" {{#equal status 1}} checked="true"{{/equal}} todoId={{_id}} id="todo-name-{{_id}}" />
-      <label for="todo-name-{{_id}}">{{name}}</label>
-    </p>
-    <!--<div class="checkbox-container">
-      <input type="checkbox" {{#equal status 1}} checked="true"{{/equal}} class="check-todo" todoId={{_id}}>
-    </div>-->
-      <!--<p>{{name}}<span class="glyphicon glyphicon-remove delete-todo"></span></p>-->
+
+    <div class="todo-info">
+      <i class="material-icons right delete-todo">clear</i><i class="material-icons right edit-todo">edit</i>
+      <p>
+        <input class="check-todo" type="checkbox" {{#equal status 1}} checked="true"{{/equal}} todoId={{_id}} id="todo-name-{{_id}}" >
+        <label for="todo-name-{{_id}}">{{name}}</label>
+      </p>
       {{#if deadline}}
       <small>Deadline: {{deadline}}</small>
       {{/if}}
       {{#if priority}}
       <br><small>Priority: {{priority}}</small>
       {{/if}}
+    </div>
+    <div class="edit-todo-form" style="display:none">
+
+      <label class="active" for="edit-todo-name">Todo Name</label>
+      <input class="edit-todo-name" name="edit-todo-name" value={{name}} type="text">
+
+      <label class="active" for="edit-todo-deadline">Deadline</label>
+      <input class="edit-todo-deadline" type="text" name="edit-todo-deadline" value={{#if deadline}}{{deadline}}{{/if}}>
+
+      <label class="active" for="edit-todo-priority">Priority</label>
+      <input class="edit-todo-priority" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
+
+      <br>
+      <button class="waves-effect waves-light btn btn-default submit-edit-todo">Submit</button>
+      <button class="waves-effect waves-light btn btn-default cancel-edit-todo">Cancel</button>
+
+    </div>
   </div>
 {{/each}}
-<button class="waves-effect waves-light btn btn-default add_todo">Add a To-Do</button>
+
 
 <!-- Using this to temporarily hold state -->
 <!-- DEPRECATED -->

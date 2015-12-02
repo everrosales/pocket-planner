@@ -430,7 +430,7 @@ router.put('/:event', function(req, res) {
 });
 
 /*
-    PUT /events/:event/categories/:category/todos/:todo?status=[check|uncheck]
+    PUT /events/:event/categories/:category/todos/:todo?status=[check|uncheck|edit]
     Request parameters:
      - event ID: the unique ID of the event we're going to modify
      - category: the category that we are going to modify
@@ -465,7 +465,7 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
       }
     });
   } else if (req.body.status == 'edit') {
-    Event.editTodo(req.event, req.category, req.todo, req.information, function(err, success) {
+    Event.editTodo(req.event, req.category, req.todo, req.body.information, function(err, success) {
       if (err) {
         utils.sendErrResponse(res, 500, err);
       } else {
@@ -476,6 +476,19 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     utils.sendErrResponse(res, 500, 'Something went wrong');
   }
 });
+
+/*
+PUT
+/events/:event/categories/:category
+*/
+router.put('/:event/categories/:category', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+
+});
+
 
 // DELETE requests
 

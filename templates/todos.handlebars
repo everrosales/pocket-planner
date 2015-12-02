@@ -4,9 +4,39 @@
   {{#each event.categories}}
     <div class="todo-container card-panel col s3" categoryId={{_id}}>
       <div class="inner-todo-container">
-        <p class="category">{{name}}<i class="material-icons right delete-category">clear</i></p>
+
+        <p class="category">{{name}}<i class="material-icons right delete-category">clear</i><i class="material-icons right edit-category">edit</i></p>
+
+        <div class="edit-category-form" style="display:none">
+          <div class="error"></div>
+          <label for="edit-category-name" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" name="edit-category-name" type="text"></label>
+
+
+          <button class="waves-effect waves-light btn btn-default submit-edit-category">Submit</button>
+          <button class="waves-effect waves-light btn btn-default cancel-edit-category">Cancel</button>
+        </div>
+
         <hr>
         {{> todo}}
+        <br>
+        <br>
+        <div class="new-todo-form" style="display:none">
+          <div class="input-field col s12">
+            <input type="text" name="todo-name" id="todo-name">
+            <label for="todo-name">Todo name</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="text" id="deadline">
+            <label for="deadline">Deadline</label>
+          </div>
+          <div class="input-field col s12">
+            <input type="number" min="1" max="10" id="priority">
+            <label for="priority">Priority</label>
+          </div>
+          <button class="btn btn-default" id="add-todo">Add Todo</button>
+          <button class="btn btn-default" id="cancel-add-todo">Cancel</button>
+        </div>
+        <button class="waves-effect waves-light btn btn-default add_todo">Add a To-Do</button>
       </div>
     </div>
   {{else}}

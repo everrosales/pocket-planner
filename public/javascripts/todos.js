@@ -1,6 +1,82 @@
 (function () {
   var event_id = undefined;
 
+  $(document).on("click", ".edit-category", function(){
+    $(this).parent().hide();
+    $(this).parent().parent().find(".add_todo").hide();
+    $(this).parent().parent().find('.edit-category-form').show();
+  });
+
+  $(document).on("click", ".cancel-edit-category", function(){
+    event_id = $("#event-panel").attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  $(document).on("click", ".submit-edit-category", function(){
+    var new_category_name = $(this).parent().find(".edit-category-name").val();
+    if (!new_category_name){
+      $(this).parent().find(".error").text("Category must have a name.")
+    }else{
+      //TODO(ajliu): make the put request after the database function is done.
+    }
+  });
+
+  $(document).on("click", ".edit-todo", function(){
+    $(this).parent().hide();
+    var edit_form = $(this).parent().parent().find(".edit-todo-form");
+    edit_form.show();
+    $(this).parent().parent().parent().find(".add_todo").hide();
+
+    edit_form.find(".edit-todo-deadline").pickadate({
+      min: new Date(),
+      selectMonths: true, // Creates a dropdown to control month
+      selectYears: 15, // Creates a dropdown of 15 years to control year
+    });
+
+  });
+
+  $(document).on("click", ".cancel-edit-todo", function(){
+    event_id = $("#event-panel").attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  $(document).on("click", ".submit-edit-todo", function(){
+    event_id = $("#event-panel").attr("eventId");
+    var cat_id = $(this).parent().parent().parent().parent().attr("categoryId");
+
+    var todo_id = $(this).parent().parent().attr("todoId");
+
+    var edit_form = $(this).parent();
+    var todo_name = edit_form.find(".edit-todo-name").val();
+
+    var todo_deadline = new Date(edit_form.find(".edit-todo-deadline").val());
+
+    var todo_priority = edit_form.find(".edit-todo-priority").val();
+    console.log(todo_priority);
+
+    if (!todo_name || !todo_deadline){
+      Materialize.toast("Todo must have a name and deadline.", 2000)
+    }else{
+      var info = {name: todo_name, deadline: todo_deadline};
+
+      if(todo_priority){
+        info.priority = todo_priority
+      };
+      $.ajax({
+        url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
+        type: 'PUT',
+        data: {status: 'edit', information: info}
+      }).done(function(response){
+        loadTodosPage(event_id);
+      }).fail(function(responseObject){
+        console.log("failed");
+        var response = $.parseJSON(responseObject.responseText);
+        Materialize.toast(response.err, 2000);
+      });
+    }
+
+  });
+
   $(document).on("click", ".remove-cost", function(){
     event_id = $("#event-panel").attr("eventId");
     var cost_id = $(this).parent().parent().parent().attr("costId");
@@ -35,7 +111,7 @@
 
   $(document).on("change", ".check-todo", function(){
     event_id = $("#event-panel").attr("eventId");
-    var cat_id=$(this).parent().parent().parent().parent().attr("categoryId");
+    var cat_id=$(this).parent().parent().parent().parent().parent().attr("categoryId");
     var todo_id = $(this).attr("todoId");
     var checked = $(this).is(":checked");
     console.log(checked);
@@ -224,7 +300,7 @@
     $(this).remove();
 
 
-    var htmlStr =
+    /*var htmlStr =
       "<div class='new-todo-form'>" +
       "<div class='input-field col s12'>" +
       "  <input type='text' id='todo-name'> " +
@@ -236,17 +312,11 @@
       "</div>" +
       "<div class='btn btn-default' id='add-todo'>Add To-do</div> " +
       "<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>"
-    // var htmlStr =
-    //
-    // <div class='new-todo-form'>
-    // <div class='error'></div>
-    // <input type='text' id='todo-name' placeholder='Todo'><br>
-    // <input type='text' placeholder='Deadline' id='deadline'><br>
-    // <div class='btn btn-default' id='add-todo'>Add To-do</div><br>
-    // <div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>
+
 
     $(htmlStr).appendTo(parent);
-
+*/
+    parent.find(".new-todo-form").show();
     $('#deadline').pickadate({
       min: new Date()
     });
@@ -254,8 +324,8 @@
   });
 
   $(document).on('click', '.delete-todo', function(){
-    var todoId = $(this).parent().attr('todoId');
-    var categoryId = $(this).parent().parent().parent().attr('categoryId');
+    var todoId = $(this).parent().parent().attr('todoId');
+    var categoryId = $(this).parent().parent().parent().parent().attr('categoryId');
     event_id = $('#event-panel').attr('eventId');
     $.ajax({
       url:'events/'+event_id+'/categories/'+categoryId+'/todos/'+todoId,
@@ -269,22 +339,39 @@
   });
 
   $(document).on('click', '#add-todo', function(){
+    console.log("adding todo");
     var categoryId = $(this).parent().parent().parent().attr('categoryId');
     event_id = $('#event-panel').attr("eventId");
     // var error_div = $(this).parent().find('.error');
-    var todo_name = $('#todo-name').val();
-    var deadline = new Date($('#deadline').val());
-    if (todo_name.length < 1){
+    var form = $(this).parent();
+    var todo_name = form.find('#todo-name').val();
+    var deadline = new Date(form.find('#deadline').val());
+    var priority = form.find("#priority").val();
+    if (todo_name.length < 1 || !deadline){
       // error_div.text('To-Do must have a name and deadline.');
-      Materialize.toast('To-Do must have a name and deadline.', 2000);
+      Materialize.toast('Todo must have a name and deadline.', 2000);
+
+
     }else{
-      $.post('events/'+event_id+'/categories/'+categoryId+'/todos', {name:todo_name, deadline: deadline}).done(function(response){
-        loadTodosPage(event_id);
-      }).fail(function(responseObject){
-        var response = $.parseJSON(responseObject.responseText);
-        Materialize.toast(response.err, 2000);
-        // error_div.text(response.err);
-      });
+
+      info = {name: todo_name, deadline:deadline};
+
+      if(priority && (priority <= 0 || priority > 10)){
+        Materialize.toast("Todo priority must be a number between 1 and 10.", 2000);
+
+      }else{
+        if(priority){
+          info.priority = priority;
+        }
+        $.post('events/'+event_id+'/categories/'+categoryId+'/todos', info).done(function(response){
+          loadTodosPage(event_id);
+        }).fail(function(responseObject){
+          var response = $.parseJSON(responseObject.responseText);
+          Materialize.toast(response.err, 2000);
+          // error_div.text(response.err);
+        });
+      }
+
     }
   });
 
@@ -309,15 +396,11 @@
 
       $(this).parent().find('.error').text('To-Do List must have a title.');
     }else{
-      console.log(event_id);
       event_id = $("#event-panel").attr("eventId");
       $.post('events/' + event_id + '/categories', {name: category_title}).done(function(response){
-        console.log("woo, added category");
-        console.log(event_id);
         loadTodosPage(event_id);
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
-        console.log(response);
         // $(this).parent().find('.error').text(response.err);
         Materialize.toast(response.err, 2000);
       });
