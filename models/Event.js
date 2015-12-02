@@ -631,6 +631,33 @@ var Event = (function Event() {
     });
   };
 
+  /** Changes the name of a category
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    categoryid: the id of the category to be updated
+   *    new_category_name: the intended new name of the category
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if error occured while saving; 'no such event'
+   *    error if event not found.
+   */
+  var _editCategory = function(eventid, categoryId, new_category_name, callback) {
+    _getCategory(eventid, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        result.event.categories.id(result.category._id).set('name', new_category_name);
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Removes a category from an event
    *  Arguments:
    *    eventId: the id of the event to be updated
@@ -826,6 +853,7 @@ var Event = (function Event() {
     getAttendeeEmails   : _getAttendeeEmails,
     addTodo             : _addTodo,
     addCategory         : _addCategory,
+    editCategory        : _editCategory,
     editTodo            : _editTodo,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,

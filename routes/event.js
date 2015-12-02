@@ -430,12 +430,40 @@ router.put('/:event', function(req, res) {
 });
 
 /*
+    PUT /events/:event/categories/:category
+    Request parameters:
+     - event ID: the unique ID of the event we're going to modify
+     - category: the category we're going to modify
+     - new_name: the new name for the category
+    Response:
+     - success: true if server succeeded in changing name of category
+     - err: on failure, an error message
+*/
+router.put('/:event/categories/:category', function(req, res) {
+  if (!req.body.new_name) {
+    utils.sendErrResponse(res, 500, 'You must specify a new name.');
+  } else {
+    Event.editCategory(req.event, req.category, req.body.new_name, function(err, success) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, success);
+      }
+    });
+  }
+});
+
+/*
     PUT /events/:event/categories/:category/todos/:todo?status=[check|uncheck|edit]
     Request parameters:
      - event ID: the unique ID of the event we're going to modify
      - category: the category that we are going to modify
-     - todo: todo which is going to be marked as checked
-
+     - todo: todo which is going to be updated
+     - status: one of three options:
+          check: given todo will be checked
+          uncheck: given todo will be unchecked
+          edit: given todo will have updated information
+     - information: required if status==edit, object containing fields to change
     Response:
      - success: true if server succeeded in marking todo
      - err: on failure, an error message

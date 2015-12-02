@@ -937,9 +937,56 @@ describe('Event', function() {
     });
   });
 
+  describe('#editCategory', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.editCategory(0, 0, 'blah', function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return an error if category doesn\'t exist', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.editCategory(n_event._id, 0, 'blah', function(err, result) {
+            assert.deepEqual(err.msg, 'Category doesn\'t exist');
+            done();
+          });
+        });
+      });
+    });
+    it('should return true if category updated successfully', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.editCategory(n_event._id, new_category._id, 'blah', function(err, result) {
+              assert.deepEqual(err, null);
+              assert.deepEqual(result, true);
+              done();
+            });
+          });
+        });
+      });
+    });
+    it('should change the result of future getEvent calls', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.editCategory(n_event._id, new_category._id, 'blah', function() {
+              Event.findById(n_event._id, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result.categories[0].name, 'blah');
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
   describe('#deleteCategory', function() {
     it('should return a no event error if event doesn\'t exist', function(done) {
-      Event.deleteCategory(0, 'venue', function(err, result) {
+      Event.deleteCategory(0, 0, function(err, result) {
         assert.deepEqual(err.msg, "No such event.");
         done();
       });
