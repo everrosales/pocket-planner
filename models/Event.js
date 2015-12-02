@@ -647,6 +647,35 @@ var Event = (function Event() {
     });
   };
 
+  /** Edits the name, deadline, and priority of a todo
+   *  Arguments:
+   *    eventId: the id of the event to be updated
+   *    categoryId: the id of the category that this todo is in
+   *    todoId: the todo to be updated
+   *    information: an object containing fields to be updated (ex. {name:<new name>})
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if error while saving event;
+   *    'no such event' error if event not found.
+   */
+  var _editTodo = function(eventId, categoryId, todoId, information, callback) {
+    _getCategory(eventId, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        // (event -> category -> todo).set(fields)
+        result.event.categories.id(result.category._id).todos.id(todoId).set(information);
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Marks a todo as completed
    *  Arguments:
    *    eventid: the id of the event to be updated
@@ -751,6 +780,7 @@ var Event = (function Event() {
     getAttendeeEmails   : _getAttendeeEmails,
     addTodo             : _addTodo,
     addCategory         : _addCategory,
+    editTodo            : _editTodo,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,
