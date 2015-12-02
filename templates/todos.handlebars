@@ -2,7 +2,7 @@
 <div id="event-row-container" class="row">
 <div id="category-container" class="col m9" eventId={{event._id}}>
   {{#each event.categories}}
-    <div class="todo-container col s3" categoryId={{_id}}>
+    <div class="todo-container card-panel col s3" categoryId={{_id}}>
       <div class="inner-todo-container">
         <p class="category">{{name}}<i class="material-icons right delete-category">clear</i></p>
         <hr>

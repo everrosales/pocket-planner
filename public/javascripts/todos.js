@@ -222,7 +222,29 @@
 
     var parent = $(this).parent();
     $(this).remove();
-    var htmlStr = "<div class='new-todo-form'><div class='error'></div><input type='text' id='todo-name' placeholder='Todo'><br><input type='text' placeholder='Deadline' id='deadline'><br><div class='btn btn-default' id='add-todo'>Add To-do</div><br><div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>";
+
+
+    var htmlStr =
+      "<div class='new-todo-form'>" +
+      "<div class='input-field col s12'>" +
+      "  <input type='text' id='todo-name'> " +
+      "  <label for='todo-name'>Name</label> " +
+      "</div>" +
+      "<div class='input-field col s12'> " +
+      "  <input type='text' id='deadline'> " +
+      "  <label for='deadline'>Deadline</label> " +
+      "</div>" +
+      "<div class='btn btn-default' id='add-todo'>Add To-do</div> " +
+      "<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>"
+    // var htmlStr =
+    //
+    // <div class='new-todo-form'>
+    // <div class='error'></div>
+    // <input type='text' id='todo-name' placeholder='Todo'><br>
+    // <input type='text' placeholder='Deadline' id='deadline'><br>
+    // <div class='btn btn-default' id='add-todo'>Add To-do</div><br>
+    // <div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>
+
     $(htmlStr).appendTo(parent);
 
     $('#deadline').pickadate({
