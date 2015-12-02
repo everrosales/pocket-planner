@@ -222,6 +222,7 @@ router.get('/', function(req, res) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
       } else {
           my_events = my_events.reverse();
+
           utils.sendSuccessResponse(res, my_events);
       }
   });
@@ -241,7 +242,14 @@ router.get('/:event', function(req, res) {
   if (!req.event) {
     utils.sendErrResponse(res, 404, "Invalid event id.");
   } else {
-    utils.sendSuccessResponse(res, req.event);
+    Event.getPlanners(req.event._id, function(err, new_planners) {
+      if (err) {
+        utils.sendErrResponse(res, 500, "An unknown error occurred.");
+      } else {
+        req.event.planners = new_planners;
+        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners});
+      }
+    });
   }
 });
 
@@ -311,7 +319,7 @@ router.post('/:event/planners', function(req, res) {
       } else {
         utils.sendSuccessResponse(res, true);
       }
-    })
+    });
   }
 
 });

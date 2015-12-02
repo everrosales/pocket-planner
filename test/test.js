@@ -373,7 +373,45 @@ describe('Event', function() {
     });
   });
 
-  describe.only('#getPlannerEmails', function() {
+  describe('#getPlanners', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.getPlanners(0, function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return [] if no planners', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.getPlanners(n_event._id, function(err, result) {
+            assert.deepEqual(err, null);
+            assert.deepEqual(result, []);
+            done();
+          });
+        });
+      });
+    });
+    it('should return planner objects (without passwords)', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function() {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+            Event.addPlanner(n_event._id, 'erosales@mit.edu', function() {
+              Event.getPlanners(n_event._id, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result.length, 1);
+                assert.deepEqual(result[0].email, "erosales@mit.edu");
+                assert.deepEqual(result[0].username, "erosales");
+                assert.deepEqual(result[0].password, undefined);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('#getPlannerEmails', function() {
     it('should return a no event error if event doesn\'t exist', function(done) {
       Event.getPlannerEmails(0, function(err, result) {
         assert.deepEqual(err.msg, "No such event.");

@@ -11,7 +11,20 @@
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log("failed");
-    })
+    });
+  });
+
+  $(document).on("click", ".remove-planner", function(){
+    event_id = $(this).parent().parent().parent().parent().attr("eventId");
+    var planner_id = $(this).parent().parent().attr("plannerId");
+    $.ajax({
+      url: 'events/'+event_id+'/planners/'+planner_id,
+      type: 'DELETE'
+    }).done(function(response){
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log("failed");
+    });
   });
 
   $(document).on("change", ".check-todo", function(){
@@ -57,16 +70,37 @@
     event_id = $(this).parent().attr("eventId");
     var name = $("#cost-name").val();
     var amount = $("#cost-amount").val();
-    var desc = $("#cost-desc").val()
+    var desc = $("#cost-desc").val();
     $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log(responseObject);
       var response = $.parseJSON(responseObject.responseText).err;
       $("#add-cost-form").find(".error").text(response);
-    })
+    });
   });
 
+  $(document).on("click", "#add-planner", function(){
+    $("#add-planner").hide();
+    $("#add-planner-form").show();
+  });
+
+  $(document).on("click", "#cancel-planner", function(){
+    event_id = $(this).parent().attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  $(document).on("click", "#submit-planner", function(){
+    event_id = $(this).parent().attr("eventId");
+    var email = $("#planner-email").val();
+    $.post("/events/"+event_id+"/planners", {planner_email:email}).done(function(response){
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log(responseObject);
+      var response = $.parseJSON(responseObject.responseText).err;
+      $("#add-planner-form").find(".error").text(response);
+    });
+  });
 
   $(document).on('click', '#edit-event', function(){
     event_id = $('#event_panel').attr("eventId");
@@ -116,12 +150,6 @@
     $(htmlStr).appendTo('#category-container');
   });
 
-  $(document).on('click', '#new_planner', function() {
-    $('#new_planner').remove();
-    var htmlStr = "<div class='column' id='new-planner-container'><div class='event'><div class='error'></div><input id='planner-email' type='text' placeholder='Email of new planner'><br><div class='btn btn-default' id='add-planner-button'>Add Planner</div><div class='btn btn-default' id='cancel-planner-button'>Cancel</div></div>";
-    $(htmlStr).appendTo('#category-container');
-  });
-
   $(document).on("click", "#submit-edit-event", function(){
     event_id = $(this).parent().parent().attr("eventId");
     var start_date = new Date($("#edit-start-date").val());
@@ -168,7 +196,7 @@
       console.log("failed");
       $("#event_panel").find(".error").text("Invalid input format.");
     });
-  })
+  });
 
   $(document).on('click', '.add_todo', function() {
 
@@ -192,7 +220,7 @@
       type: 'DELETE'
     }).done(function(response){
       loadTodosPage(event_id);
-    })
+    });
   });
 
   $(document).on('click', '#add-todo', function(){
@@ -209,7 +237,7 @@
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
         error_div.text(response.err);
-      })
+      });
     }
   });
 
@@ -244,28 +272,6 @@
         var response = $.parseJSON(responseObject.responseText);
         console.log(response);
         $(this).parent().find('.error').text(response.err);
-      })
-    }
-  });
-
-  $(document).on('click', '#cancel-planner-button', function() {
-    $('#new-planner-container').remove();
-    var htmlStr = '<div class="column btn btn-default" id="new_planner"><p>+ Add another planner</p></div>';
-    $(htmlStr).appendTo('#category-container');
-  });
-
-  $(document).on('click', '#add-planner-button', function() {
-    var planner_email = $('#planner-email').val();
-    if (planner_email.length < 1) {
-      $(this).parent().find('.error').text('Planner must have an email');
-    } else {
-      event_id = $("#event_panel").attr("eventId");
-      $.post('events/' + event_id + '/planners', {planner_email: planner_email}).done(function(response) {
-        loadTodosPage(event_id);
-      }).fail(function(responseObject) {
-        var response = $.parseJSON(responseObject.responseText);
-        console.log(response);
-        $(this).parent().find('.error').text(response.err);
       });
     }
   });
@@ -279,7 +285,6 @@
     }).done(function(response){
       loadTodosPage(event_id);
     });
-  })
-
+  });
 
 })();
