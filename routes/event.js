@@ -249,8 +249,6 @@ router.post('/', function(req, res) {
         utils.sendSuccessResponse(res, event);
       });
     }
-
-
 });
 
 /*
@@ -383,66 +381,53 @@ var mailerCallback = function(err, info) {
 };
 
 /*
-    POST /events/:event/email/invitee
-    Request body:
-     - subject: email subject
-     - text: email body text
-     - date: when the emails will be sent
-    Response:
-     - success: true if email sent or scheduled
-     - err: on failure, an error message
-*/
-router.post('/:event/email/invitee', function(req, res) {
-  if (!req.body.subject || !req.body.text) {
-    utils.sendErrResponse(res, 400, 'Email subject and text are required.');
-  } else {
-    Event.getInviteeEmails(req.event, function(err, emails) {
-      emails.forEach(function(email) {
-        if (req.body.date) {
-          if (req.body.date < Date.now()) {
-            utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
-          } else {
-            mailer.sendEmailAt(email, req.body.subject, req.body.text, req.body.date, mailerCallback);
-            utils.sendSuccessResponse(res, true);
-          }
-        } else {
-          mailer.sendEmail(email, req.body.subject, req.body.text, mailerCallback);
-          utils.sendSuccessResponse(res, true);
-        }
-      });
-    });
-  }
-});
+    Send email from user to user, and bcc invitees or just attendees
 
-/*
-    POST /events/:event/email/attendee
+    POST /events/:event/email
     Request body:
      - subject: email subject
-     - text: email body text
-     - date: when the emails will be sent
+     - html: email body html
+     - date: if given, when the emails will be sent
+     - attendee: if true, send bcc email to only attendees
     Response:
      - success: true if email sent or scheduled
      - err: on failure, an error message
 */
-router.post('/:event/email/attendee', function(req, res) {
-  if (!req.body.subject || !req.body.text) {
-    utils.sendErrResponse(res, 400, 'Email subject and text are required.');
-  } else {
-    Event.getAttendeeEmails(req.event, function(err, emails) {
-      emails.forEach(function(email) {
-        if (req.body.date) {
-          if (req.body.date < Date.now()) {
-            utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
-          } else {
-            mailer.sendEmailAt(email, req.body.subject, req.body.text, req.body.date, mailerCallback);
-            utils.sendSuccessResponse(res, true);
-          }
+router.post('/:event/email', function(req, res) {
+  var addressesCallback = function(err, email_addresses) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else {
+      var email_message = {
+        from: req.user.email,
+        to: req.user.email,
+        bcc: email_addresses,
+        subject: req.body.subject,
+        html: req.body.html,
+        generateTextFromHTML: true
+      };
+
+      if (req.body.date) {
+        var date = new Date(req.body.date);
+        if (date < new Date()) {
+          utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
         } else {
-          mailer.sendEmail(email, req.body.subject, req.body.text, mailerCallback);
+          mailer.sendEmailAt(email_message, date, mailerCallback);
           utils.sendSuccessResponse(res, true);
         }
-      });
-    });
+      } else {
+        mailer.sendEmail(email_message, mailerCallback);
+        utils.sendSuccessResponse(res, true);
+      }
+    }
+  };
+
+  if (!req.body.subject || !req.body.html) {
+    utils.sendErrResponse(res, 400, 'Email subject and content are required.');
+  } else if (req.body.attendee) {
+    Event.getAttendeeEmails(req.event, addressesCallback);
+  } else {
+    Event.getInviteeEmails(req.event, addressesCallback);
   }
 });
 
