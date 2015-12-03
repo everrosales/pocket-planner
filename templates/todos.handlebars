@@ -132,7 +132,7 @@
         <p class="bold">Invite link: <br>
           <a class="invite-link" href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
         </p>
-        <p><span class="bold">Number attendees:</span>  {{event.attendees.length}}</p>
+        <p><span class="bold">Number attendees:</span>  {{event.attending.length}}</p>
       </div>
     </div>
 
@@ -209,6 +209,8 @@
             <p>No invitees yet.</p>
           {{/each}}
         </ul>
+        <button class="btn btn-default" id="email-invitees">Email invitees</button>
+        <button class="btn btn-default" id="email-attendees">Email attendees</button>
         <button class="btn btn-default" id="add-invitee">Add Invitee</button>
       </div>
       <div id="add-invitee-form" style="display:none" eventId={{event._id}}>
