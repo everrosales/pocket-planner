@@ -764,8 +764,8 @@ var Event = (function Event() {
       if (err) {
         callback(err);
       } else {
-        result.event.populate('planners', function(err, populated_event) {
-          if (populated_event.planners.indexOf({email:planner_email}) != -1 || result.event.hostEmail == planner_email) {
+        _getPlannerEmails(eventId, function(err, email_list) {
+          if (email_list.indexOf(planner_email) != -1 || result.event.hostEmail == planner_email) {
             result.event.categories.id(result.category._id).todos.id(todoId).set('assignee', planner_email);
             result.event.save(function(err) {
               if (err) {
