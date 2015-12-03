@@ -459,9 +459,7 @@ var mailerCallback = function(err, info) {
 */
 router.post('/:event/email', function(req, res) {
   var addressesCallback = function(err, email_addresses) {
-    if (err) {
-      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-    } else {
+
       Event.getPlannerEmails(req.event, function(err, planner_addresses) {
         if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
@@ -469,7 +467,7 @@ router.post('/:event/email', function(req, res) {
           email_addresses.push(req.event.hostEmail);
           Array.prototype.push.apply(email_addresses, planner_addresses);
           ejs.renderFile(
-              __dirname + '/../views/emails/' + (req.body.invitation ? 'invitation.ejs':'message.ejs'),
+              __dirname + '/../views/emails/' + (req.body.invitation=="true" ? 'invitation.ejs':'message.ejs'),
               { event: req.event, message: req.body.message, url: req.protocol + '://' + req.get('host') },
               function(err, email_html) {
                 if (err) {
@@ -501,7 +499,7 @@ router.post('/:event/email', function(req, res) {
         }
       });
     }
-  };
+
 
   if (! isAuthorized(req, res)) {
     // Error response has already sent in isAuthorized.
@@ -509,7 +507,7 @@ router.post('/:event/email', function(req, res) {
   }
   if (!req.body.subject) {
     utils.sendErrResponse(res, 400, 'Email subject is required.');
-  } else if (req.body.attendee) {
+  } else if (req.body.attendee=="true") {
     Event.getAttendeeEmails(req.event, addressesCallback);
   } else {
     Event.getInviteeEmails(req.event, addressesCallback);

@@ -336,4 +336,55 @@
       Materialize.toast('Invalid input format', 2000);
     });
   });
+
+  //Email functions
+
+  //email invitees form
+  $(document).on("click", "#email-invitees", function(){
+    $("#email-form").show();
+    $("#email-invitees").hide();
+    $("#email-attendees").hide();
+
+    $("#email-form-label").text("Email invitees");
+  });
+
+  //email attendees form
+  $(document).on("click", "#email-attendees", function(){
+    $("#email-form").show();
+    $("#email-invitees").hide();
+    $("#email-attendees").hide();
+
+    $("#email-form-label").text("Email attendees");
+  });
+
+  //cancel emailing
+  $(document).on("click", "#cancel-email-form", function(){
+    event_id = $("#event-panel").attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  //submit emailing form
+  $(document).on("click", "#submit-email-form", function(){
+    event_id = $("#event-panel").attr("eventId");
+    var attendee = false;
+
+    if ($("#email-form-label").text() == "Email attendees"){
+      attendee = true;
+    }
+
+    var invitation = $("#email-invitation").is(":checked");
+
+    var subject = $("#email-subject").val();
+    var message = $("#email-message").val();
+
+    $.post("/events/"+event_id+"/email", {message: message, subject: subject, invitation: invitation, attendee: attendee}).done(function(response){
+      Materialize.toast("Emails sent!", 2000);
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
+    });
+
+  });
+
 })();

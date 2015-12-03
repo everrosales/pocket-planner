@@ -215,6 +215,25 @@
         <button class="btn btn-default" id="email-invitees">Email invitees</button>
         <button class="btn btn-default" id="email-attendees">Email attendees</button>
         <button class="btn btn-default" id="add-invitee">Add Invitee</button>
+
+        <div id="email-form" style="display:none">
+          <h5 id="email-form-label"></h5>
+          <input type="text" id="email-subject">
+          <label for="email-subject">Email subject</label>
+
+          <!--TODO: datepicker to send the emails at a specific date -->
+          <br>
+          <input type="checkbox" id="email-invitation">
+          <label for="email-invitation">Use invitation template</label>
+
+          <input type="text" id="email-message">
+          <label for="email-message">Message (optional)</label>
+          <br>
+          <button class="btn btn-default" id="submit-email-form">Submit</button>
+          <button class="btn btn-default" id="cancel-email-form">Cancel</button>
+
+        </div>
+
       </div>
       <div id="add-invitee-form" style="display:none" eventId={{event._id}}>
         <h4>New Invitee</h4>
