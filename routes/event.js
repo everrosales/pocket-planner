@@ -7,8 +7,6 @@ var ejs = require('ejs');
 var User = require('../models/User');
 var Event = require('../models/Event');
 
-var APP_URL = 'http://localhost:3000'
-
 /*
     Require authentication on all access to /events/*
     clients who are not logged in will receive 403 error
@@ -419,7 +417,7 @@ var mailerCallback = function(err, info) {
 };
 
 /*
-    Send email from user to user, and bcc invitees or just attendees
+    Send email from user to user, and bcc all planners + invitees or attendees
 
     POST /events/:event/email
     Request body:
@@ -437,40 +435,51 @@ router.post('/:event/email', function(req, res) {
     if (err) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else {
-      var email_html = ejs.renderFile(
-          __dirname + '/../views/emails/' + (req.body.invitation ? 'invitation.ejs':'message.ejs'),
-          { event: req.event, message: req.body.message, url: APP_URL },
-          function(err, email_html) {
-            if (err) {
-              console.log(err);
-              utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-            } else {
-              var email = {
-                from: req.user.email,
-                to: req.user.email,
-                bcc: email_addresses,
-                subject: req.body.subject,
-                html: email_html,
-                generateTextFromHTML: true
-              };
-
-              if (req.body.date) {
-                var date = new Date(req.body.date);
-                if (date < new Date()) {
-                  utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+      Event.getPlannerEmails(req.event, function(err, planner_addresses) {
+        if (err) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+          email_addresses.push(req.event.hostEmail);
+          Array.prototype.push.apply(email_addresses, planner_addresses);
+          ejs.renderFile(
+              __dirname + '/../views/emails/' + (req.body.invitation ? 'invitation.ejs':'message.ejs'),
+              { event: req.event, message: req.body.message, url: req.protocol + '://' + req.get('host') },
+              function(err, email_html) {
+                if (err) {
+                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
                 } else {
-                  mailer.sendEmailAt(email, date, mailerCallback);
-                  utils.sendSuccessResponse(res, true);
+                  var email = {
+                    from: req.user.email,
+                    to: req.user.email,
+                    bcc: email_addresses,
+                    subject: req.body.subject,
+                    html: email_html,
+                    generateTextFromHTML: true
+                  };
+
+                  if (req.body.date) {
+                    var date = new Date(req.body.date);
+                    if (date < new Date()) {
+                      utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+                    } else {
+                      mailer.sendEmailAt(email, date, mailerCallback);
+                      utils.sendSuccessResponse(res, true);
+                    }
+                  } else {
+                    mailer.sendEmail(email, mailerCallback);
+                    utils.sendSuccessResponse(res, true);
+                  }
                 }
-              } else {
-                mailer.sendEmail(email, mailerCallback);
-                utils.sendSuccessResponse(res, true);
-              }
-            }
-          });
+              });
+        }
+      });
     }
   };
 
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
   if (!req.body.subject) {
     utils.sendErrResponse(res, 400, 'Email subject is required.');
   } else if (req.body.attendee) {
