@@ -16,7 +16,7 @@
   //Cancel adding planner.
   $(document).on("click", "#cancel-invitee", function(){
     event_id = $("#event-panel").attr("eventId");
-    window.location.href = "#event-invitees";
+    window.location.href = "#event-attendees";
     loadTodosPage(event_id);
   });
 
@@ -33,7 +33,7 @@
       return;
     }
     $.post("/events/"+event_id+"/invite", {attendee:email}).done(function(response){
-      window.location.href = "#event-invitees";
+      window.location.href = "#event-attendees";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       console.log(responseObject);
