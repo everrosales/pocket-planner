@@ -321,8 +321,8 @@
     }
 
     var desc = $("#edit-event-desc").val();
-
-    var info = {name:name, start:start_date, end:end_date, location:location, budget:budget, description: desc};
+    var is_private = $("#edit-private")[0].checked;
+    var info = {name:name, start:start_date, end:end_date, location:location, private:is_private, budget:budget, description: desc};
     console.log(info);
 
     $.ajax({

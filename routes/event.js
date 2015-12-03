@@ -260,7 +260,8 @@ router.post('/', function(req, res) {
     if (!req.body.email || !req.body.name || !req.body.start_date || !req.body.end_date) {
       utils.sendErrResponse(res, 400, 'Email, name, and time required.');
     }else{
-      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, false, function(err, event) {
+      var is_private;
+      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, req.body.is_private, function(err, event) {
         utils.sendSuccessResponse(res, event);
       });
     }
