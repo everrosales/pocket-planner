@@ -44,7 +44,7 @@ var zero_pad = function(str){
 
 var loadTodosPage = function(event_id) {
 
-  $.get('/events/' + event_id).done(function(response){
+  $.get('/events/' + event_id).done(function(response) {
     console.log(response.content.event);
 
     response.content.event.start = new Date(response.content.event.start);
@@ -75,6 +75,31 @@ var loadTodosPage = function(event_id) {
         t.deadline = t.deadline.toLocaleDateString();
       });
     });
+    response.content.event.categories.forEach(function(c) {
+      c.todos.sort(function(todo1, todo2) {
+        if (todo1.name < todo2.name) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      c.todos.sort(function(todo1, todo2) {
+        if (response.content.self == todo1.assignee) {
+          if (response.content.self == todo2.assignee) {
+            return todo2.priority - todo1.priority; //highest priority (10) to no priority (0)
+          } else {
+            return -1; //todo1 assigned to me so higher than todo2
+          }
+        } else {
+          if (response.content.self == todo2.assignee) {
+            return 1; //todo2 assigned to me so higher than todo1
+          } else {
+            return todo2.priority - todo1.priority;
+          }
+        }
+      });
+    });
+
     response.content.event.planners = response.content.planners;
     response.content.event.freeBudget = response.content.freeBudget;
 
