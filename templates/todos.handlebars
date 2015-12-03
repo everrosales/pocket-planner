@@ -5,7 +5,7 @@
     <div class="todo-container card-panel col s12 m6 l3" categoryId={{_id}}>
       <div class="inner-todo-container">
 
-        <p class="category">{{name}}<i class="material-icons right delete-category">clear</i><i class="material-icons right edit-category">edit</i></p>
+        <p class="category">{{name}}<i class="material-icons right delete-category ghetto-badge">clear</i><i class="material-icons right edit-category ghetto-badge">edit</i></p>
 
         <div class="edit-category-form" style="display:none">
           <label for="edit-category-name" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" name="edit-category-name" type="text"></label>
@@ -42,13 +42,18 @@
     <p><em>No todo lists yet!</em></p>
   {{/each}}
 
-  <button class="btn btn-default" id="new_category">+ New To-Do List</button>
-  <div id='new-category-container' style="display:none">
-    <div>
-      <input id='category-title' type='text' placeholder='To-Do List Title'>
-      <br>
-      <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
-      <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
+  <div id="new-todo-list-card" class="card-panel col s12 m6 l3">
+    <h4>New Todo List</h4>
+    <button class="btn btn-default" id="new_category">+ Add List</button>
+
+
+    <div id='new-category-container' style="display:none">
+      <div>
+        <input id='category-title' type='text' placeholder='To-Do List Title'>
+        <br>
+        <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
+        <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
+      </div>
     </div>
   </div>
 
