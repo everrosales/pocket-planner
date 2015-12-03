@@ -465,7 +465,7 @@ router.post('/:event/email', function(req, res) {
       utils.sendErrResponse(res, 500, 'An unknown error occurred.');
     } else {
       var email_html = ejs.renderFile(
-          __dirname + '/../views/emails/' + (req.body.invitation ? 'invitation.ejs':'message.ejs'),
+          __dirname + '/../views/emails/' + (req.body.invitation=="true" ? 'invitation.ejs':'message.ejs'),
           { event: req.event, message: req.body.message, url: APP_URL },
           function(err, email_html) {
             if (err) {
@@ -500,7 +500,7 @@ router.post('/:event/email', function(req, res) {
 
   if (!req.body.subject) {
     utils.sendErrResponse(res, 400, 'Email subject is required.');
-  } else if (req.body.attendee) {
+  } else if (req.body.attendee=="true") {
     Event.getAttendeeEmails(req.event, addressesCallback);
   } else {
     Event.getInviteeEmails(req.event, addressesCallback);
