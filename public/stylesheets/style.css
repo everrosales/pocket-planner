@@ -98,3 +98,11 @@ div .tabs .indicator {
 .invite-link {
   word-break: break-word;
 }
+
+.ghetto-badge {
+  color: #757575;
+}
+
+#new-todo-list-card {
+  padding: 15px;
+}
