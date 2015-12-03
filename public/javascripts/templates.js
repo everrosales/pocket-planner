@@ -321,22 +321,28 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
 },"15":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li>\n                <p><span class=\"bold green-text lighten-1\">"
+  return "              <li plannerId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n                <p><span class=\"bold green-text lighten-1\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
     + " <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
 },"17":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li>\n                <p><span class=\"bold red-text lighten-1\">"
-    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li-\n";
+  return "              <li plannerId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n                <p><span class=\"bold red-text lighten-1\">"
+    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
+    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
 },"19":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li>\n                <p><span class=\"bold\">"
-    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
+  return "              <li plannerId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n                <p><span class=\"bold\">"
+    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
     + " <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     return "            <p>No invitees yet.</p>\n";
@@ -345,9 +351,9 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
 
   return "            <li plannerId="
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n              <p><span class=\"bold\">"
+    + ">\n              <p>\n                <span class=\"bold\">\n                  "
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(24, data, 0),"inverse":container.program(26, data, 0),"data":data})) != null ? stack1 : "")
-    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">clear</i></span></p>\n            </li>\n";
+    + "\n                </span>\n                <span class=\"badge\">\n                  <i class=\"material-icons remove-planner\">clear</i>\n                </span>\n              </p>\n            </li>\n";
 },"24":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -370,7 +376,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "\n  <div id=\"new-todo-list-card\" class=\"card-panel col s12 m6 l3\">\n    <h4>New Todo List</h4>\n    <button class=\"btn btn-default\" id=\"new_category\">+ Add List</button>\n\n\n    <div id='new-category-container' style=\"display:none\">\n      <div>\n        <input id='category-title' type='text' placeholder='To-Do List Title'>\n        <br>\n        <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n        <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n      </div>\n    </div>\n  </div>\n\n</div>\n<div id=\"event-panel\" class=\"col m3 s12 z-depth-2\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n  <div class=\"row\">\n    <div class=\"col s12\">\n      <!-- <div class=\"error\"></div> -->\n      <ul class=\"tabs\">\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"active teal-text\" href=\"#event-details\">Details</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-costs\">Costs</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-invitees\">Invitees</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-planners\">Planners</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"event-details\" class=\"col s12\">\n      <div id=\"event_editable\">\n        <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n        <!-- Event Summary Info (not editable) -->\n        <h3 id=\"event_name\">"
+    + ">\n  <div class=\"row\">\n    <div class=\"col s12\">\n      <!-- <div class=\"error\"></div> -->\n      <ul class=\"tabs\">\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"active teal-text\" href=\"#event-details\">Details</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-costs\">Costs</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-attendees\">Attendees</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-planners\">Planners</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"event-details\" class=\"col s12\">\n      <div id=\"event_editable\">\n        <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n        <!-- Event Summary Info (not editable) -->\n        <h3 id=\"event_name\">"
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1["private"] : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
     + "</h3>\n        <hr>\n        <span id=\"event-start\">Start: <span id=\"start-date\">"
@@ -410,7 +416,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + "/attend</a>\n        </p>\n        <p><span class=\"bold\">Number attendees:</span>  "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1)) != null ? stack1.length : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attending : stack1)) != null ? stack1.length : stack1), depth0))
     + "</p>\n      </div>\n    </div>\n\n    <div id=\"event-costs\" class=\"col s12\">\n      <!-- Costs for the event -->\n      <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n        <h3>Costs</h3>\n        Budget: $"
@@ -421,13 +427,13 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
     + "        </ul>\n        <script>\n          $(document).ready(function(){\n            $('.collapsible').collapsible({\n              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style\n            });\n          });\n          </script>\n        <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n      </div>\n      <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n        <h4>New Cost</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-name\" type=\"text\" class=\"validate\">\n          <label for=\"cost-name\">Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-amount\" type=\"number\" class=\"validate\">\n          <label for=\"cost-amount\">Amount (in $)</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input id=\"cost-desc\" type=\"text\" class=\"validate\">\n          <label for=\"cost-desc\">Description</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n        <button class=\" waves-effect waves-light btn btn-default\" id=\"cancel-cost\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-invitees\" class=\"col s12\">\n      <!-- invitee administration -->\n      <div id=\"invitee-list\" eventId= "
+    + ">\n        <h4>New Cost</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-name\" type=\"text\" class=\"validate\">\n          <label for=\"cost-name\">Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-amount\" type=\"number\" class=\"validate\">\n          <label for=\"cost-amount\">Amount (in $)</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input id=\"cost-desc\" type=\"text\" class=\"validate\">\n          <label for=\"cost-desc\">Description</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n        <button class=\" waves-effect waves-light btn btn-default\" id=\"cancel-cost\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-attendees\" class=\"col s12\">\n      <!-- invitee administration -->\n      <div id=\"invitee-list\" eventId= "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n        <h3>Invitees</h3>\n        <ul>\n"
+    + ">\n        <h3>Attendees</h3>\n        <ul>\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1),{"name":"each","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(21, data, 0),"data":data})) != null ? stack1 : "")
-    + "        </ul>\n        <button class=\"btn btn-default\" id=\"add-invitee\">Add Invitee</button>\n      </div>\n      <div id=\"add-invitee-form\" style=\"display:none\" eventId="
+    + "        </ul>\n        <button class=\"btn btn-default\" id=\"email-invitees\">Email invitees</button>\n        <button class=\"btn btn-default\" id=\"email-attendees\">Email attendees</button>\n        <button class=\"btn btn-default\" id=\"add-invitee\">Add Invitee</button>\n\n        <div id=\"email-form\" style=\"display:none\">\n          <h5 id=\"email-form-label\"></h5>\n          <input type=\"text\" id=\"email-subject\">\n          <label for=\"email-subject\">Email subject</label>\n\n          <!--TODO: datepicker to send the emails at a specific date -->\n          <br>\n          <input type=\"checkbox\" id=\"email-invitation\">\n          <label for=\"email-invitation\">Use invitation template</label>\n\n          <input type=\"text\" id=\"email-message\">\n          <label for=\"email-message\">Message (optional)</label>\n          <br>\n          <button class=\"btn btn-default\" id=\"submit-email-form\">Submit</button>\n          <button class=\"btn btn-default\" id=\"cancel-email-form\">Cancel</button>\n\n        </div>\n\n      </div>\n      <div id=\"add-invitee-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n        <h4>New Invitee</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email\">Email</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email-confirm\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email-confirm\">Confirm Email</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-invitee\">Invite</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-planner\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-planners\" class=\"col s12\">\n      <!-- Planner adminstration -->\n      <div id=\"planner-list\" eventId = "
+    + ">\n        <h4>New Invitee</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email\">Email</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email-confirm\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email-confirm\">Confirm Email</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-invitee\">Invite</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-invitee\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-planners\" class=\"col s12\">\n      <!-- Planner adminstration -->\n      <div id=\"planner-list\" eventId = "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n        <h3>Planners</h3>\n        <p> Host: "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.hostEmail : stack1), depth0))
@@ -758,22 +764,28 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
 },"15":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li>\n                <p><span class=\"bold green-text lighten-1\">"
+  return "              <li plannerId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n                <p><span class=\"bold green-text lighten-1\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
     + " <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
 },"17":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li>\n                <p><span class=\"bold red-text lighten-1\">"
-    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li-\n";
+  return "              <li plannerId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n                <p><span class=\"bold red-text lighten-1\">"
+    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
+    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
 },"19":function(container,depth0,helpers,partials,data) {
-    var helper;
+    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li>\n                <p><span class=\"bold\">"
-    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
+  return "              <li plannerId="
+    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
+    + ">\n                <p><span class=\"bold\">"
+    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
     + " <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     return "            <p>No invitees yet.</p>\n";
@@ -782,9 +794,9 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
 
   return "            <li plannerId="
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n              <p><span class=\"bold\">"
+    + ">\n              <p>\n                <span class=\"bold\">\n                  "
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(24, data, 0),"inverse":container.program(26, data, 0),"data":data})) != null ? stack1 : "")
-    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">clear</i></span></p>\n            </li>\n";
+    + "\n                </span>\n                <span class=\"badge\">\n                  <i class=\"material-icons remove-planner\">clear</i>\n                </span>\n              </p>\n            </li>\n";
 },"24":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -807,7 +819,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.categories : stack1),{"name":"each","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
     + "\n  <div id=\"new-todo-list-card\" class=\"card-panel col s12 m6 l3\">\n    <h4>New Todo List</h4>\n    <button class=\"btn btn-default\" id=\"new_category\">+ Add List</button>\n\n\n    <div id='new-category-container' style=\"display:none\">\n      <div>\n        <input id='category-title' type='text' placeholder='To-Do List Title'>\n        <br>\n        <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>\n        <div class='btn btn-default' id='cancel-category-button'>Cancel</div>\n      </div>\n    </div>\n  </div>\n\n</div>\n<div id=\"event-panel\" class=\"col m3 s12 z-depth-2\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n  <div class=\"row\">\n    <div class=\"col s12\">\n      <!-- <div class=\"error\"></div> -->\n      <ul class=\"tabs\">\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"active teal-text\" href=\"#event-details\">Details</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-costs\">Costs</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-invitees\">Invitees</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-planners\">Planners</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"event-details\" class=\"col s12\">\n      <div id=\"event_editable\">\n        <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n        <!-- Event Summary Info (not editable) -->\n        <h3 id=\"event_name\">"
+    + ">\n  <div class=\"row\">\n    <div class=\"col s12\">\n      <!-- <div class=\"error\"></div> -->\n      <ul class=\"tabs\">\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"active teal-text\" href=\"#event-details\">Details</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-costs\">Costs</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-attendees\">Attendees</a>\n        </li>\n        <li class=\"tab col s4 tab-accent-cyan\">\n          <a class=\"teal-text\" href=\"#event-planners\">Planners</a>\n        </li>\n      </ul>\n    </div>\n    <div id=\"event-details\" class=\"col s12\">\n      <div id=\"event_editable\">\n        <i class=\"material-icons right\" id=\"edit-event\">edit</i>\n        <!-- Event Summary Info (not editable) -->\n        <h3 id=\"event_name\">"
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1["private"] : stack1),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
     + "</h3>\n        <hr>\n        <span id=\"event-start\">Start: <span id=\"start-date\">"
@@ -847,7 +859,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + "/attend</a>\n        </p>\n        <p><span class=\"bold\">Number attendees:</span>  "
-    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1)) != null ? stack1.length : stack1), depth0))
+    + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attending : stack1)) != null ? stack1.length : stack1), depth0))
     + "</p>\n      </div>\n    </div>\n\n    <div id=\"event-costs\" class=\"col s12\">\n      <!-- Costs for the event -->\n      <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n        <h3>Costs</h3>\n        Budget: $"
@@ -858,13 +870,13 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(9, data, 0),"inverse":container.program(12, data, 0),"data":data})) != null ? stack1 : "")
     + "        </ul>\n        <script>\n          $(document).ready(function(){\n            $('.collapsible').collapsible({\n              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style\n            });\n          });\n          </script>\n        <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n      </div>\n      <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n        <h4>New Cost</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-name\" type=\"text\" class=\"validate\">\n          <label for=\"cost-name\">Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-amount\" type=\"number\" class=\"validate\">\n          <label for=\"cost-amount\">Amount (in $)</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input id=\"cost-desc\" type=\"text\" class=\"validate\">\n          <label for=\"cost-desc\">Description</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n        <button class=\" waves-effect waves-light btn btn-default\" id=\"cancel-cost\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-invitees\" class=\"col s12\">\n      <!-- invitee administration -->\n      <div id=\"invitee-list\" eventId= "
+    + ">\n        <h4>New Cost</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-name\" type=\"text\" class=\"validate\">\n          <label for=\"cost-name\">Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"cost-amount\" type=\"number\" class=\"validate\">\n          <label for=\"cost-amount\">Amount (in $)</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input id=\"cost-desc\" type=\"text\" class=\"validate\">\n          <label for=\"cost-desc\">Description</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\"  id=\"submit-cost\">Submit Cost</button>\n        <button class=\" waves-effect waves-light btn btn-default\" id=\"cancel-cost\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-attendees\" class=\"col s12\">\n      <!-- invitee administration -->\n      <div id=\"invitee-list\" eventId= "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n        <h3>Invitees</h3>\n        <ul>\n"
+    + ">\n        <h3>Attendees</h3>\n        <ul>\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attendees : stack1),{"name":"each","hash":{},"fn":container.program(14, data, 0),"inverse":container.program(21, data, 0),"data":data})) != null ? stack1 : "")
-    + "        </ul>\n        <button class=\"btn btn-default\" id=\"add-invitee\">Add Invitee</button>\n      </div>\n      <div id=\"add-invitee-form\" style=\"display:none\" eventId="
+    + "        </ul>\n        <button class=\"btn btn-default\" id=\"email-invitees\">Email invitees</button>\n        <button class=\"btn btn-default\" id=\"email-attendees\">Email attendees</button>\n        <button class=\"btn btn-default\" id=\"add-invitee\">Add Invitee</button>\n\n        <div id=\"email-form\" style=\"display:none\">\n          <h5 id=\"email-form-label\"></h5>\n          <input type=\"text\" id=\"email-subject\">\n          <label for=\"email-subject\">Email subject</label>\n\n          <!--TODO: datepicker to send the emails at a specific date -->\n          <br>\n          <input type=\"checkbox\" id=\"email-invitation\">\n          <label for=\"email-invitation\">Use invitation template</label>\n\n          <input type=\"text\" id=\"email-message\">\n          <label for=\"email-message\">Message (optional)</label>\n          <br>\n          <button class=\"btn btn-default\" id=\"submit-email-form\">Submit</button>\n          <button class=\"btn btn-default\" id=\"cancel-email-form\">Cancel</button>\n\n        </div>\n\n      </div>\n      <div id=\"add-invitee-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + ">\n        <h4>New Invitee</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email\">Email</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email-confirm\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email-confirm\">Confirm Email</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-invitee\">Invite</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-planner\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-planners\" class=\"col s12\">\n      <!-- Planner adminstration -->\n      <div id=\"planner-list\" eventId = "
+    + ">\n        <h4>New Invitee</h4>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email\">Email</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input id=\"invitee-email-confirm\" type=\"email\" class=\"validate\">\n          <label for=\"invitee-email-confirm\">Confirm Email</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-invitee\">Invite</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-invitee\">Cancel</button>\n      </div>\n    </div>\n    <div id=\"event-planners\" class=\"col s12\">\n      <!-- Planner adminstration -->\n      <div id=\"planner-list\" eventId = "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n        <h3>Planners</h3>\n        <p> Host: "
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.hostEmail : stack1), depth0))
