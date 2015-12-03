@@ -70,7 +70,7 @@
           <a class="teal-text" href="#event-costs">Costs</a>
         </li>
         <li class="tab col s4 tab-accent-cyan">
-          <a class="teal-text" href="#event-invitees">Invitees</a>
+          <a class="teal-text" href="#event-attendees">Attendees</a>
         </li>
         <li class="tab col s4 tab-accent-cyan">
           <a class="teal-text" href="#event-planners">Planners</a>
@@ -187,10 +187,10 @@
         <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
       </div>
     </div>
-    <div id="event-invitees" class="col s12">
+    <div id="event-attendees" class="col s12">
       <!-- invitee administration -->
       <div id="invitee-list" eventId= {{event._id}}>
-        <h3>Invitees</h3>
+        <h3>Attendees</h3>
         <ul>
           {{#each event.attendees}}
             {{#equal attending 1}}
@@ -246,7 +246,7 @@
           <label for="invitee-email-confirm">Confirm Email</label>
         </div>
         <button class="waves-effect waves-light btn btn-default" id="submit-invitee">Invite</button>
-        <button class="waves-effect waves-light btn btn-default" id="cancel-planner">Cancel</button>
+        <button class="waves-effect waves-light btn btn-default" id="cancel-invitee">Cancel</button>
       </div>
     </div>
     <div id="event-planners" class="col s12">

@@ -53,7 +53,7 @@ $(document).on("click",".rsvp-attend", function(e){
       note:comments
     }).done(function(response) {
       console.log('success!');
-      Materialize.toast('You Registered for the event! Redirecting..' , 4000);
+      Materialize.toast('You registered for the event! Redirecting..' , 4000);
       window.setTimeout(function(){
         window.location.href="/";
       }, 1000);
