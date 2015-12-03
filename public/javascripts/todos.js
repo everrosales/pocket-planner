@@ -229,9 +229,11 @@
 
     $("#event_editable").hide();
     $("#event-edit-form").show();
+
+    console.log($('#edit-end-date').val());
     $("#edit-start-date").pickadate({
       min: new Date(),
-      max: $('#edit-end-date').val() || new Date(8640000000000000),
+      max: new Date($('#edit-end-date').val()) || new Date(8640000000000000),
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onClose: function(){
@@ -245,7 +247,7 @@
       /*onSet: function(){
         $('#start_date').pickadate.set('max', $(this).val());
       }*/
-      min: $('#edit-start-date').val() || new Date(),
+      min: new Date($('#edit-start-date').val()) || new Date(),
       onClose: function(){
         $('#edit-start-date').pickadate('picker').set('max', $('#edit-end-date').val());
       }
