@@ -11,7 +11,8 @@ var Event = (function Event() {
     name          : {type:String, required:true},
     deadline      : {type:Date, required:true},
     status        : {type:Number, default:0}, // (0: unchecked, 1: checked)
-    priority      : {type:Number, default:0}  //default none
+    priority      : {type:Number, default:0}, //default none
+    assignee      : {type:String, default:""}
   });
   // Schema for a category (a collection of related todos)
   var categorySchema = new Schema({
@@ -720,6 +721,40 @@ var Event = (function Event() {
     });
   };
 
+  /** Moves a todo from one category to another
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    old_categoryId: the id of the category from which the todo is being moved
+   *    new_categoryId: the id of the category to which the todo is being moved
+   *    todoId: the id of the todo to be moved
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if event saved successfully; false if error while saving;
+   *    'no such event' error if event not found.
+   */
+  var _moveTodo = function(eventId, old_categoryId, new_categoryId, todoId, callback) {
+    _getCategory(eventId, old_categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        todo = result.event.categories.id(result.category._id).todos.id(todoId);
+        stripped_todo = {name:todo.name,
+                         deadline:todo.deadline,
+                         status:todo.status, // (0: unchecked, 1: checked)
+                         priority:todo.priority};
+        result.event.categories.id(new_categoryId).todos.push(stripped_todo);
+        result.event.categories.id(result.category._id).todos.id(todoId).remove();
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Edits the name, deadline, and priority of a todo
    *  Arguments:
    *    eventId: the id of the event to be updated
@@ -743,6 +778,40 @@ var Event = (function Event() {
             callback(err, false);
           } else {
             callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
+  /** Assigns the todo to a planner
+   *  Arguments:
+   *    eventId: the id of the event to be updated
+   *    categoryId: the id of the category that this todo is in
+   *    todoId: the todo to be updated
+   *    planner_email: the email of the planner you wish to assign this todo to
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if error while saving event;
+   *    'no such event' error if event not found.
+   */
+  var _assignTodo = function(eventId, categoryId, todoId, planner_email, callback) {
+    _getCategory(eventId, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        _getPlannerEmails(eventId, function(err, email_list) {
+          if (email_list.indexOf(planner_email) != -1 || result.event.hostEmail == planner_email) {
+            result.event.categories.id(result.category._id).todos.id(todoId).set('assignee', planner_email);
+            result.event.save(function(err) {
+              if (err) {
+                callback(err, false);
+              } else {
+                callback(err, true);
+              }
+            });
+          } else {
+            callback({msg:"Not a valid planner email"});
           }
         });
       }
@@ -854,9 +923,11 @@ var Event = (function Event() {
     getInviteeEmails    : _getInviteeEmails,
     getAttendeeEmails   : _getAttendeeEmails,
     addTodo             : _addTodo,
+    moveTodo            : _moveTodo,
     addCategory         : _addCategory,
     editCategory        : _editCategory,
     editTodo            : _editTodo,
+    assignTodo          : _assignTodo,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,
