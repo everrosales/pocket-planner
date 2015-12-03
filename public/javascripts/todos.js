@@ -110,10 +110,14 @@
     edit_form.show();
     $(this).parent().parent().parent().find(".add_todo").hide();
 
+    var cur_deadline = new Date(edit_form.find(".edit-todo-deadline").val());
     edit_form.find(".edit-todo-deadline").pickadate({
       min: new Date(),
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
+      onStart: function(){
+        this.set('select', [cur_deadline.getFullYear(), cur_deadline.getMonth()+1, cur_deadline.getDate()])
+      }
     });
 
   });
