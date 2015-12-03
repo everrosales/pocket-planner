@@ -694,12 +694,14 @@ describe('Event', function() {
           Event.addInvite(n_event._id, 'erosales@mit.edu', function() {
             Event.markAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
               assert.deepEqual(err, null);
-              assert.deepEqual(result.attendees.length, 1);
-              assert.deepEqual(result.attendees[0].email, 'erosales@mit.edu');
-              assert.deepEqual(result.attendees[0].name, 'ever');
-              assert.deepEqual(result.attendees[0].note, 'blahhhhhhh');
-              assert.deepEqual(result.attendees[0].attending, 1);
-              done();
+              Event.findById(n_event._id, function(err, result) {
+                assert.deepEqual(result.attendees.length, 1);
+                assert.deepEqual(result.attendees[0].email, 'erosales@mit.edu');
+                assert.deepEqual(result.attendees[0].name, 'ever');
+                assert.deepEqual(result.attendees[0].note, 'blahhhhhhh');
+                assert.deepEqual(result.attendees[0].attending, 1);
+                done();
+              });
             });
           });
         });
@@ -762,7 +764,7 @@ describe('Event', function() {
     });
     it('should return a no such invitee error if invitee doesn\'t exist', function(done) {
       User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
-        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), false, function(err, n_event) {
           Event.markNotAttending(n_event._id, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {
             assert.deepEqual(err.msg, "No such invitee.");
             done();

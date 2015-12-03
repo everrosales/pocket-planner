@@ -478,8 +478,8 @@ var Event = (function Event() {
           if (found_event) {
             _model.update({'_id':eventid, 'attendees.email':attendee_email},
                     {$set: {'attendees.$.attending':1,
-                        'attendees.$.name':attendee_name,
-                        'attendees.$.note':note_from_attendee || ""}}, callback);
+                            'attendees.$.name':attendee_name,
+                            'attendees.$.note':note_from_attendee || ""}}, callback);
           } else {
             _model.update({'_id':eventid},
                   {$push: {'attendees':{'attending':1,
@@ -511,8 +511,10 @@ var Event = (function Event() {
           if (found_event) {
             _model.update({'_id':eventid, 'attendees.email':attendee_email},
                     {$set: {'attendees.$.attending':2,
-                        'attendees.$.name':attendee_name,
-                        'attendees.$.note':note_from_attendee || ""}}, callback);
+                            'attendees.$.name':attendee_name,
+                            'attendees.$.note':note_from_attendee || ""}}, callback);
+          } else {
+            callback({msg: "No such invitee."});
           }
         });
       } else {
