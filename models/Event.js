@@ -715,6 +715,40 @@ var Event = (function Event() {
     });
   };
 
+  /** Moves a todo from one category to another
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    old_categoryId: the id of the category from which the todo is being moved
+   *    new_categoryId: the id of the category to which the todo is being moved
+   *    todoId: the id of the todo to be moved
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true if event saved successfully; false if error while saving;
+   *    'no such event' error if event not found.
+   */
+  var _moveTodo = function(eventId, old_categoryId, new_categoryId, todoId, callback) {
+    _getCategory(eventId, old_categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        todo = result.event.categories.id(result.category._id).todos.id(todoId);
+        stripped_todo = {name:todo.name,
+                         deadline:todo.deadline,
+                         status:todo.status, // (0: unchecked, 1: checked)
+                         priority:todo.priority};
+        result.event.categories.id(new_categoryId).todos.push(stripped_todo);
+        result.event.categories.id(result.category._id).todos.id(todoId).remove();
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Edits the name, deadline, and priority of a todo
    *  Arguments:
    *    eventId: the id of the event to be updated
@@ -849,6 +883,7 @@ var Event = (function Event() {
     getInviteeEmails    : _getInviteeEmails,
     getAttendeeEmails   : _getAttendeeEmails,
     addTodo             : _addTodo,
+    moveTodo            : _moveTodo,
     addCategory         : _addCategory,
     editCategory        : _editCategory,
     editTodo            : _editTodo,

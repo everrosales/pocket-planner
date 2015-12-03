@@ -1095,6 +1095,67 @@ describe('Event', function() {
     });
   });
 
+  describe('#moveTodo', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.moveTodo(0, 0, 0, {}, function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return an error if category doesn\'t exist', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.moveTodo(n_event._id, 0, 0, {}, function(err, result) {
+            assert.deepEqual(err.msg, 'Category doesn\'t exist');
+            done();
+          });
+        });
+      });
+    });
+    it('should return true if todo edited successfully', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.addCategory(n_event._id, 'location', function(err, new_new_category) {
+              Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
+                Event.moveTodo(n_event._id, new_category._id, new_new_category._id, new_todo._id, function(err, result) {
+                  assert.deepEqual(err, null);
+                  assert.deepEqual(result, true);
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should change the result of future getEvent calls', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), function(err, n_event) {
+          Event.addCategory(n_event._id, 'venue', function(err, new_category) {
+            Event.addCategory(n_event._id, 'location', function(err, new_new_category) {
+              Event.addTodo(n_event._id, new_category._id, 'blah', new Date(1995, 7, 6, 10, 39, 0), 3, function(err, new_todo) {
+                Event.moveTodo(n_event._id, new_category._id, new_new_category._id, new_todo._id, function() {
+                  Event.findById(n_event._id, function(err, result) {
+                    assert.deepEqual(err, null);
+                    if (result.categories[0].name == 'location') {
+                      assert.deepEqual(result.categories[0].todos.length,1);
+                      assert.deepEqual(result.categories[1].todos.length,0);
+                    } else {
+                      assert.deepEqual(result.categories[0].todos.length,0);
+                      assert.deepEqual(result.categories[1].todos.length,1);
+                    }
+                    done();
+                  });
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  })
+
   describe('#checkTodo', function() {
     it('should return a no event error if event doesn\'t exist', function(done) {
       Event.checkTodo(0, 0, 0, function(err, result) {
