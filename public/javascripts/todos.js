@@ -272,24 +272,25 @@
     console.log($("#event_name_edit").val());
 
     //parse out Dates
-    var hr_min = ($('#start-time').val()).split(':');
-    var hour = parseInt(hr_min[0]);
-    var min = parseInt(hr_min[1]);
-    if (hour) {
-      start_date.setHours(parseInt(hr_min[0]));
+    var start_hr_min = ($('#edit-start-time').val()).split(':');
+    var start_hour = parseInt(start_hr_min[0]);
+    var start_min = parseInt(start_hr_min[1]);
+
+    if (start_hour) {
+      start_date.setHours(start_hour);
     }
-    if (min) {
-      start_date.setMinutes(parseInt(hr_min[1]));
+    if (start_min) {
+      start_date.setMinutes(start_min);
     }
 
-    hr_min = ($('#end-time').val()).split(':');
-    hour = parseInt(hr_min[0]);
-    min = parseInt(hr_min[1]);
-    if (hour) {
-      end_date.setHours(parseInt(hr_min[0]));
+    var end_hr_min = ($('#edit-end-time').val()).split(':');
+    var end_hour = parseInt(end_hr_min[0]);
+    var end_min = parseInt(end_hr_min[1]);
+    if (end_hour) {
+      end_date.setHours(end_hour);
     }
-    if (min) {
-      end_date.setMinutes(parseInt(hr_min[1]));
+    if (end_min) {
+      end_date.setMinutes(end_min);
     }
 
     var location = $("#edit-event-loc").val();
