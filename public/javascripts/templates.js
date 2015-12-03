@@ -64,7 +64,7 @@ templates['event'] = template({"1":function(container,depth0,helpers,partials,da
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "        <p class=\"event_desc\">"
+  return "        <p class=\"event_desc\">Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -232,9 +232,9 @@ templates['todo'] = template({"1":function(container,depth0,helpers,partials,dat
     + "</label>\n      </p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value="
+    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value=\""
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + " type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
+    + "\" type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">\n\n      <label class=\"active\" for=\"edit-todo-priority\">Priority (1-10)</label>\n      <input class=\"edit-todo-priority\" type=\"number\" max=\"10\" min=\"1\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -404,7 +404,9 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n        <h3>Costs</h3>\n        Budget: $"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "\n        <ul class=\"collapsible\" data-collapsible=\"accordion\">\n"
+    + " (Current total: $"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.freeBudget : stack1), depth0))
+    + ")\n        <ul class=\"collapsible\" data-collapsible=\"accordion\">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
     + "        </ul>\n        <script>\n          $(document).ready(function(){\n            $('.collapsible').collapsible({\n              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style\n            });\n          });\n          </script>\n        <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n      </div>\n      <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
@@ -488,7 +490,7 @@ templates['templates/event'] = template({"1":function(container,depth0,helpers,p
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "        <p class=\"event_desc\">"
+  return "        <p class=\"event_desc\">Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -656,9 +658,9 @@ templates['templates/todo'] = template({"1":function(container,depth0,helpers,pa
     + "</label>\n      </p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value="
+    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value=\""
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + " type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
+    + "\" type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">\n\n      <label class=\"active\" for=\"edit-todo-priority\">Priority (1-10)</label>\n      <input class=\"edit-todo-priority\" type=\"number\" max=\"10\" min=\"1\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -828,7 +830,9 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + ">\n        <h3>Costs</h3>\n        Budget: $"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
-    + "\n        <ul class=\"collapsible\" data-collapsible=\"accordion\">\n"
+    + " (Current total: $"
+    + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.freeBudget : stack1), depth0))
+    + ")\n        <ul class=\"collapsible\" data-collapsible=\"accordion\">\n"
     + ((stack1 = helpers.each.call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.cost : stack1),{"name":"each","hash":{},"fn":container.program(5, data, 0),"inverse":container.program(8, data, 0),"data":data})) != null ? stack1 : "")
     + "        </ul>\n        <script>\n          $(document).ready(function(){\n            $('.collapsible').collapsible({\n              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style\n            });\n          });\n          </script>\n        <button class=\"btn btn-default\" id=\"add-cost\">Add Cost</button>\n      </div>\n      <div id=\"add-cost-form\" style=\"display:none\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
