@@ -234,7 +234,12 @@ router.get('/:event', function(req, res) {
         utils.sendErrResponse(res, 500, "An unknown error occurred.");
       } else {
         req.event.planners = new_planners;
-        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners});
+        var totalCosts = 0;
+        req.event.cost.forEach(function(cost) {
+          totalCosts += cost.amount;
+        });
+        var freeBudget = req.event.budget - totalCosts;
+        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners, 'freeBudget': freeBudget});
       }
     });
   }
