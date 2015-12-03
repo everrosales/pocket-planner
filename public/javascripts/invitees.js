@@ -24,6 +24,14 @@
   $(document).on("click", "#submit-invitee", function(){
     event_id = $("#event-panel").attr("eventId");
     var email = $("#invitee-email").val();
+    if (!email) {
+      Materialize.toast("You must enter an email.", 2000);
+      return;
+    }
+    if (email != $("#invitee-email-confirm").val()) {
+      Materialize.toast("Emails must match.", 2000);
+      return;
+    }
     $.post("/events/"+event_id+"/invite", {attendee:email}).done(function(response){
       window.location.href = "#event-invitees";
       loadTodosPage(event_id);

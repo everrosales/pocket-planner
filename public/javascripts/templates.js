@@ -232,9 +232,9 @@ templates['todo'] = template({"1":function(container,depth0,helpers,partials,dat
     + "</label>\n      </p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value="
+    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value=\""
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + " type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
+    + "\" type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">\n\n      <label class=\"active\" for=\"edit-todo-priority\">Priority (1-10)</label>\n      <input class=\"edit-todo-priority\" type=\"number\" max=\"10\" min=\"1\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
@@ -658,9 +658,9 @@ templates['templates/todo'] = template({"1":function(container,depth0,helpers,pa
     + "</label>\n      </p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(4, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(6, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value="
+    + "    </div>\n    <div class=\"edit-todo-form\" style=\"display:none\">\n\n      <label class=\"active\" for=\"edit-todo-name\">Todo Name</label>\n      <input class=\"edit-todo-name\" name=\"edit-todo-name\" value=\""
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
-    + " type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
+    + "\" type=\"text\">\n\n      <label class=\"active\" for=\"edit-todo-deadline\">Deadline</label>\n      <input class=\"edit-todo-deadline\" type=\"text\" name=\"edit-todo-deadline\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.deadline : depth0),{"name":"if","hash":{},"fn":container.program(8, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + ">\n\n      <label class=\"active\" for=\"edit-todo-priority\">Priority (1-10)</label>\n      <input class=\"edit-todo-priority\" type=\"number\" max=\"10\" min=\"1\" value="
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.priority : depth0),{"name":"if","hash":{},"fn":container.program(10, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
