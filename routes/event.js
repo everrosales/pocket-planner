@@ -234,6 +234,7 @@ router.get('/:event', function(req, res) {
         utils.sendErrResponse(res, 500, "An unknown error occurred.");
       } else {
         req.event.planners = new_planners;
+        console.log(req.event);
         utils.sendSuccessResponse(res, {event:req.event, planners:new_planners});
       }
     });
