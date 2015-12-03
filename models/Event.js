@@ -468,21 +468,20 @@ var Event = (function Event() {
   var _markAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
-        _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                {$set: {'attendees.$.attending':1,
-                    'attendees.$.name':attendee_name,
-                    'attendees.$.note':note_from_attendee || ""}},
-                 function(err, result) {
-                   if(result.nModified === 0) {
-                     _model.update({'_id':eventid},
-                           {$push: {'attendees':{'attending':1,
-                                       'name':attendee_name,
-                                       'email':attendee_email,
-                                       'note':note_from_attendee}}}, callback);
-                   } else {
-                     callback(err, result);
-                   }
-                 });
+        _model.findOne({'_id':eventid, 'attendees.email':attendee_email}, function(err, found_event) {
+          if (found_event) {
+            _model.update({'_id':eventid, 'attendees.email':attendee_email},
+                    {$set: {'attendees.$.attending':1,
+                        'attendees.$.name':attendee_name,
+                        'attendees.$.note':note_from_attendee || ""}}, callback);
+          } else {
+            _model.update({'_id':eventid},
+                  {$push: {'attendees':{'attending':1,
+                                        'name':attendee_name,
+                                        'email':attendee_email,
+                                        'note':note_from_attendee}}}, callback);
+          }
+        });
       } else {
         callback({msg: "No such event."});
       }
@@ -502,16 +501,14 @@ var Event = (function Event() {
   var _markNotAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
     _ifEventExists(eventid, function(err, exists) {
       if (exists) {
-        _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                {$set: {'attendees.$.attending':2,
-                    'attendees.$.note':note_from_attendee || ""}},
-                    function(err, result) {
-                      if(result.nModified === 0) {
-                        callback({msg:"No such invitee."});
-                      } else {
-                        callback(err, result);
-                      }
-                    });
+        _model.findOne({'_id':eventid, 'attendees.email':attendee_email}, function(err, found_event) {
+          if (found_event) {
+            _model.update({'_id':eventid, 'attendees.email':attendee_email},
+                    {$set: {'attendees.$.attending':2,
+                        'attendees.$.name':attendee_name,
+                        'attendees.$.note':note_from_attendee || ""}}, callback);
+          }
+        });
       } else {
         callback({msg: "No such event."});
       }

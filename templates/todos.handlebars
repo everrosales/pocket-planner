@@ -65,6 +65,9 @@
           <a class="teal-text" href="#event-costs">Costs</a>
         </li>
         <li class="tab col s4 tab-accent-cyan">
+          <a class="teal-text" href="#event-invitees">Invitees</a>
+        </li>
+        <li class="tab col s4 tab-accent-cyan">
           <a class="teal-text" href="#event-planners">Planners</a>
         </li>
       </ul>
@@ -176,7 +179,47 @@
         <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
       </div>
     </div>
-
+    <div id="event-invitees" class="col s12">
+      <!-- invitee administration -->
+      <div id="invitee-list" eventId= {{event._id}}>
+        <h3>Invitees</h3>
+        <ul>
+          {{#each event.attendees}}
+            {{#equal attending 1}}
+              <li>
+                <p><span class="bold green-text lighten-1">{{name}} {{email}} <i class="material-icons green-text lighten-1 right">check</i></span></p>
+              </li>
+            {{/equal}}
+            {{#equal attending 2}}
+              <li>
+                <p><span class="bold red-text lighten-1">{{email}} <i class="material-icons red-text lighten-1 right">close</i></span></p>
+              </li-
+            {{/equal}}
+            {{#equal attending 0}}
+              <li>
+                <p><span class="bold">{{email}} <i class="material-icons right">more_horiz</i></span></p>
+              </li>
+            {{/equal}}
+          {{else}}
+            <p>No invitees yet.</p>
+          {{/each}}
+        </ul>
+        <button class="btn btn-default" id="add-invitee">Add Invitee</button>
+      </div>
+      <div id="add-invitee-form" style="display:none" eventId={{event._id}}>
+        <h4>New Invitee</h4>
+        <div class="input-field col s6">
+          <input id="invitee-email" type="email" class="validate">
+          <label for="invitee-email">Email</label>
+        </div>
+        <div class="input-field col s6">
+          <input id="invitee-email-confirm" type="email" class="validate">
+          <label for="invitee-email-confirm">Confirm Email</label>
+        </div>
+        <button class="waves-effect waves-light btn btn-default" id="submit-invitee">Invite</button>
+        <button class="waves-effect waves-light btn btn-default" id="cancel-planner">Cancel</button>
+      </div>
+    </div>
     <div id="event-planners" class="col s12">
       <!-- Planner adminstration -->
       <div id="planner-list" eventId = {{event._id}}>
