@@ -64,7 +64,7 @@ templates['event'] = template({"1":function(container,depth0,helpers,partials,da
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "        <p class=\"event_desc\">"
+  return "        <p class=\"event_desc\">Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -352,7 +352,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
     + "</span><br>\n      </div>\n\n      <!-- Input form to update the Event description and information -->\n      <div id=\"event-edit-form\" style=\"display:none\">\n        <div class=\"input-field col s12\">\n          <input id=\"event_name_edit\" name=\"event_name_edit\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
-    + "\" class=\"validate\" type=\"text\">\n          <label class=\"active\" for=\"event_name_edit\">Event Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input type=\"text\" name=\"edit-start-date\" id=\"edit-start-date\" class=\"validate datepicker\" value=\""
+    + "\" class=\"validate\" type=\"text\">\n          <label class=\"active\" for=\"event_name_edit\">Event Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input type=\"text\" name=\"edit-start-date\" id=\"edit-start-date\" class=\"datepicker\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start : stack1), depth0))
     + "\">\n          <label class=\"active\" for=\"edit-start-date\">Start Date</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input type=\"time\" name=\"edit-start-time\" id=\"edit-start-time\" class=\"validate\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start_time_24 : stack1), depth0))
@@ -362,7 +362,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end_time_24 : stack1), depth0))
     + "\">\n          <label class=\"active\" for=\"edit-end-time\">End Time</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input type=\"text\" name=\"edit-event-loc\" id=\"edit-event-loc\" class=\"validate\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
-    + "\">\n          <label class=\"active\" for=\"edit-event-loc\">Location</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <textarea id=\"edit-event-desc\" class=\"materialize-textarea\">"
+    + "\">\n          <label class=\"active\" for=\"edit-event-loc\">Location</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <textarea id=\"edit-event-desc\" class=\"materialize-textarea\" length=\"50\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
     + "</textarea>\n          <label class=\"active\" for=\"edit-event-desc\">Description</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input type=\"number\" id=\"edit-event-budget\" class=\"validate\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
@@ -454,7 +454,7 @@ templates['templates/event'] = template({"1":function(container,depth0,helpers,p
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "        <p class=\"event_desc\">"
+  return "        <p class=\"event_desc\">Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "</p>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -742,7 +742,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
     + "</span><br>\n      </div>\n\n      <!-- Input form to update the Event description and information -->\n      <div id=\"event-edit-form\" style=\"display:none\">\n        <div class=\"input-field col s12\">\n          <input id=\"event_name_edit\" name=\"event_name_edit\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.name : stack1), depth0))
-    + "\" class=\"validate\" type=\"text\">\n          <label class=\"active\" for=\"event_name_edit\">Event Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input type=\"text\" name=\"edit-start-date\" id=\"edit-start-date\" class=\"validate datepicker\" value=\""
+    + "\" class=\"validate\" type=\"text\">\n          <label class=\"active\" for=\"event_name_edit\">Event Name</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input type=\"text\" name=\"edit-start-date\" id=\"edit-start-date\" class=\"datepicker\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start : stack1), depth0))
     + "\">\n          <label class=\"active\" for=\"edit-start-date\">Start Date</label>\n        </div>\n        <div class=\"input-field col s6\">\n          <input type=\"time\" name=\"edit-start-time\" id=\"edit-start-time\" class=\"validate\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.start_time_24 : stack1), depth0))
@@ -752,7 +752,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.end_time_24 : stack1), depth0))
     + "\">\n          <label class=\"active\" for=\"edit-end-time\">End Time</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input type=\"text\" name=\"edit-event-loc\" id=\"edit-event-loc\" class=\"validate\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.location : stack1), depth0))
-    + "\">\n          <label class=\"active\" for=\"edit-event-loc\">Location</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <textarea id=\"edit-event-desc\" class=\"materialize-textarea\">"
+    + "\">\n          <label class=\"active\" for=\"edit-event-loc\">Location</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <textarea id=\"edit-event-desc\" class=\"materialize-textarea\" length=\"50\">"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.description : stack1), depth0))
     + "</textarea>\n          <label class=\"active\" for=\"edit-event-desc\">Description</label>\n        </div>\n        <div class=\"input-field col s12\">\n          <input type=\"number\" id=\"edit-event-budget\" class=\"validate\" value=\""
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
