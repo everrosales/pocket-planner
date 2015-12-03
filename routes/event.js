@@ -152,7 +152,7 @@ router.post('/:event/attend', function(req, res) {
     utils.sendErrResponse(res, 500, 'Email and name required.');
   } else {
     // TODO(ersosales): handle private events in the same function
-    if (req.body.attending) {
+    if (req.body.attending == 'true') {
       Event.markAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
