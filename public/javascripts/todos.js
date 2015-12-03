@@ -292,6 +292,10 @@
     if (end_min) {
       end_date.setMinutes(end_min);
     }
+    if (end_date < start_date) {
+      Materialize.toast("End date/time must be after Start date/time.", 2000);
+      return;
+    }
 
     var location = $("#edit-event-loc").val();
     var budget = $("#edit-event-budget").val();

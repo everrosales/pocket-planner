@@ -60,6 +60,14 @@
       if (min) {
         end_date.setMinutes(parseInt(hr_min[1]));
       }
+
+      if (end_date < start_date) {
+        Materialize.toast("End date/time must be after Start date/time.", 2000);
+        $('#add-event-button')[0].classList.remove('disabled');
+        $('#cancel-event-button')[0].classList.remove('disabled');
+        return;
+      }
+
       var data = {email: currentUser, name: event_name, start_date: start_date, end_date: end_date};
 
       $.post('/events', data).done(function(response){
