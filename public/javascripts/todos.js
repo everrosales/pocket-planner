@@ -234,6 +234,7 @@
     $("#edit-start-date").pickadate({
       min: new Date(),
       max: new Date($('#edit-end-date').val()) || new Date(8640000000000000),
+      format:'mm/dd/yyyy',
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onClose: function(){
@@ -244,6 +245,7 @@
     $('#edit-end-date').pickadate({
       selectMonths: true,
       selectYears: 15,
+      format:'mm/dd/yyyy',
       /*onSet: function(){
         $('#start_date').pickadate.set('max', $(this).val());
       }*/
