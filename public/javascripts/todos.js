@@ -292,6 +292,10 @@
 
     var location = $("#edit-event-loc").val();
     var budget = $("#edit-event-budget").val();
+    if (budget < 0) {
+      Materialize.toast('Budget must be positive', 2000);
+      return;
+    }
 
     var desc = $("#edit-event-desc").val();
 

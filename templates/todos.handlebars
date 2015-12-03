@@ -132,7 +132,7 @@
       <!-- Costs for the event -->
       <div id="cost-list" eventId={{event._id}}>
         <h3>Costs</h3>
-        Budget: ${{event.budget}}
+        Budget: ${{event.budget}} (Current total: ${{ event.freeBudget }})
         <ul class="collapsible" data-collapsible="accordion">
         {{#each event.cost}}
             <li costId="{{_id}}">
