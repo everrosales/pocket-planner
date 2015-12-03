@@ -43,6 +43,10 @@
     event_id = $(this).parent().attr("eventId");
     var name = $("#cost-name").val();
     var amount = $("#cost-amount").val();
+    if (amount < 0) {
+      Materialize.toast("Cost amount must be positive.", 2000);
+      return;
+    }
     var desc = $("#cost-desc").val();
     $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){
       window.location.href = "#event-costs";
