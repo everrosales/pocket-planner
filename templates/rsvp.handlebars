@@ -1,25 +1,51 @@
-<div class="rsvp-container" id={{locals._id}}>
-  <div class="column attend-event-container" id={{locals._id}}>
-    <div class="event">
-      <p class="event_name">{{locals.name}}</span></p>
-      <hr>
-      <p class="host-email">Host: {{locals.hostEmail}}</p>
-      <p class="start_date">Start: {{locals.start}} @ {{locals.start_time}}</p>
-      <p class="end_date">End: {{locals.end}} @ {{locals.end_time}}</p>
-      <p class="event_loc">Location: {{#if locals.location}}{{locals.location}}{{else}}TBD{{/if}}</p>
+<div class="rsvp">
+  {{> header currentUser=currentUser}}
+  <div class="container grey lighten-3">
+    <div id="rsvp-summary-card" class="card large">
+      <div id="rsvp-summary-image" class="card-image teal">
+        <span class="card-title">event details</span>
+      </div>
+      <div id="rsvp-summary-content" class="card-content">
+          <div class="row">
+            <h2>{{name}}</h2>
+            <blockquote id="rsvp-summary-details">
+              Host: {{hostEmail}} <br>
+              Start: {{ start}} @ {{ start_time}} <br>
+              End: {{ end}} @ {{ end_time}} <br>
+              Location: {{#if  location}}{{ location}}{{else}}TBD{{/if}}
+            </blockquote>
+          </div>
+          {{#if description}}
+            <div class="row">
+              {{ description}}
+            </div>
+          {{/if}}
+        <form id="attendee-status" action="#">
+          <h3>Are you going?</h3>
+          <div class="row">
+            <div class="input-field col s6">
+              <input name="email" type="email" class="validate">
+              <label for="email">Email</label>
+            </div>
+            <div class="input-field col s6">
+              <input name="name" type="text" class="validate">
+              <label for="name">Name</label>
+            </div>
+            <div class="input-field col s12">
+              <textarea id="rsvp-comments" name="note" class="materialize-textarea"></textarea>
+              <label for="note">Comments</label>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="card-action">
+        <button eventId = "{{_id }}" class="rsvp-attend waves-effect waves-light btn-flat" name="attending" value="1">Yes</button>
+        <button eventId = "{{ _id }}" class="rsvp-attend waves-effect waves-light btn-flat" name="attending" value="0">No</button>
+      </div>
 
-      {{#if description}}
-        <p class="event_desc">{{locals.description}}</p>
-      {{/if}}
     </div>
   </div>
   <div>
-    <form name="attendee-status">
-      <input name="email" placeholder="Email [required]">
-      <input name="name" placeholder="Your name [required]">
-      <textarea name="note" placeholder="Comments"></textarea>
-      <button type="submit" name="attending" value="1">Yes</button>
-      <button type="submit" name="attending" value="0">No</button>
-    </form>
+
   </div>
 </div>

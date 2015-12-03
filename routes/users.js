@@ -70,7 +70,7 @@ router.get('/loginsuccess', userLoggedIn, function(req, res) {
 });
 
 router.get('/loginfail', function(req, res) {
-  utils.sendSuccessResponse(res, {message: 'Login failed'});
+  utils.sendErrResponse(res, 500, 'Login failed');
 });
 
 /*
@@ -116,12 +116,12 @@ router.post('/', passport.authenticate('local-signup', {
 
 // Redirected here to display message saying that signup was successful
 router.get('/signupsuccess', function(req, res) {
-  utils.sendSuccessResponse(res, {message: 'Signup success.'});
+  utils.sendSuccessResponse(res, {user: req.user.username, message: 'Signup success.'});
 });
 
 // Redirect here to display message saying that signup fail
 router.get('/signupfail', function(req, res) {
-  utils.sendSuccessResponse(res, {message: 'Signup fail.'});
+  utils.sendErrResponse(res, 500, 'Signup failed');
 });
 
 /*
