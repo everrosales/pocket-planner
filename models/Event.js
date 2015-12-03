@@ -11,7 +11,8 @@ var Event = (function Event() {
     name          : {type:String, required:true},
     deadline      : {type:Date, required:true},
     status        : {type:Number, default:0}, // (0: unchecked, 1: checked)
-    priority      : {type:Number, default:0}  //default none
+    priority      : {type:Number, default:0}, //default none
+    assignee      : {type:String, default:""}
   });
   // Schema for a category (a collection of related todos)
   var categorySchema = new Schema({
