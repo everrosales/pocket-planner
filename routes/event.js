@@ -261,7 +261,11 @@ router.post('/', function(req, res) {
       utils.sendErrResponse(res, 400, 'Email, name, and time required.');
     }else{
       Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, function(err, event) {
-        utils.sendSuccessResponse(res, event);
+        if (err) {
+          utils.sendErrResponse(res, 400, err.msg);
+        } else {
+          utils.sendSuccessResponse(res, event);
+        }
       });
     }
 });

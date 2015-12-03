@@ -5,6 +5,7 @@ var User = require("../models/User");
 var Event = (function Event() {
   var mongoose = require('mongoose');
   var Schema = require('mongoose').Schema;
+  var validator = require('validator');
 
   // Schema for a todo (a task that should be accomplished)
   var todoSchema = new Schema({
@@ -28,7 +29,10 @@ var Event = (function Event() {
   var attendeeSchema = new Schema({
     userId        : {type:Schema.Types.ObjectId, ref:'user'}, //link to user database (default = nonexistent)
     name          : {type:String, default:""},
-    email         : {type:String, required:true},   //required
+    email         : {type:String, required:true, validate: {
+      validator: validator.isEmail,
+      message: '{VALUE} is not an email address.'
+    }},
     attending     : {type:Number, default:0},
     //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
     note          : {type:String, default:""},
@@ -38,7 +42,10 @@ var Event = (function Event() {
     name          : {type:String, required:true},
     description   : {type:String, default:""},
     host          : {type:Schema.Types.ObjectId, required:true, ref:User}, //link to user database
-    hostEmail     : {type:String, required:true},
+    hostEmail     : {type:String, required:true, validate: {
+      validator: validator.isEmail,
+      message: '{VALUE} is not an email address.'
+    }},
     planners      : {type:[{type:Schema.Types.ObjectId, ref:'user'}], default:[]},  //     ^
 
     start         : {type:Date, required:true},
@@ -133,7 +140,13 @@ var Event = (function Event() {
           'end' : event_end,
           'hostEmail' : host_email,
           'host' : user._id,
-        }, callback);
+        }, function(err, newUser) {
+          if (err && err.name === 'ValidationError' && err.errors.email) {
+            callback({msg:err.errors.email.message}, newUser);
+          } else {
+            callback(err, newUser);
+          }
+        });
       }
     });
   };
@@ -438,24 +451,33 @@ var Event = (function Event() {
    *    undefined on success; 'no such event' error if event not found.
    */
   var _addInvite = function(eventid, attendee_email, callback) {
-    _ifEventExists(eventid, function(err, exists) {
-      if (exists) {
-        User.findByEmail(attendee_email, function(err, user) {
-          if (err) {//no such user, create attendee
-            _model.findByIdAndUpdate(eventid,
-              {$push:{attendees:{'email': attendee_email}}}, callback);
-          } else { //user exists, attach userid to attendee
-            _model.findByIdAndUpdate(eventid,
-              {$push:{attendees:{'email': attendee_email, 'userId': user._id}}}, callback);
-          }
-        });
+    _getEvent(eventid, function(err, event) {
+      if (err) {
+        callback(err);
       } else {
-        callback({msg: "No such event."});
+        var attendee = { 'email': attendee_email };
+        User.findByEmail(attendee_email, function(err, user) {
+          if (!err) { //user exists, attach userid to attendee
+            attendee.userId = user._id;
+          }
+          event.attendees.push(attendee);
+          event.save(function(err) {
+            if (err && err.name === 'ValidationError') {
+              for (var item in err.errors) {
+                if (err.errors[item].value === attendee_email) {
+                  callback({msg:err.errors[item].message});
+                  return;
+                }
+              }
+            }
+            callback(err);
+          });
+        });
       }
     });
   };
 
-  /** Marks an invitee (or person in general) as attending an event
+  /** Marks an invitee (or person in general) as attending an event (adds attendee if not found)
    *  Arguments:
    *    eventid: the id of the event to be updated
    *    attendee_email: the email of the attendee being marked
@@ -466,8 +488,10 @@ var Event = (function Event() {
    *    undefined on success; 'no such event' error if event not found.
    */
   var _markAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
-    _ifEventExists(eventid, function(err, exists) {
-      if (exists) {
+    _getEvent(eventid, function(err, event) {
+      if (err) {
+        callback(err);
+      } else {
         _model.findOne({'_id':eventid, 'attendees.email':attendee_email}, function(err, found_event) {
           if (found_event) {
             _model.update({'_id':eventid, 'attendees.email':attendee_email},
@@ -475,15 +499,31 @@ var Event = (function Event() {
                         'attendees.$.name':attendee_name,
                         'attendees.$.note':note_from_attendee || ""}}, callback);
           } else {
-            _model.update({'_id':eventid},
-                  {$push: {'attendees':{'attending':1,
-                                        'name':attendee_name,
-                                        'email':attendee_email,
-                                        'note':note_from_attendee}}}, callback);
+            attendee = {
+              'attending': 1,
+              'name': attendee_name,
+              'email': attendee_email,
+              'note': note_from_attendee
+            };
+            User.findByEmail(attendee_email, function(err, user) {
+              if (!err) { //user exists, attach userid to attendee
+                attendee.userId = user._id;
+              }
+              event.attendees.push(attendee);
+              event.save(function(err) {
+                if (err && err.name === 'ValidationError') {
+                  for (var item in err.errors) {
+                    if (err.errors[item].value === attendee_email) {
+                      callback({msg:err.errors[item].message});
+                      return;
+                    }
+                  }
+                }
+                callback(err);
+              });
+            });
           }
         });
-      } else {
-        callback({msg: "No such event."});
       }
     });
   };
@@ -496,7 +536,8 @@ var Event = (function Event() {
    *    note_from_attendee: a note from the person (not) attending (optional)
    *    callback: a function to call once the planner is added
    *  Returns:
-   *    undefined on success; 'no such event' error if event not found.
+   *    undefined on success; 'no such event' error if event not found;
+   *    'no such attendee' error if attendee_email not found
    */
   var _markNotAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
     _ifEventExists(eventid, function(err, exists) {
@@ -507,6 +548,8 @@ var Event = (function Event() {
                     {$set: {'attendees.$.attending':2,
                         'attendees.$.name':attendee_name,
                         'attendees.$.note':note_from_attendee || ""}}, callback);
+          } else {
+            callback({msg: 'No such attendee.'});
           }
         });
       } else {

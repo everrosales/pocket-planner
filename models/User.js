@@ -3,12 +3,16 @@ var User = (function User() {
   var mongoose = require('mongoose');
   var Schema = require('mongoose').Schema;
   var bcrypt = require('bcrypt-nodejs');
+  var validator = require('validator');
 
   // Schema for a user (someone who plans events with our app)
   var userSchema = new Schema({
     username  : String, //optional
     password  : {type:String, required:true},
-    email     : {type:String, required:true},
+    email     : {type:String, required:true, validate: {
+      validator: validator.isEmail,
+      message: '{VALUE} is not an email address.'
+    }},
   }, {versionKey: false});
 
   var _model = mongoose.model('user', userSchema);
@@ -158,7 +162,13 @@ var User = (function User() {
           'username' : username,
           'email'  : email,
           'password' : password,
-        }, callback);
+        }, function(err, newUser) {
+          if (err && err.name === 'ValidationError' && err.errors.email) {
+            callback({message:err.errors.email.message}, newUser);
+          } else {
+            callback(err, newUser);
+          }
+        });
       }
     });
   };
