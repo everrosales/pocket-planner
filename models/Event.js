@@ -37,6 +37,7 @@ var Event = (function Event() {
   var eventSchema = new Schema({
     name          : {type:String, required:true},
     description   : {type:String, default:""},
+    private       : {type:Boolean, default:false},
     host          : {type:Schema.Types.ObjectId, required:true, ref:User}, //link to user database
     hostEmail     : {type:String, required:true},
     planners      : {type:[{type:Schema.Types.ObjectId, ref:'user'}], default:[]},  //     ^
@@ -122,7 +123,7 @@ var Event = (function Event() {
    *  Returns:
    *    undefined.
    */
-  var _createNewEvent = function(host_email, event_name, event_start, event_end, callback) {
+  var _createNewEvent = function(host_email, event_name, event_start, event_end, is_private, callback) {
     User.findByEmail(host_email, function(err, user) {
       if (err) {
         callback(err);
@@ -131,6 +132,7 @@ var Event = (function Event() {
           'name' : event_name,
           'start' : event_start,
           'end' : event_end,
+          'private' : is_private,
           'hostEmail' : host_email,
           'host' : user._id,
         }, callback);
@@ -173,8 +175,7 @@ var Event = (function Event() {
    *    list of events found (or [] if no public events found)
    */
   var _getPublicEvents = function(callback) {
-    // for now return all events (no private events for now)
-    _model.find({}, callback);
+    _model.find({private:false}, callback);
   };
 
   /** Finds a specific public event by id
@@ -186,10 +187,14 @@ var Event = (function Event() {
    */
   var _getPublicEventById = function(eventid, callback) {
     _getEvent(eventid, function(err, event) {
-      // TODO(erosolar): implement this check
-      // if (!event.public is true) then throw error
-      // otherwise just return the thing
-      callback(err, event);
+      if (err) {
+        callback(err);
+      }
+      if (event.private) {
+        callback({msg:"No such event."});
+      } else {
+        callback(err, event);
+      }
     });
   };
 
