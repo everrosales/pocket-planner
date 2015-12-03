@@ -449,14 +449,36 @@ var Event = (function Event() {
         User.findByEmail(attendee_email, function(err, user) {
           if (err) {//no such user, create attendee
             _model.findByIdAndUpdate(eventid,
-              {$push:{attendees:{'email': attendee_email}}}, callback);
+              {$push:{attendees:{'email': attendee_email}}}, {new:true}, callback);
           } else { //user exists, attach userid to attendee
             _model.findByIdAndUpdate(eventid,
-              {$push:{attendees:{'email': attendee_email, 'userId': user._id}}}, callback);
+              {$push:{attendees:{'email': attendee_email, 'userId': user._id}}}, {new:true}, callback);
           }
         });
       } else {
         callback({msg: "No such event."});
+      }
+    });
+  };
+
+  var _deleteInvitee = function(eventid, attendeeId, callback) {
+    _getEvent(eventid, function(err, found_event) {
+      if(err) {
+        callback(err);
+      } else {
+        // (event -> category -> todo).remove()
+        if (found_event.attendees.id(attendeeId)) {
+          found_event.attendees.id(attendeeId).remove();
+          found_event.save(function(err) {
+            if (err) {
+              callback(err, false);
+            } else {
+              callback(err, true);
+            }
+          });
+        } else {
+          callback({msg: "No such invitee."});
+        }
       }
     });
   };
@@ -918,6 +940,7 @@ var Event = (function Event() {
     addCost             : _addCost,
     deleteCost          : _deleteCost,
     addInvite           : _addInvite,
+    deleteInvitee       : _deleteInvitee,
     markAttending       : _markAttending,
     markNotAttending    : _markNotAttending,
     getAttendingCount   : _getAttendingCount,
