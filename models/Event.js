@@ -747,6 +747,40 @@ var Event = (function Event() {
     });
   };
 
+  /** Assigns the todo to a planner
+   *  Arguments:
+   *    eventId: the id of the event to be updated
+   *    categoryId: the id of the category that this todo is in
+   *    todoId: the todo to be updated
+   *    planner_email: the email of the planner you wish to assign this todo to
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if error while saving event;
+   *    'no such event' error if event not found.
+   */
+  var _assignTodo = function(eventId, categoryId, todoId, planner_email, callback) {
+    _getCategory(eventId, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        result.event.populate('planners', function(err, populated_event) {
+          if (populated_event.planners.indexOf({email:planner_email}) != -1 || result.event.hostEmail == planner_email) {
+            result.event.categories.id(result.category._id).todos.id(todoId).set('assignee', planner_email);
+            result.event.save(function(err) {
+              if (err) {
+                callback(err, false);
+              } else {
+                callback(err, true);
+              }
+            });
+          } else {
+            callback({msg:"Not a valid planner email"});
+          }
+        });
+      }
+    });
+  };
+
   /** Marks a todo as completed
    *  Arguments:
    *    eventid: the id of the event to be updated
@@ -855,6 +889,7 @@ var Event = (function Event() {
     addCategory         : _addCategory,
     editCategory        : _editCategory,
     editTodo            : _editTodo,
+    assignTodo          : _assignTodo,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,
