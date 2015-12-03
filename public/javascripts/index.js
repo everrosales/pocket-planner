@@ -101,6 +101,50 @@ var loadTodosPage = function(event_id) {
     });
 
     response.content.event.planners = response.content.planners;
+    response.content.event.planners.sort(function(email1, email2) {
+      if (email1 < email2) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    response.content.event.attendees.sort(function(a1, a2) {
+      if (a1.attending == 1) {
+        if (a2.attending == 1) {
+          if (a1.email < a2.email) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else {
+          return -1; //attending go on top so a1 is first
+        }
+      } else if (a1.attending === 0) {
+        if (a2.attending == 1) {
+          return 1;
+        } else if (a2.attending === 0) {
+          if (a1.email < a2.email) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else {
+          return -1; //a2 not attending so a1 comes first
+        }
+      } else { //a1 not attending
+        if (a2.attending == 2) {
+          if (a1.email < a2.email) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else { //a2 either attending or invited so comes first
+          return 1;
+        }
+      }
+    });
+
     response.content.event.freeBudget = response.content.freeBudget;
 
     response.content.event.attending = response.content.event.attendees.filter(function(e){
