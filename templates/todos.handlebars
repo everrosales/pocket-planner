@@ -81,7 +81,7 @@
       <div id="event_editable">
         <i class="material-icons right" id="edit-event">edit</i>
         <!-- Event Summary Info (not editable) -->
-        <h3 id="event_name">{{event.name}}</h3>
+        <h3 id="event_name">{{#if event.private}}<i class="material-icons" style:"font-size: 40px">lock</i>{{/if}}{{event.name}}</h3>
         <hr>
         <span id="event-start">Start: <span id="start-date">{{event.start}}</span> @ <span id="start-time">{{event.start_time}}</span></span><br>
         <span id="event-end">End: <span id="end-date">{{event.end}}</span> @ <span id="end-time">{{event.end_time}}</span></span><br>
@@ -97,7 +97,7 @@
           <label class="active" for="event_name_edit">Event Name</label>
         </div>
         <div class="input-field col s6">
-          <input type="text" name="edit-start-date" id="edit-start-date" class="validate datepicker" value="{{event.start}}">
+          <input type="text" name="edit-start-date" id="edit-start-date" class="datepicker" value="{{event.start}}">
           <label class="active" for="edit-start-date">Start Date</label>
         </div>
         <div class="input-field col s6">
@@ -124,6 +124,9 @@
           <input type="number" id="edit-event-budget" class="validate" value="{{event.budget}}">
           <label class="active" for="edit-event-budget">Budget</label>
         </div>
+        <div>
+          <input type="checkbox" id="edit-private" {{#if event.private}} checked=true {{/if}}><label for="edit-private">Make this event private</label>
+        </div>
         <button class="waves-effect waves-light btn btn-default" id="submit-edit-event">Submit</button>
         <button class="waves-effect waves-light btn btn-default" id="cancel-edit-event">Cancel</button>
       </div>
@@ -132,7 +135,7 @@
         <p class="bold">Invite link: <br>
           <a class="invite-link" href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
         </p>
-        <p><span class="bold">Number attendees:</span>  {{event.attendees.length}}</p>
+        <p><span class="bold">Number attendees:</span>  {{event.attending.length}}</p>
       </div>
     </div>
 
@@ -209,6 +212,8 @@
             <p>No invitees yet.</p>
           {{/each}}
         </ul>
+        <button class="btn btn-default" id="email-invitees">Email invitees</button>
+        <button class="btn btn-default" id="email-attendees">Email attendees</button>
         <button class="btn btn-default" id="add-invitee">Add Invitee</button>
       </div>
       <div id="add-invitee-form" style="display:none" eventId={{event._id}}>

@@ -43,6 +43,8 @@
       var hr_min = formData.start_time.split(":");//($('.start_time').val()).split(':');
       var hour = parseInt(hr_min[0]);
       var min = parseInt(hr_min[1]);
+      var is_private = $('#set_private')[0].checked;
+      console.log(is_private);
       if (hour) {
         start_date.setHours(parseInt(hr_min[0]));
       }
@@ -68,7 +70,7 @@
         return;
       }
 
-      var data = {email: currentUser, name: event_name, start_date: start_date, end_date: end_date};
+      var data = {email: currentUser, name: event_name, start_date: start_date, end_date: end_date, is_private:is_private};
 
       $.post('/events', data).done(function(response){
         console.log("success!");

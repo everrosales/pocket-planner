@@ -261,10 +261,37 @@ router.post('/', function(req, res) {
     if (!req.body.email || !req.body.name || !req.body.start_date || !req.body.end_date) {
       utils.sendErrResponse(res, 400, 'Email, name, and time required.');
     }else{
-      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, function(err, event) {
+      var is_private;
+      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, req.body.is_private, function(err, event) {
         utils.sendSuccessResponse(res, event);
       });
     }
+});
+
+/*
+  POST /events/:event/categories/:category/todos/:todo/assign
+  Request body:
+    - planner_email: the planner to assign to the todo
+  Response:
+    - success: true if the server succeeded in assigning the planner to the todo
+    - err: on failure, an error message
+*/
+router.post('/:event/categories/:category/todos/:todo/assign', function(req, res){
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  if(!req.body.planner_email){
+    utils.sendErrResponse(res, 400, 'Planner email required.');
+  } else {
+    Event.assignTodo(req.event._id, req.category._id, req.todo._id, req.body.planner_email, function(err){
+      if (err) {
+        utils.sendErrResponse(err, 500, err);
+      }else{
+        utils.sendSuccessResponse(res, true);
+      }
+    });
+  }
 });
 
 /*
