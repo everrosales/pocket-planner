@@ -229,9 +229,11 @@
 
     $("#event_editable").hide();
     $("#event-edit-form").show();
+
+    console.log($('#edit-end-date').val());
     $("#edit-start-date").pickadate({
       min: new Date(),
-      max: $('#edit-end-date').val() || new Date(8640000000000000),
+      max: new Date($('#edit-end-date').val()) || new Date(8640000000000000),
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onClose: function(){
@@ -245,7 +247,7 @@
       /*onSet: function(){
         $('#start_date').pickadate.set('max', $(this).val());
       }*/
-      min: $('#edit-start-date').val() || new Date(),
+      min: new Date($('#edit-start-date').val()) || new Date(),
       onClose: function(){
         $('#edit-start-date').pickadate('picker').set('max', $('#edit-end-date').val());
       }
@@ -270,28 +272,37 @@
     console.log($("#event_name_edit").val());
 
     //parse out Dates
-    var hr_min = ($('#start-time').val()).split(':');
-    var hour = parseInt(hr_min[0]);
-    var min = parseInt(hr_min[1]);
-    if (hour) {
-      start_date.setHours(parseInt(hr_min[0]));
+    var start_hr_min = ($('#edit-start-time').val()).split(':');
+    var start_hour = parseInt(start_hr_min[0]);
+    var start_min = parseInt(start_hr_min[1]);
+
+    if (start_hour) {
+      start_date.setHours(start_hour);
     }
-    if (min) {
-      start_date.setMinutes(parseInt(hr_min[1]));
+    if (start_min) {
+      start_date.setMinutes(start_min);
     }
 
-    hr_min = ($('#end-time').val()).split(':');
-    hour = parseInt(hr_min[0]);
-    min = parseInt(hr_min[1]);
-    if (hour) {
-      end_date.setHours(parseInt(hr_min[0]));
+    var end_hr_min = ($('#edit-end-time').val()).split(':');
+    var end_hour = parseInt(end_hr_min[0]);
+    var end_min = parseInt(end_hr_min[1]);
+    if (end_hour) {
+      end_date.setHours(end_hour);
     }
-    if (min) {
-      end_date.setMinutes(parseInt(hr_min[1]));
+    if (end_min) {
+      end_date.setMinutes(end_min);
+    }
+    if (end_date < start_date) {
+      Materialize.toast("End date/time must be after Start date/time.", 2000);
+      return;
     }
 
     var location = $("#edit-event-loc").val();
     var budget = $("#edit-event-budget").val();
+    if (budget < 0) {
+      Materialize.toast('Budget must be positive', 2000);
+      return;
+    }
 
     var desc = $("#edit-event-desc").val();
 
