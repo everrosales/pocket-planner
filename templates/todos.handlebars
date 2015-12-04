@@ -194,18 +194,18 @@
         <ul>
           {{#each event.attendees}}
             {{#equal attending 1}}
-              <li plannerId={{_id}}>
-                <p><span class="bold green-text lighten-1">{{name}} {{email}} <i class="material-icons green-text lighten-1 right">check</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span class="bold green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span></p>
               </li>
             {{/equal}}
             {{#equal attending 2}}
-              <li plannerId={{_id}}>
-                <p><span class="bold red-text lighten-1">{{email}} <i class="material-icons red-text lighten-1 right">close</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span class="bold red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span></p>
               </li>
             {{/equal}}
             {{#equal attending 0}}
-              <li plannerId={{_id}}>
-                <p><span class="bold">{{email}} <i class="material-icons right">more_horiz</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span class="bold">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span></p>
               </li>
             {{/equal}}
           {{else}}

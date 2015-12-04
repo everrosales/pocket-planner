@@ -321,29 +321,29 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
 },"15":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li plannerId="
+  return "              <li inviteeid="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <p><span class=\"bold green-text lighten-1\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
 },"17":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li plannerId="
+  return "              <li inviteeid="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <p><span class=\"bold red-text lighten-1\">"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
 },"19":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li plannerId="
+  return "              <li inviteeid="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <p><span class=\"bold\">"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     return "            <p>No invitees yet.</p>\n";
 },"23":function(container,depth0,helpers,partials,data) {
@@ -764,29 +764,29 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
 },"15":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li plannerId="
+  return "              <li inviteeid="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <p><span class=\"bold green-text lighten-1\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
 },"17":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li plannerId="
+  return "              <li inviteeid="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <p><span class=\"bold red-text lighten-1\">"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
 },"19":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li plannerId="
+  return "              <li inviteeid="
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <p><span class=\"bold\">"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     return "            <p>No invitees yet.</p>\n";
 },"23":function(container,depth0,helpers,partials,data) {

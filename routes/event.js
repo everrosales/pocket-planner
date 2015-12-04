@@ -692,8 +692,6 @@ router.delete('/:event/planners/:planner', function(req, res) {
     return false;
   }
   // Delete Planner
-
-  console.log(req.plannerid);
   Event.deletePlanner(req.event, req.plannerid, function(err, success) {
     if (err) {
       utils.sendErrResponse(res, 500, err);
@@ -712,7 +710,7 @@ router.delete('/:event/planners/:planner', function(req, res) {
       - success: true if the server succeeded in deleting the invitee from the Event
       - err: on failure, an error message
 */
-router.delete(':event/invitees/:invitee', function(req, res) {
+router.delete('/:event/invitees/:invitee', function(req, res) {
   if (! isAuthorized(req, res)) {
     // Error response has already sent in isAuthorized.
     return false;
