@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router({mergeParams:true});
 var utils = require('../utils/utils');
 var mailer = require('../config/mailer.js');
+var ejs = require('ejs');
 
 var User = require('../models/User');
 var Event = require('../models/Event');
@@ -260,14 +261,37 @@ router.post('/', function(req, res) {
     if (!req.body.email || !req.body.name || !req.body.start_date || !req.body.end_date) {
       utils.sendErrResponse(res, 400, 'Email, name, and time required.');
     }else{
-      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, function(err, event) {
-        if (err) {
-          utils.sendErrResponse(res, 400, err.msg);
-        } else {
-          utils.sendSuccessResponse(res, event);
-        }
+      var is_private;
+      Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, req.body.is_private, function(err, event) {
+        utils.sendSuccessResponse(res, event);
       });
     }
+});
+
+/*
+  POST /events/:event/categories/:category/todos/:todo/assign
+  Request body:
+    - planner_email: the planner to assign to the todo
+  Response:
+    - success: true if the server succeeded in assigning the planner to the todo
+    - err: on failure, an error message
+*/
+router.post('/:event/categories/:category/todos/:todo/assign', function(req, res){
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  if(!req.body.planner_email){
+    utils.sendErrResponse(res, 400, 'Planner email required.');
+  } else {
+    Event.assignTodo(req.event._id, req.category._id, req.todo._id, req.body.planner_email, function(err){
+      if (err) {
+        utils.sendErrResponse(err, 500, err);
+      }else{
+        utils.sendSuccessResponse(res, true);
+      }
+    });
+  }
 });
 
 /*
@@ -420,50 +444,70 @@ var mailerCallback = function(err, info) {
 };
 
 /*
-    Send email from user to user, and bcc invitees or just attendees
+    Send email from user to user, and bcc all planners + invitees or attendees
 
     POST /events/:event/email
     Request body:
      - subject: email subject
-     - html: email body html
+     - message: email message
      - date: if given, when the emails will be sent
-     - attendee: if true, send bcc email to only attendees
+     - invitation: if true, send invitation emails
+     - attendee: if true, bcc message to only attendees
     Response:
      - success: true if email sent or scheduled
      - err: on failure, an error message
 */
 router.post('/:event/email', function(req, res) {
   var addressesCallback = function(err, email_addresses) {
-    if (err) {
-      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
-    } else {
-      var email_message = {
-        from: req.user.email,
-        to: req.user.email,
-        bcc: email_addresses,
-        subject: req.body.subject,
-        html: req.body.html,
-        generateTextFromHTML: true
-      };
 
-      if (req.body.date) {
-        var date = new Date(req.body.date);
-        if (date < new Date()) {
-          utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+      Event.getPlannerEmails(req.event, function(err, planner_addresses) {
+        if (err) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          mailer.sendEmailAt(email_message, date, mailerCallback);
-          utils.sendSuccessResponse(res, true);
-        }
-      } else {
-        mailer.sendEmail(email_message, mailerCallback);
-        utils.sendSuccessResponse(res, true);
-      }
-    }
-  };
+          email_addresses.push(req.event.hostEmail);
+          Array.prototype.push.apply(email_addresses, planner_addresses);
+          ejs.renderFile(
+              __dirname + '/../views/emails/' + (req.body.invitation=="true" ? 'invitation.ejs':'message.ejs'),
+              { event: req.event, message: req.body.message, url: req.protocol + '://' + req.get('host') },
+              function(err, email_html) {
+                if (err) {
+                  utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+                } else {
+                  var email = {
+                    from: req.user.email,
+                    to: req.user.email,
+                    bcc: email_addresses,
+                    subject: req.body.subject,
+                    html: email_html,
+                    generateTextFromHTML: true
+                  };
 
-  if (!req.body.subject || !req.body.html) {
-    utils.sendErrResponse(res, 400, 'Email subject and content are required.');
-  } else if (req.body.attendee) {
+                  if (req.body.date) {
+                    var date = new Date(req.body.date);
+                    if (date < new Date()) {
+                      utils.sendErrResponse(res, 400, 'Cannot send emails to the past');
+                    } else {
+                      mailer.sendEmailAt(email, date, mailerCallback);
+                      utils.sendSuccessResponse(res, true);
+                    }
+                  } else {
+                    mailer.sendEmail(email, mailerCallback);
+                    utils.sendSuccessResponse(res, true);
+                  }
+                }
+              });
+        }
+      });
+    }
+
+
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  if (!req.body.subject) {
+    utils.sendErrResponse(res, 400, 'Email subject is required.');
+  } else if (req.body.attendee=="true") {
     Event.getAttendeeEmails(req.event, addressesCallback);
   } else {
     Event.getInviteeEmails(req.event, addressesCallback);

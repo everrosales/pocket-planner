@@ -17,7 +17,11 @@
 
     parent.find(".new-todo-form").show();
     $('.deadline').pickadate({
-      min: new Date()
+      min: new Date(),
+      onStart: function(){
+        var event_start = new Date($("#edit-start-date").val());
+        this.set('select', [event_start.getFullYear(), event_start.getMonth(), event_start.getDate()])
+      }
     });
   });
 
@@ -116,7 +120,7 @@
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onStart: function(){
-        this.set('select', [cur_deadline.getFullYear(), cur_deadline.getMonth()+1, cur_deadline.getDate()])
+        this.set('select', [cur_deadline.getFullYear(), cur_deadline.getMonth(), cur_deadline.getDate()])
       }
     });
 
@@ -228,8 +232,8 @@
     event_id = $('#event-panel').attr("eventId");
     var event_name = $('#event_name').text();
     console.log($('#start-date').text());
-    var start_date = ($('#start-date').text());
-    var end_date = ($('#end-date').text());
+    var start_date = new Date($('#start-date').text());
+    var end_date = new Date($('#end-date').text());
 
     $("#event_editable").hide();
     $("#event-edit-form").show();
@@ -243,6 +247,9 @@
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onClose: function(){
         $('#edit-end-date').pickadate('picker').set('min', $('#edit-start-date').val());
+      },
+      onStart: function(){
+        this.set('select', [start_date.getFullYear(), start_date.getMonth(), start_date.getDate()]);
       }
     });
 
@@ -256,6 +263,9 @@
       min: new Date($('#edit-start-date').val()) || new Date(),
       onClose: function(){
         $('#edit-start-date').pickadate('picker').set('max', $('#edit-end-date').val());
+      },
+      onStart: function(){
+        this.set('select', [end_date.getFullYear(), end_date.getMonth(), end_date.getDate()])
       }
     });
 
@@ -311,8 +321,8 @@
     }
 
     var desc = $("#edit-event-desc").val();
-
-    var info = {name:name, start:start_date, end:end_date, location:location, budget:budget, description: desc};
+    var is_private = $("#edit-private")[0].checked;
+    var info = {name:name, start:start_date, end:end_date, location:location, private:is_private, budget:budget, description: desc};
     console.log(info);
 
     $.ajax({
@@ -326,4 +336,55 @@
       Materialize.toast('Invalid input format', 2000);
     });
   });
+
+  //Email functions
+
+  //email invitees form
+  $(document).on("click", "#email-invitees", function(){
+    $("#email-form").show();
+    $("#email-invitees").hide();
+    $("#email-attendees").hide();
+
+    $("#email-form-label").text("Email invitees");
+  });
+
+  //email attendees form
+  $(document).on("click", "#email-attendees", function(){
+    $("#email-form").show();
+    $("#email-invitees").hide();
+    $("#email-attendees").hide();
+
+    $("#email-form-label").text("Email attendees");
+  });
+
+  //cancel emailing
+  $(document).on("click", "#cancel-email-form", function(){
+    event_id = $("#event-panel").attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  //submit emailing form
+  $(document).on("click", "#submit-email-form", function(){
+    event_id = $("#event-panel").attr("eventId");
+    var attendee = false;
+
+    if ($("#email-form-label").text() == "Email attendees"){
+      attendee = true;
+    }
+
+    var invitation = $("#email-invitation").is(":checked");
+
+    var subject = $("#email-subject").val();
+    var message = $("#email-message").val();
+
+    $.post("/events/"+event_id+"/email", {message: message, subject: subject, invitation: invitation, attendee: attendee}).done(function(response){
+      Materialize.toast("Emails sent!", 2000);
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
+    });
+
+  });
+
 })();
