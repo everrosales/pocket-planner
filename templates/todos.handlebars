@@ -143,23 +143,28 @@
       <!-- Costs for the event -->
       <div id="cost-list" eventId={{event._id}}>
         <h3>Costs</h3>
-        Budget: ${{event.budget}} (Current total: ${{ event.freeBudget }})
-        <ul class="collapsible" data-collapsible="accordion">
-        {{#each event.cost}}
-            <li costId="{{_id}}">
-              <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
-              <div class="collapsible-body">
-                <p>Amount: ${{amount}}
-                {{#if description}}
-                  <br>Description: {{description}}
-                {{/if}}
-                </p>
-              </div>
-            </li>
+        Budget: ${{event.budget}} (Budget remaining: ${{ event.freeBudget }})
+        {{#if event.cost}}
+          <ul class="collapsible" data-collapsible="accordion">
+          {{#each event.cost}}
+              <li costId="{{_id}}">
+                <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
+                <div class="collapsible-body">
+                  <p>Amount: ${{amount}}
+                  {{#if description}}
+                    <br><p>Description: {{description}}
+                  {{/if}}
+                  </p>
+                </div>
+              </li>
+          {{/each}}
+          </ul>
+
         {{else}}
-          <p>No costs yet.</p>
-        {{/each}}
-        </ul>
+          <p><em>No costs yet.</em></p>
+        {{/if}}
+
+
         <script>
           $(document).ready(function(){
             $('.collapsible').collapsible({
@@ -167,24 +172,29 @@
             });
           });
           </script>
-        <button class="btn btn-default" id="add-cost">Add Cost</button>
       </div>
+      <button class="btn btn-default" id="add-cost">Add Cost</button>
+
       <div id="add-cost-form" style="display:none" eventId={{event._id}}>
-        <h4>New Cost</h4>
-        <div class="input-field col s6">
-          <input id="cost-name" type="text" class="validate">
-          <label for="cost-name">Name</label>
+          <h4>New Cost</h4>
+          <div class="input-field col s6">
+            <input id="cost-name" type="text" class="validate">
+            <label for="cost-name">Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="cost-amount" type="number" class="validate">
+            <label for="cost-amount">Amount (in $)</label>
+          </div>
+          <div class="input-field col s12">
+            <input id="cost-desc" type="text" class="validate">
+            <label for="cost-desc">Description</label>
+          </div>
+        <br>
+        <div class="col s12">
+          <button class="waves-effect waves-light btn btn-default"  id="submit-cost">Submit Cost</button>
+          <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
         </div>
-        <div class="input-field col s6">
-          <input id="cost-amount" type="number" class="validate">
-          <label for="cost-amount">Amount (in $)</label>
-        </div>
-        <div class="input-field col s12">
-          <input id="cost-desc" type="text" class="validate">
-          <label for="cost-desc">Description</label>
-        </div>
-        <button class="waves-effect waves-light btn btn-default"  id="submit-cost">Submit Cost</button>
-        <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
+
       </div>
     </div>
     <div id="event-attendees" class="col s12">
