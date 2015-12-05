@@ -79,7 +79,7 @@
     </div>
     <div id="event-details" class="col s12">
       <div id="event_editable">
-        <i class="material-icons right" id="edit-event">edit</i>
+        <i class="material-icons right" id="edit-event ghetto-badge">edit</i>
         <!-- Event Summary Info (not editable) -->
         <h3 id="event_name">{{#if event.private}}<i class="material-icons" style:"font-size: 40px">lock</i>{{/if}}{{event.name}}</h3>
         <hr>
@@ -148,7 +148,7 @@
           <ul class="collapsible" data-collapsible="accordion">
           {{#each event.cost}}
               <li costId="{{_id}}">
-                <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
+                <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost ghetto-badge">clear</i></span></div>
                 <div class="collapsible-body">
                   <p>Amount: ${{amount}}
                   {{#if description}}
@@ -267,7 +267,7 @@
         <ul>
           {{#each event.planners}}
             <li plannerId={{_id}}>
-              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">clear</i></span></p>
+              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner ghetto-badge">clear</i></span></p>
             </li>
           {{else}}
             <p>No other planners yet.</p>

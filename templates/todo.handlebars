@@ -14,6 +14,12 @@
       {{#if priority}}
       <br><small>Priority (1-10): {{priority}}</small>
       {{/if}}
+      <br>
+      <button class="todo-add-assignee btn btn-default">Add Assignee</button>
+    </div>
+    <div class="add-assignee-form" style="display:none">
+      <label class="active" for="add-assignee-name">Assignee email</label>
+      <input class="add-assignee-name" type="text" name="add-assignee-name">
     </div>
     <div class="edit-todo-form" style="display:none">
 
