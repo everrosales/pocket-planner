@@ -82,7 +82,7 @@ var loadTodosPage = function(event_id) {
       return e.attending == 1;
     });
     console.log(response.content.event.attending);
-    loadPage('todos', {event: response.content.event, title:"Your Todos for " + response.content.event.name, currentUser: currentUser});
+    loadPage('todos', {event: response.content.event, title:"Your Todos for " + response.content.event.name, currentUser: currentUser, page:"todos"});
   }).fail(function(responseObject){
     console.log(responseObject);
     console.log("failed");
@@ -204,4 +204,12 @@ $(document).on('click', '#register-btn', function(evt) {
 
 $(document).on('click', '#attend-events', function(evt) {
   loadAttendEvents();
-})
+});
+
+$(document).on('click', '#home-page-link', function(){
+  loadHomePage();
+});
+
+$(document).on('click', '#events-page-link', function(){
+  loadEventsPage();
+});

@@ -87,6 +87,10 @@ div .tabs .indicator {
   background-color: #009688;
 }
 
+.event-title-header {
+  font-size: 1.64rem;
+}
+
 #event-panel, #event-row-container, #event-row-container {
   /*height: 100%;*/
 }
