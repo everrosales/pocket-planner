@@ -46,6 +46,19 @@ $(document).on("click",".rsvp-attend", function(e){
     comments = "";
   }
 
+  if (!email || !name) {
+    Materialize.toast("You must enter a name and an email.", 2000);
+    return;
+  } else if (!validator.isEmail(email)) {
+    Materialize.toast("That is not an email address.", 2000);
+    return;
+  } else if (name.length > 100) {
+    Materialize.toast("Your name can be at most 100 characters long.", 2000);
+    return;
+  } else if (comments.length > 100) {
+    Materialize.toast("Your comments can be at most 300 characters long.", 2000);
+    return;
+  }
   $.post("/events/" + event_id + "/attend",  {
       email:email,
       name:name,

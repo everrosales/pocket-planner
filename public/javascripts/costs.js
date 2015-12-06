@@ -46,6 +46,9 @@
     if (amount < 0) {
       Materialize.toast("Cost amount must be positive.", 2000);
       return;
+    } else if (name.length > 100) {
+      Materialize.toast("Cost name can be at most 100 characters long.", 2000);
+      return;
     }
     var desc = $("#cost-desc").val();
     $.post("/events/"+event_id+"/costs", {name:name , amount:amount, description:desc}).done(function(response){

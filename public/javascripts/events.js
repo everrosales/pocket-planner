@@ -58,13 +58,22 @@
       min = parseInt(hr_min[1]);
       if (hour) {
         end_date.setHours(parseInt(hr_min[0]));
+      } else {
+        end_date.setHours(23);
       }
       if (min) {
         end_date.setMinutes(parseInt(hr_min[1]));
+      } else {
+        end_date.setMinutes(59);
       }
 
       if (end_date < start_date) {
         Materialize.toast("End date/time must be after Start date/time.", 2000);
+        $('#add-event-button')[0].classList.remove('disabled');
+        $('#cancel-event-button')[0].classList.remove('disabled');
+        return;
+      } else if (event_name.length > 100) {
+        Materialize.toast("Event names can be at most 100 characters long.", 2000);
         $('#add-event-button')[0].classList.remove('disabled');
         $('#cancel-event-button')[0].classList.remove('disabled');
         return;

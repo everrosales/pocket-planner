@@ -24,10 +24,11 @@
   //Submit new category.
   $(document).on('click', '#add-category-button', function() {
     var category_title = $('#category-title').val();
-    if (category_title.length < 1){
-
-      Materialize.toast('To-Do List must have a title.', 2000);
-    }else{
+    if (category_title.length < 1) {
+      Materialize.toast('To-Do List must have a name.', 2000);
+    } else if (category_title.length > 100) {
+      Materialize.toast('To-Do List name can be at most 100 characters long.', 2000);
+    } else {
       event_id = $("#event-panel").attr("eventId");
       $.post('events/' + event_id + '/categories', {name: category_title}).done(function(response){
         loadTodosPage(event_id);
@@ -77,10 +78,11 @@
       var cat_id = $(this).parent().parent().parent().attr("categoryId");
       var new_category_name = $(this).parent().find(".edit-category-name").val();
 
-      if (!new_category_name){
-        Materialize.toast("Category must have a name.", 2000);
-
-      }else{
+      if (!new_category_name) {
+        Materialize.toast('To-Do List must have a name.', 2000);
+      } else if (new_category_name.length > 100) {
+        Materialize.toast('To-Do List name can be at most 100 characters long.');
+      } else {
         $.ajax({
           url: "/events/"+event_id+"/categories/"+cat_id,
           type: "PUT",

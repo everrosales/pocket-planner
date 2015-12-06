@@ -20,7 +20,10 @@ var isLoggedInOrInvalidBody = function(req, res) {
     utils.sendErrResponse(res, 400, 'Username or password not provided.');
     return true;
   } else if (!validator.isEmail(req.body.username)) {
-    utils.sendErrResponse(res, 403, 'Username must be an email address.');
+    utils.sendErrResponse(res, 400, 'Username must be an email address.');
+    return true;
+  } else if (req.body.password.length < 8 || req.body.password.length > 30) {
+    utils.sendErrResponse(res, 400, 'Password length must be within 8~30.');
     return true;
   }
   return false;

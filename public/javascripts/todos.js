@@ -38,18 +38,18 @@
     var priority = form.find(".priority").val();
 
     //check that it has name and deadline
-    if (todo_name.length < 1 || !deadline){
+    if (todo_name.length < 1 || !deadline) {
+      Materialize.toast('To-Do must have a name and deadline.', 2000);
+    } else if (todo_name.length > 100) {
+      Materialize.toast('To-Do name can be at most 100 characters long.', 2000);
 
-      Materialize.toast('Todo must have a name and deadline.', 2000);
-
-
-    }else{
+    } else {
       deadline = new Date(deadline);
       info = {name: todo_name, deadline:deadline};
 
       //check that priority is correct range if applicable.
       if(priority && (priority <= 0 || priority > 10)){
-        Materialize.toast("Todo priority must be a number between 1 and 10.", 2000);
+        Materialize.toast("To-Do priority must be a number between 1 and 10.", 2000);
 
       }else{
         if(priority){
@@ -149,8 +149,11 @@
     var todo_priority = edit_form.find(".edit-todo-priority").val();
     console.log(todo_priority);
 
-    if (!todo_name || !todo_deadline){
-      Materialize.toast("Todo must have a name and deadline.", 2000)
+    if (todo_name.length < 1 || !deadline) {
+      Materialize.toast('To-Do must have a name and deadline.', 2000);
+    } else if (todo_name.length > 100) {
+      Materialize.toast('To-Do name can be at most 100 characters long.', 2000);
+
     }else{
       var info = {name: todo_name, deadline: todo_deadline};
 

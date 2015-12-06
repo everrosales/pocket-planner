@@ -9,7 +9,7 @@ var Event = (function Event() {
 
   // Schema for a todo (a task that should be accomplished)
   var todoSchema = new Schema({
-    name          : {type:String, required:true},
+    name          : {type:String, required:true, maxlength:100},
     deadline      : {type:Date, required:true},
     status        : {type:Number, default:0}, // (0: unchecked, 1: checked)
     priority      : {type:Number, default:0}, //default none
@@ -17,30 +17,30 @@ var Event = (function Event() {
   });
   // Schema for a category (a collection of related todos)
   var categorySchema = new Schema({
-    name          : {type:String, required:true},
+    name          : {type:String, required:true, maxlength:100},
     todos         : {type:[todoSchema], default:[]}
   });
   // Schema for a cost object (a description of a particular expense)
   var costSchema = new Schema({
-    name          : {type:String, required:true},
+    name          : {type:String, required:true, maxlength:100},
     amount        : {type:Number, required:true},
     description   : {type:String, default:""},
   });
   // Schema for an attendee (someone attending an event)
   var attendeeSchema = new Schema({
     userId        : {type:Schema.Types.ObjectId, ref:'user'}, //link to user database (default = nonexistent)
-    name          : {type:String, default:""},
+    name          : {type:String, default:"", maxlength:100},
     email         : {type:String, required:true, validate: {
       validator: validator.isEmail,
       message: '{VALUE} is not an email address.'
     }},
     attending     : {type:Number, default:0},
     //0 if invited (unknown reply), 1 if yes, 2 if no (internal only)
-    note          : {type:String, default:""},
+    note          : {type:String, default:"", maxlength:300},
   });
   // Schema for an entire event, including (multiples of) the above schemas
   var eventSchema = new Schema({
-    name          : {type:String, required:true},
+    name          : {type:String, required:true, maxlength:100},
     description   : {type:String, default:""},
     private       : {type:Boolean, default:false},
     host          : {type:Schema.Types.ObjectId, required:true, ref:User}, //link to user database
@@ -52,7 +52,7 @@ var Event = (function Event() {
 
     start         : {type:Date, required:true},
     end           : {type:Date, required:true}, // can be same as, but not earlier than, start
-    location      : {type:String, default:""},
+    location      : {type:String, default:"", maxlength:100},
     budget        : {type:Number, default:0},
     cost          : {type:[costSchema], default:[]},
 
@@ -372,11 +372,14 @@ var Event = (function Event() {
       'amount': amount,
       'description':description || "",
     };
-    _ifEventExists(eventid, function(err, exists) {
-      if (exists) {
-        _model.findByIdAndUpdate(eventid, {$push:{cost: cost}}, {new:true}, callback);
+    _getEvent(eventid, function(err, event) {
+      if (err) {
+        callback(err);
       } else {
-        callback({msg: "No such event."});
+        event.cost.push(cost);
+        event.save(function(err) {
+          callback(err);
+        });
       }
     });
   };
@@ -499,37 +502,33 @@ var Event = (function Event() {
       if (err) {
         callback(err);
       } else {
-        _model.findOne({'_id':eventid, 'attendees.email':attendee_email}, function(err, found_event) {
-          if (found_event) {
-            _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                    {$set: {'attendees.$.attending':1,
-                            'attendees.$.name':attendee_name,
-                            'attendees.$.note':note_from_attendee || ""}}, callback);
-          } else {
-            attendee = {
-              'attending': 1,
-              'name': attendee_name,
-              'email': attendee_email,
-              'note': note_from_attendee
-            };
-            User.findByEmail(attendee_email, function(err, user) {
-              if (!err) { //user exists, attach userid to attendee
-                attendee.userId = user._id;
-              }
-              event.attendees.push(attendee);
-              event.save(function(err) {
-                if (err && err.name === 'ValidationError') {
-                  for (var item in err.errors) {
-                    if (err.errors[item].value === attendee_email) {
-                      callback({msg:err.errors[item].message});
-                      return;
-                    }
-                  }
-                }
-                callback(err);
-              });
-            });
+        var query = event.attendees.filter(function(p) { return p.email === attendee_email; });
+        if (query.length < 1) {
+          var attendee = { 'email': attendee_email };
+        } else {
+          var attendee = query[0];
+        }
+        attendee.attending = 1;
+        attendee.name = attendee_name;
+        attendee.note = note_from_attendee;
+        User.findByEmail(attendee_email, function(err, user) {
+          if (!err) { //user exists, attach userid to attendee
+            attendee.userId = user._id;
           }
+          if (query.length < 1) {
+            event.attendees.push(attendee);
+          }
+          event.save(function(err) {
+            if (err && err.name === 'ValidationError') {
+              for (var item in err.errors) {
+                if (err.errors[item].value === attendee_email) {
+                  callback({msg:err.errors[item].message});
+                  return;
+                }
+              }
+            }
+            callback(err);
+          });
         });
       }
     });
@@ -547,20 +546,22 @@ var Event = (function Event() {
    *    'no such attendee' error if attendee_email not found
    */
   var _markNotAttending = function(eventid, attendee_email, attendee_name, note_from_attendee, callback) {
-    _ifEventExists(eventid, function(err, exists) {
-      if (exists) {
-        _model.findOne({'_id':eventid, 'attendees.email':attendee_email}, function(err, found_event) {
-          if (found_event) {
-            _model.update({'_id':eventid, 'attendees.email':attendee_email},
-                    {$set: {'attendees.$.attending':2,
-                            'attendees.$.name':attendee_name,
-                            'attendees.$.note':note_from_attendee || ""}}, callback);
-          } else {
-            callback({msg: "No such invitee."});
-          }
-        });
+    _getEvent(eventid, function(err, event) {
+      if (err) {
+        callback(err);
       } else {
-        callback({msg: "No such event."});
+        var query = event.attendees.filter(function(p) { return p.email === attendee_email; });
+        if (query.length < 1) {
+          callback({msg: "No such invitee."});
+        } else {
+          var attendee = query[0];
+          attendee.attending = 2;
+          attendee.name = attendee_name;
+          attendee.note = note_from_attendee;
+          event.save(function(err) {
+            callback(err);
+          });
+        }
       }
     });
   };
@@ -815,7 +816,7 @@ var Event = (function Event() {
       if (err) {
         callback(err);
       } else {
-        // (event -> category -> todo).set(fields)
+        // (event -> category -> todo).set(fieldsj
         result.event.categories.id(result.category._id).todos.id(todoId).set(information);
         result.event.save(function(err) {
           if (err) {

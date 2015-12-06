@@ -42,6 +42,16 @@
   $(document).on("click", "#submit-planner", function(){
     event_id = $("#event-panel").attr("eventId");
     var email = $("#planner-email").val();
+    if (!email) {
+      Materialize.toast("You must enter an email.", 2000);
+      return;
+    } else if (!validator.isEmail(email)) {
+      Materialize.toast("That is not an email address.", 2000);
+      return;
+    } else if (email != $("#planner-email-confirm").val()) {
+      Materialize.toast("Emails must match.", 2000);
+      return;
+    }
     $.post("/events/"+event_id+"/planners", {planner_email:email}).done(function(response){
       window.location.href = "#event-planners";
       loadTodosPage(event_id);

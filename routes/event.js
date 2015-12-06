@@ -151,9 +151,15 @@ router.get('/:event/details', function(req, res) {
 router.post('/:event/attend', function(req, res) {
   // Mark attendance for event
   if (!req.body.email || !req.body.name) {
-    utils.sendErrResponse(res, 500, 'Email and name required.');
+    utils.sendErrResponse(res, 400, 'Email and name required.');
+  } else if (!validator.isEmail(req.body.email)) {
+    utils.sendErrResponse(res, 400, 'Expected attendee email address.');
+  } else if (req.body.name.length > 100) {
+    utils.sendErrResponse(res, 400, 'Name length cannot be greater than 100.');
+  } else if (req.body.note.length > 300) {
+    utils.sendErrResponse(res, 400, 'Note length cannot be greater than 300.');
   } else {
-    // TODO(ersosales): handle private events in the same function
+    // TODO(erosales): handle private events in the same function
     if (req.body.attending == 'true') {
       Event.markAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
@@ -261,7 +267,11 @@ router.post('/', function(req, res) {
     // Create a new event
     if (!req.body.email || !req.body.name || !req.body.start_date || !req.body.end_date) {
       utils.sendErrResponse(res, 400, 'Email, name, and time required.');
-    }else{
+    } else if (!validator.isEmail(req.body.email)) {
+      utils.sendErrResponse(res, 400, 'Expected host email address.');
+    } else if (req.body.name.length > 100) {
+      utils.sendErrResponse(res, 400, 'Event name length cannot be greater than 100.');
+    } else {
       var is_private;
       Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, req.body.is_private, function(err, event) {
         utils.sendSuccessResponse(res, event);
@@ -282,8 +292,10 @@ router.post('/:event/categories/:category/todos/:todo/assign', function(req, res
     // Error response has already sent in isAuthorized.
     return false;
   }
-  if(!req.body.planner_email){
+  if (!req.body.planner_email) {
     utils.sendErrResponse(res, 400, 'Planner email required.');
+  } else if (!validator.isEmail(req.body.planner_email)) {
+    utils.sendErrResponse(res, 400, 'Expected planner email address.');
   } else {
     Event.assignTodo(req.event._id, req.category._id, req.todo._id, req.body.planner_email, function(err){
       if (err) {
@@ -311,6 +323,8 @@ router.post('/:event/costs', function (req, res) {
   // add cost to the event
   if (!req.body.name || !req.body.amount) {
     utils.sendErrResponse(res, 400, 'Name and amount are required.');
+  } else if (req.body.name.length > 100) {
+    utils.sendErrResponse(res, 400, 'Cost name length cannot be greater than 100.');
   } else {
     Event.addCost(req.event._id, req.body.name, req.body.amount, req.body.description,
         function(err) {
@@ -339,8 +353,10 @@ router.post('/:event/planners', function(req, res) {
   }
   // add another planner to the event
   if (!req.body.planner_email) {
-    utils.sendErrResponse(res, 404, 'Planner is required');
-  }else{
+    utils.sendErrResponse(res, 400, 'Planner is required');
+  } else if (!validator.isEmail(req.body.planner_email)) {
+    utils.sendErrResponse(res, 400, 'Expected planner email address.');
+  } else {
     Event.addPlanner(req.event._id, req.body.planner_email, function(err) {
       if (err) {
         utils.sendErrResponse(res, 404, err);
@@ -366,8 +382,10 @@ router.post('/:event/categories', function (req, res) {
     return false;
   }
   if (!req.body.name) {
-    utils.sendErrResponse(res, 500, 'Name is required.');
-  }else{
+    utils.sendErrResponse(res, 400, 'Name is required.');
+  } else if (req.body.name.length > 100) {
+    utils.sendErrResponse(res, 400, 'Category name length cannot be greater than 100.');
+  } else {
     //console.log(req);
     // Just add the category to the event.
     Event.addCategory(req.event._id, req.body.name, function(err, id) {
@@ -395,14 +413,17 @@ router.post('/:event/invite', function (req, res) {
   }
   if (!req.body.attendee) {
     utils.sendErrResponse(res, 400, 'Attendee email required.');
+  } else if (!validator.isEmail(req.body.attendee)) {
+    utils.sendErrResponse(res, 400, 'Expected attendee email address.');
+  } else {
+    Event.addInvite(req.event._id, req.body.attendee, function(err) {
+      if (err) {
+        utils.sendErrResponse(res, 500, err);
+      } else {
+        utils.sendSuccessResponse(res, true);
+      }
+    });
   }
-  Event.addInvite(req.event._id, req.body.attendee, function(err) {
-    if (err) {
-      utils.sendErrResponse(res, 500, err);
-    } else {
-      utils.sendSuccessResponse(res, true);
-    }
-  });
 });
 
 /*
@@ -420,8 +441,10 @@ router.post('/:event/categories/:category/todos', function (req, res) {
     return false;
   }
   if (!req.body.name || !req.body.deadline) {
-    utils.sendErrResponse(res, 500, 'Name and deadline are required.');
-  }else{
+    utils.sendErrResponse(res, 400, 'Name and deadline are required.');
+  } else if (req.body.name.length > 100) {
+    utils.sendErrResponse(res, 400, 'To-Do name length cannot be greater than 100.');
+  } else {
     Event.addTodo(req.event, req.category, req.body.name, req.body.deadline, req.body.priority,
         function(err, newTodo) {
           if (err) {
@@ -460,7 +483,6 @@ var mailerCallback = function(err, info) {
 */
 router.post('/:event/email', function(req, res) {
   var addressesCallback = function(err, email_addresses) {
-
       Event.getPlannerEmails(req.event, function(err, planner_addresses) {
         if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
@@ -508,6 +530,8 @@ router.post('/:event/email', function(req, res) {
   }
   if (!req.body.subject) {
     utils.sendErrResponse(res, 400, 'Email subject is required.');
+  } else if (req.body.subject.length > 100) {
+    utils.sendErrResponse(res, 400, 'Email subject length cannot be greater than 100.');
   } else if (req.body.attendee=="true") {
     Event.getAttendeeEmails(req.event, addressesCallback);
   } else {
@@ -531,7 +555,7 @@ router.put('/:event', function(req, res) {
   }
   // add information to the event
   if (!req.body.information) {
-    utils.sendErrResponse(res, 404, 'Information is required.');
+    utils.sendErrResponse(res, 400, 'Information is required.');
   }else{
     Event.setInformation(req.event._id, req.body.information, function(err) {
       if (err) {
@@ -555,7 +579,9 @@ router.put('/:event', function(req, res) {
 */
 router.put('/:event/categories/:category', function(req, res) {
   if (!req.body.new_name) {
-    utils.sendErrResponse(res, 500, 'You must specify a new name.');
+    utils.sendErrResponse(res, 400, 'You must specify a new name.');
+  } else if (req.body.new_name.length > 100) {
+    utils.sendErrResponse(res, 400, 'Category length cannot be greater than 100.');
   } else {
     Event.editCategory(req.event, req.category, req.body.new_name, function(err, success) {
       if (err) {
@@ -588,7 +614,7 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     return false;
   }
   if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit')) {
-    utils.sendErrResponse(res, 500, 'Status missing from the URL');
+    utils.sendErrResponse(res, 400, 'Status missing from the URL');
   }
   if (req.body.status == 'check') {
     Event.checkTodo(req.event, req.category, req.todo, function(err, success) {
