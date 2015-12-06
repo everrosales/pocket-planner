@@ -1,15 +1,6 @@
 <div id="homepage">
     {{> header currentUser=currentUser}}
     <div>
-      {{#unless currentUser}}
-      <div class="navbar">
-        <nav class="nav-error white red-text accent-1-text">
-          <div class="nav-error center">
-            You need to be logged in to create an event
-          </div>
-        </nav>
-      </div>
-      {{/unless}}
       <div class="slider background-slider hide-on-small-only">
         <ul class="slides">
           <li>

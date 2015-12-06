@@ -853,6 +853,23 @@ var Event = (function Event() {
     });
   };
 
+  var _removeAssignee = function(eventId, categoryId, todoId, callback) {
+    _getCategory(eventId, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        result.event.categories.id(result.category._id).todos.id(todoId).set('assignee', undefined);
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Marks a todo as completed
    *  Arguments:
    *    eventid: the id of the event to be updated
@@ -964,6 +981,7 @@ var Event = (function Event() {
     editCategory        : _editCategory,
     editTodo            : _editTodo,
     assignTodo          : _assignTodo,
+    removeAssignee      : _removeAssignee,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,
