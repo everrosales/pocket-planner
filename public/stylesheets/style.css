@@ -116,6 +116,9 @@ div .tabs .indicator {
 }
 
 /*Google Maps */
+#map {
+        height: 1000px;
+      }
 .controls {
   margin-top: 10px;
   border: 1px solid transparent;
@@ -157,6 +160,3 @@ div .tabs .indicator {
   font-size: 13px;
   font-weight: 300;
 }
-#target {
-        width: 345px;
-      }
