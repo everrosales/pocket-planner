@@ -3,6 +3,7 @@ var router = express.Router({mergeParams:true});
 var utils = require('../utils/utils');
 var mailer = require('../config/mailer.js');
 var ejs = require('ejs');
+var validator = require('validator');
 
 var User = require('../models/User');
 var Event = require('../models/Event');

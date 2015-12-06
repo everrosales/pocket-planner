@@ -15,7 +15,7 @@ describe('User', function() {
 
   it('email', function(done) {
     User.createNewUser('notemail', 'oyoyoy', '', function(err, user) {
-      assert.strictEqual(err.message, 'notemail is not an email address.');
+      assert.strictEqual(err.msg, 'notemail is not an email address.');
       done();
     });
   });
@@ -37,14 +37,14 @@ describe('Event', function() {
 
   it('hostEmail (impossible)', function(done) {
     User.createNewUser('erosolar@mit.edu', 'blah', '', function(err, user) {
-      Event.createNewEvent('notemail', 'thing', new Date(2016,0,1,0,0,0), new Date(2016,0,1,0,0,0), function(err, event) {
+      Event.createNewEvent('notemail', 'thing', new Date(2016,0,1,0,0,0), new Date(2016,0,1,0,0,0), false, function(err, event) {
         assert.strictEqual(err.msg, 'No such user.');
         done();
       });
     });
   });
   it('attendee.email (addInvite)', function(done) {
-    Event.createNewEvent('erosolar@mit.edu', 'thing', new Date(2016,0,1,0,0,0), new Date(2016,0,1,0,0,0), function(err, event) {
+    Event.createNewEvent('erosolar@mit.edu', 'thing', new Date(2016,0,1,0,0,0), new Date(2016,0,1,0,0,0), false, function(err, event) {
       eventid = event._id;
       Event.addInvite(eventid, 'notemail', function(err) {
         assert.strictEqual(err.msg, 'notemail is not an email address.');

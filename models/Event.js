@@ -127,6 +127,7 @@ var Event = (function Event() {
    *    event_name: the name of the event (a string)
    *    event_start: when the event starts (a Date object)
    *    event_end: when the event ends (also a Date object)
+   *    is_private: true if the event is private
    *    callback: a function to call once the event is created
    *  Returns:
    *    undefined.
@@ -143,11 +144,11 @@ var Event = (function Event() {
           'private' : is_private,
           'hostEmail' : host_email,
           'host' : user._id,
-        }, function(err, newUser) {
+        }, function(err, newEvent) {
           if (err && err.name === 'ValidationError' && err.errors.email) {
-            callback({msg:err.errors.email.message}, newUser);
+            callback({msg:err.errors.email.message});
           } else {
-            callback(err, newUser);
+            callback(err, newEvent);
           }
         });
       }

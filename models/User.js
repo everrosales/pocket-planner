@@ -164,7 +164,7 @@ var User = (function User() {
           'password' : password,
         }, function(err, newUser) {
           if (err && err.name === 'ValidationError' && err.errors.email) {
-            callback({message:err.errors.email.message}, newUser);
+            callback({msg:err.errors.email.message});
           } else {
             callback(err, newUser);
           }
