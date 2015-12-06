@@ -12,7 +12,6 @@
   $(document).on("click", ".remove-planner", function(){
     event_id = $('#event-panel').attr("eventId");
     var planner_id = $(this).parent().parent().parent().attr("plannerId");
-    console.log(planner_id);
     $.ajax({
       url: 'events/'+event_id+'/planners/'+planner_id,
       type: 'DELETE'
@@ -20,7 +19,6 @@
       window.location.href = "#event-planners";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
-      console.log("failed");
       var response = $.parseJSON(responseObject.responseText);
       Materialize.toast(response.err, 2000);
     });
@@ -47,9 +45,7 @@
       window.location.href = "#event-planners";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
-      console.log(responseObject);
       var response = $.parseJSON(responseObject.responseText);
-      console.log(response);
       if (response.err.msg) {
         response.err = response.err.msg;
       }

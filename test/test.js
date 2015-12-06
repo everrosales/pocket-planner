@@ -703,8 +703,6 @@ describe('Event', function() {
         User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, ever) {
           Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), false, function(err, n_event) {
             Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, n_event) {
-              console.log(n_event);
-              console.log(n_event.attendees[0]._id);
               Event.deleteInvitee(n_event._id, n_event.attendees[0]._id, function(err, result) {
                 assert.deepEqual(err, null);
                 assert.deepEqual(result, true);

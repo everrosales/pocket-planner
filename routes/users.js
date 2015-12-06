@@ -28,7 +28,7 @@ var userLoggedIn = function(req, res, next) {
   }
   // If someone tries to hit this page without being authenticated redirect to home page
   res.redirect('/');
-}
+};
 
 /*
     This function checks to see that the provided username-password combination

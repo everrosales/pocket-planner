@@ -14,8 +14,7 @@ Handlebars.registerPartial('event', Handlebars.templates.event);
 Handlebars.registerPartial('todo', Handlebars.templates.todo);
 Handlebars.registerPartial('attendeventsummary', Handlebars.templates.attendeventsummary);
 Handlebars.registerPartial('header', Handlebars.templates.header);
-Handlebars.registerPartial('subscribe', Handlebars.templates.subscribe);
-//global variable set when a user is logged in. - unsafe should replace!
+//global variable set when a user is logged in.
 currentUser = undefined;
 
 var loadPage = function(template, data) {
@@ -24,9 +23,7 @@ var loadPage = function(template, data) {
 };
 
 var loadHomePage = function() {
-  console.log(currentUser)
     if (currentUser){
-      console.log("giving data currentUser")
       loadPage('index', {currentUser: currentUser});
     }else{
       loadPage('index');
@@ -40,12 +37,11 @@ var zero_pad = function(str){
   }else{
     return str;
   }
-}
+};
 
 var loadTodosPage = function(event_id) {
 
   $.get('/events/' + event_id).done(function(response) {
-    console.log(response.content.event);
 
     response.content.event.start = new Date(response.content.event.start);
     response.content.event.end = new Date(response.content.event.end);
@@ -150,11 +146,8 @@ var loadTodosPage = function(event_id) {
     response.content.event.attending = response.content.event.attendees.filter(function(e){
       return e.attending == 1;
     });
-    console.log(response.content.event.attending);
     loadPage('todos', {event: response.content.event, title:"Your Todos for " + response.content.event.name, currentUser: currentUser, page:"todos"});
   }).fail(function(responseObject){
-    console.log(responseObject);
-    console.log("failed");
     var response = $.parseJSON(responseObject.responseText);
     Materialize.toast(response.err, 4000);
   });
@@ -162,7 +155,6 @@ var loadTodosPage = function(event_id) {
 
 var loadEventsPage = function() {
     //get request for events. replace my_events with results
-    //
     if (currentUser){
       $.get('/events', function(response){
         results = [];
@@ -170,7 +162,6 @@ var loadEventsPage = function() {
           results.push(e);
         });
         results.forEach(function(r){
-          //console.log(r.date);
           r.start = new Date(r.start);
           r.start_time = r.start.toLocaleTimeString();
           var tmp_time = r.start_time.split(' ');
@@ -192,7 +183,7 @@ var loadEventsPage = function() {
           } else {
             r.is_mine = false;
           }
-        })
+        });
         loadPage('events', {
           my_events: response.content,
           title: "Your Events",
@@ -216,8 +207,6 @@ var loadAttendEvents = function() {
       results.push(e);
     });
     results.forEach(function(r){
-      console.log(r);
-      //console.log(r.date);
       r.start = new Date(r.start);
       r.start_time = r.start.toLocaleTimeString();
       var tmp_time = r.start_time.split(' ');
@@ -234,7 +223,7 @@ var loadAttendEvents = function() {
       r.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
       r.end = r.end.toLocaleDateString();
 
-    })
+    });
     loadPage('attendfeed', {
       my_events: response.content,
       title: "Current Events",
@@ -242,11 +231,10 @@ var loadAttendEvents = function() {
 
     });
   });
-}
+};
 
 $(document).ready(function() {
     $.get('/users/current', function(response) {
-      console.log(response);
         if (response.content.loggedIn) {
             currentUser = response.content.user;
         }
@@ -257,7 +245,7 @@ $(document).ready(function() {
 
 $(document).on('click', '#organize-events', function(){
   loadEventsPage();
-})
+});
 $(document).on('click', '#home-link', function(evt) {
 
     loadHomePage();
