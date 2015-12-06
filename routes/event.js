@@ -668,7 +668,11 @@ router.delete('/:event/planners/:planner', function(req, res) {
     if (err) {
       utils.sendErrResponse(res, 500, err);
     } else {
-      utils.sendSuccessResponse(res, success);
+      if (req.plannerid == req.user._id) {
+          utils.sendSuccessResponse(res, {success: true, target: 'home'});
+      } else {
+        utils.sendSuccessResponse(res, {success: true, target: 'events'});
+      }
     }
   });
 });
