@@ -9,7 +9,7 @@
           <p class="category">{{name}}<i class="material-icons right delete-category ghetto-badge">clear</i><i class="material-icons right edit-category ghetto-badge">edit</i></p>
 
           <div class="edit-category-form" style="display:none">
-            <label for="edit-category-name" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" name="edit-category-name" type="text"></label>
+            <label for="edit-category-name-{{_id}}" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" id="edit-category-name-{{_id}}" name="edit-category-name" type="text"></label>
 
 
             <button class="waves-effect waves-light btn btn-default submit-edit-category">Submit</button>
@@ -22,7 +22,7 @@
           <br>
           <div class="new-todo-form" style="display:none">
             <div class="input-field col s12">
-              <input type="text" name="todo-name" class="todo-name">
+              <input type="text" id="todo-name" name="todo-name" class="todo-name">
               <label for="todo-name">Todo name</label>
             </div>
             <div class="input-field col s12">
@@ -30,7 +30,7 @@
               <label for="deadline">Deadline</label>
             </div>
             <div class="input-field col s12">
-              <input type="number" min="1" max="10" class="priority">
+              <input type="number" min="1" max="10" id="priority" class="priority">
               <label for="priority">Priority (1-10)</label>
             </div>
             <button class="btn btn-default" id="add-todo">Add Todo</button>
@@ -81,7 +81,7 @@
     </div>
     <div id="event-details" class="col s12">
       <div id="event_editable">
-        <i class="material-icons right" id="edit-event ghetto-badge">edit</i>
+        <i class="material-icons ghetto-badge right" id="edit-event">edit</i>
         <!-- Event Summary Info (not editable) -->
         <h3 id="event_name">{{#if event.private}}<i class="material-icons" style:"font-size: 40px">lock</i>{{/if}}{{event.name}}</h3>
         <hr>

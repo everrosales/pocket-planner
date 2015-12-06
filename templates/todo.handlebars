@@ -25,21 +25,21 @@
       <br>
     </div>
     <div class="add-assignee-form input-field" style="display:none">
-      <input class="add-assignee-email" type="text" id="add-assignee-email">
-      <label for="add-assignee-email">Assignee email</label>
+      <input class="add-assignee-email" type="text" id="add-assignee-email-{{_id}}">
+      <label for="add-assignee-email-{{_id}}">Assignee email</label>
       <button class="waves-effect waves-light btn btn-default submit-add-assignee">Add</button>
       <button class="waves-effect waves-light btn btn-default cancel-add-assignee">Cancel</button>
     </div>
     <div class="edit-todo-form" style="display:none">
 
-      <label class="active" for="edit-todo-name">Todo Name</label>
-      <input class="edit-todo-name" id="edit-todo-name" value="{{name}}" type="text">
+      <label class="active" for="edit-todo-name-{{_id}}">Todo Name</label>
+      <input class="edit-todo-name" id="edit-todo-name-{{_id}}" value="{{name}}" type="text">
 
-      <label class="active" for="edit-todo-deadline">Deadline</label>
-      <input class="edit-todo-deadline" type="text" id="edit-todo-deadline" value={{#if deadline}}{{deadline}}{{/if}}>
+      <label class="active" for="edit-todo-deadline-{{_id}}">Deadline</label>
+      <input class="edit-todo-deadline" type="text" id="edit-todo-deadline-{{_id}}" value={{#if deadline}}{{deadline}}{{/if}}>
 
-      <label class="active" for="edit-todo-priority">Priority (1-10)</label>
-      <input class="edit-todo-priority" id="edit-todo-priority" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
+      <label class="active" for="edit-todo-priority-{{_id}}">Priority (1-10)</label>
+      <input class="edit-todo-priority" id="edit-todo-priority-{{_id}}" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
 
       <br>
       <button class="waves-effect waves-light btn btn-default submit-edit-todo">Submit</button>
