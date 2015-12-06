@@ -11,20 +11,35 @@
       {{#if deadline}}
       <small>Deadline: {{deadline}}</small>
       {{/if}}
+      {{#if assignee}}
+      <div class="chip right">
+        {{assignee}}
+        <i class="material-icons delete-assignee">close</i>
+      </div>
+      {{else}}
+      <i class="assign-person material-icons small ghetto-badge right">person_add</i>
+      {{/if}}
       {{#if priority}}
       <br><small>Priority (1-10): {{priority}}</small>
       {{/if}}
+      <br>
+    </div>
+    <div class="add-assignee-form input-field" style="display:none">
+      <input class="add-assignee-email" type="text" id="add-assignee-email-{{_id}}">
+      <label for="add-assignee-email-{{_id}}">Assignee email</label>
+      <button class="waves-effect waves-light btn btn-default submit-add-assignee">Add</button>
+      <button class="waves-effect waves-light btn btn-default cancel-add-assignee">Cancel</button>
     </div>
     <div class="edit-todo-form" style="display:none">
 
-      <label class="active" for="edit-todo-name">Todo Name</label>
-      <input class="edit-todo-name" name="edit-todo-name" value="{{name}}" type="text">
+      <label class="active" for="edit-todo-name-{{_id}}">Todo Name</label>
+      <input class="edit-todo-name" id="edit-todo-name-{{_id}}" value="{{name}}" type="text">
 
-      <label class="active" for="edit-todo-deadline">Deadline</label>
-      <input class="edit-todo-deadline" type="text" name="edit-todo-deadline" value={{#if deadline}}{{deadline}}{{/if}}>
+      <label class="active" for="edit-todo-deadline-{{_id}}">Deadline</label>
+      <input class="edit-todo-deadline" type="text" id="edit-todo-deadline-{{_id}}" value={{#if deadline}}{{deadline}}{{/if}}>
 
-      <label class="active" for="edit-todo-priority">Priority (1-10)</label>
-      <input class="edit-todo-priority" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
+      <label class="active" for="edit-todo-priority-{{_id}}">Priority (1-10)</label>
+      <input class="edit-todo-priority" id="edit-todo-priority-{{_id}}" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
 
       <br>
       <button class="waves-effect waves-light btn btn-default submit-edit-todo">Submit</button>
@@ -33,33 +48,3 @@
     </div>
   </div>
 {{/each}}
-
-
-<!-- Using this to temporarily hold state -->
-<!-- DEPRECATED -->
-<!-- <div id='new-category-container'>
-  <div class='event'>
-    <div class='input-field col s3'>
-      <input id='category-title' type='text' placeholder='To-Do List Title'>
-      <label for='category-title'>New Category Title</label>
-    </div>
-    <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
-    <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
-    </div>
-  </div>
-</div> -->
-
-<!-- Using this to temporarily hold state -->
-<!-- DEPRECATED -->
-<!-- var htmlStr =
-  "<div class='new-todo-form'>" +
-  "<div class='input-field col s12'>" +
-  "  <input type='text' id='todo-name'> " +
-  "  <label for='todo-name'>Name</label> " +
-  "</div>" +
-  "<div class='input-field col s12'> " +
-  "  <input type='text' id='deadline'> " +
-  "  <label for='deadline'>Deadline</label> " +
-  "</div>" +
-  "<div class='btn btn-default' id='add-todo'>Add To-do</div> " +
-  "<div class='btn btn-default' id='cancel-add-todo'>Cancel</div></div>" -->

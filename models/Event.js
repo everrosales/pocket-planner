@@ -338,20 +338,22 @@ var Event = (function Event() {
    *    to event; 'no such event' error if event not found.
    */
   var _deletePlanner = function(eventid, plannerid, callback) {
-    _ifEventExists(eventid, function(err, exists) {
-      if (exists) {
-        _model.findOneAndUpdate({'_id':eventid, 'planners':plannerid},
-                    {$unset:{'planners':plannerid}},
-                    {new:true},
-                    function(err, result) {
-          if (result) {
-            callback(err, true);
-          } else {
-            callback({msg: "No such planner."});
-          }
-        });
+    _getEvent(eventid, function(err, found_event) {
+      if (err) {
+        callback(err);
       } else {
-        callback({msg:"No such event."});
+        if (found_event.planners.indexOf(plannerid) != -1) {
+          found_event.planners.pull(plannerid);
+          found_event.save(function(err) {
+            if (err) {
+              callback(err, false);
+            } else {
+              callback(err, true);
+            }
+        });
+        } else {
+          callback({msg: "No such planner."});
+        }
       }
     });
   };
@@ -487,7 +489,38 @@ var Event = (function Event() {
     });
   };
 
-  /** Marks an invitee (or person in general) as attending an event (adds attendee if not found)
+  /** Removes an invitee from an Event
+   *  Arguments:
+   *    eventid: the id of the event to be updated
+   *    attendee: the email of the invited person being removed
+   *    callback: a function to call once the event is updated
+   *  Returns:
+   *    true on success; false if err while saving;
+   *    'no such event' error if event not found.
+   */
+  var _deleteInvitee = function(eventid, attendeeId, callback) {
+    _getEvent(eventid, function(err, found_event) {
+      if(err) {
+        callback(err);
+      } else {
+        // (event -> category -> todo).remove()
+        if (found_event.attendees.id(attendeeId)) {
+          found_event.attendees.id(attendeeId).remove();
+          found_event.save(function(err) {
+            if (err) {
+              callback(err, false);
+            } else {
+              callback(err, true);
+            }
+          });
+        } else {
+          callback({msg: "No such invitee."});
+        }
+      }
+    });
+  };
+
+  /** Marks an invitee (or person in general) as attending an event
    *  Arguments:
    *    eventid: the id of the event to be updated
    *    attendee_email: the email of the attendee being marked
@@ -863,6 +896,23 @@ var Event = (function Event() {
     });
   };
 
+  var _removeAssignee = function(eventId, categoryId, todoId, callback) {
+    _getCategory(eventId, categoryId, function(err, result) {
+      if (err) {
+        callback(err);
+      } else {
+        result.event.categories.id(result.category._id).todos.id(todoId).set('assignee', undefined);
+        result.event.save(function(err) {
+          if (err) {
+            callback(err, false);
+          } else {
+            callback(err, true);
+          }
+        });
+      }
+    });
+  };
+
   /** Marks a todo as completed
    *  Arguments:
    *    eventid: the id of the event to be updated
@@ -961,6 +1011,7 @@ var Event = (function Event() {
     addCost             : _addCost,
     deleteCost          : _deleteCost,
     addInvite           : _addInvite,
+    deleteInvitee       : _deleteInvitee,
     markAttending       : _markAttending,
     markNotAttending    : _markNotAttending,
     getAttendingCount   : _getAttendingCount,
@@ -973,6 +1024,7 @@ var Event = (function Event() {
     editCategory        : _editCategory,
     editTodo            : _editTodo,
     assignTodo          : _assignTodo,
+    removeAssignee      : _removeAssignee,
     checkTodo           : _checkTodo,
     uncheckTodo         : _uncheckTodo,
     deleteTodo          : _deleteTodo,

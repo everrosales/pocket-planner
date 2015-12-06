@@ -34,7 +34,6 @@
         loadTodosPage(event_id);
       }).fail(function(responseObject){
         var response = $.parseJSON(responseObject.responseText);
-        // $(this).parent().find('.error').text(response.err);
         Materialize.toast(response.err, 2000);
       });
     }

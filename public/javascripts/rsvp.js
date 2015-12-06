@@ -20,21 +20,18 @@ var loadPage = function(template, data) {
 var loadRsvpPage = function() {
   var event_id = window.location.pathname.split('/')[2];
   $.get('/events/' + event_id + '/details').done(function(response) {
-    console.log('success!');
     evt = response.content.event;
     loadPage('rsvp', evt);
   }).fail(function(responseObject) {
-    console.log(responseObject);
     var response = $.parseJSON(responseObject.responseText);
-    console.log(response);
     Materialize.toast(response.err, 4000);
   });
-}
+};
 
 $(document).on("click",".rsvp-attend", function(e){
   e.preventDefault();
   var attending = true;
-  if ($(this).val() == 0){
+  if ($(this).val() === 0){
     attending = false;
   }
   var event_id = $(this).attr("eventId");
@@ -65,13 +62,11 @@ $(document).on("click",".rsvp-attend", function(e){
       attending:attending,
       note:comments
     }).done(function(response) {
-      console.log('success!');
       Materialize.toast('You registered for the event! Redirecting..' , 4000);
       window.setTimeout(function(){
         window.location.href="/";
       }, 1000);
     }).fail(function(responseObject) {
-      console.log('oops');
       var response = $.parseJSON(responseObject.responseText);
       Materialize.toast(response.err, 4000);
     });
@@ -80,7 +75,7 @@ $(document).on("click",".rsvp-attend", function(e){
 $(document).on("click", "#home-link", function(evt){
   evt.preventDefault();
   window.location.href="/";
-})
+});
 
 $(document).ready(function() {
   $.get('/users/current', function(response) {

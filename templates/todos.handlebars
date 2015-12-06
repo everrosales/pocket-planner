@@ -1,67 +1,69 @@
 {{> header currentUser=currentUser title=title}}
 <div id="event-row-container" class="row">
-<div id="category-container" class="col m9" eventId={{event._id}}>
+<div id="category-container" class="col l8 m6 s12" eventId={{event._id}}>
   {{#each event.categories}}
-    <div class="todo-container card-panel col s12 m6 l3" categoryId={{_id}}>
-      <div class="inner-todo-container">
+    <div class="container col s12 m12 l4">
+      <div class="todo-container card-panel" categoryId={{_id}}>
+        <div class="inner-todo-container">
 
-        <p class="category">{{name}}<i class="material-icons right delete-category ghetto-badge">clear</i><i class="material-icons right edit-category ghetto-badge">edit</i></p>
+          <p class="category">{{name}}<i class="material-icons right delete-category ghetto-badge">clear</i><i class="material-icons right edit-category ghetto-badge">edit</i></p>
 
-        <div class="edit-category-form" style="display:none">
-          <label for="edit-category-name" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" name="edit-category-name" type="text"></label>
+          <div class="edit-category-form" style="display:none">
+            <label for="edit-category-name-{{_id}}" class="active">Todo List Name<input class="edit-category-name" value="{{name}}" id="edit-category-name-{{_id}}" name="edit-category-name" type="text"></label>
 
 
-          <button class="waves-effect waves-light btn btn-default submit-edit-category">Submit</button>
-          <button class="waves-effect waves-light btn btn-default cancel-edit-category">Cancel</button>
+            <button class="waves-effect waves-light btn btn-default submit-edit-category">Submit</button>
+            <button class="waves-effect waves-light btn btn-default cancel-edit-category">Cancel</button>
+          </div>
+
+          <hr>
+          {{> todo}}
+          <br>
+          <br>
+          <div class="new-todo-form" style="display:none">
+            <div class="input-field col s12">
+              <input type="text" id="todo-name" name="todo-name" class="todo-name">
+              <label for="todo-name">Todo name</label>
+            </div>
+            <div class="input-field col s12">
+              <input type="text" class="deadline">
+              <label for="deadline">Deadline</label>
+            </div>
+            <div class="input-field col s12">
+              <input type="number" min="1" max="10" id="priority" class="priority">
+              <label for="priority">Priority (1-10)</label>
+            </div>
+            <button class="btn btn-default" id="add-todo">Add Todo</button>
+            <button class="btn btn-default" id="cancel-add-todo">Cancel</button>
+          </div>
+          <button class="waves-effect waves-light btn btn-default add_todo">Add a To-Do</button>
         </div>
-
-        <hr>
-        {{> todo}}
-        <br>
-        <br>
-        <div class="new-todo-form" style="display:none">
-          <div class="input-field col s12">
-            <input type="text" name="todo-name" class="todo-name">
-            <label for="todo-name">Todo name</label>
-          </div>
-          <div class="input-field col s12">
-            <input type="text" class="deadline">
-            <label for="deadline">Deadline</label>
-          </div>
-          <div class="input-field col s12">
-            <input type="number" min="1" max="10" class="priority">
-            <label for="priority">Priority (1-10)</label>
-          </div>
-          <button class="btn btn-default" id="add-todo">Add Todo</button>
-          <button class="btn btn-default" id="cancel-add-todo">Cancel</button>
-        </div>
-        <button class="waves-effect waves-light btn btn-default add_todo">Add a To-Do</button>
       </div>
     </div>
   {{else}}
     <p><em>No todo lists yet!</em></p>
   {{/each}}
 
-  <div id="new-todo-list-card" class="card-panel col s12 m6 l3">
-    <h4>New Todo List</h4>
-    <button class="btn btn-default" id="new_category">+ Add List</button>
+  <div class="container col s12 m12 l4">
+    <div id="new-todo-list-card" class="card-panel">
+      <h4>New Todo List</h4>
+      <button class="btn btn-default" id="new_category">+ Add List</button>
 
 
-    <div id='new-category-container' style="display:none">
-      <div>
-        <input id='category-title' type='text' placeholder='To-Do List Title'>
-        <br>
-        <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
-        <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
+      <div id='new-category-container' style="display:none">
+        <div>
+          <input id='category-title' type='text' placeholder='To-Do List Title'>
+          <br>
+          <div class='btn btn-default' id='add-category-button'>Add To-Do List</div>
+          <div class='btn btn-default' id='cancel-category-button'>Cancel</div>
+        </div>
       </div>
     </div>
   </div>
-
 </div>
-<div id="event-panel" class="col m3 s12 z-depth-2" eventId={{event._id}}>
+<div id="event-panel" class="col l4 m6 s12 z-depth-2" eventId={{event._id}}>
   <div class="row">
     <div class="col s12">
-      <!-- <div class="error"></div> -->
       <ul class="tabs">
         <li class="tab col s4 tab-accent-cyan">
           <a class="active teal-text" href="#event-details">Details</a>
@@ -79,7 +81,7 @@
     </div>
     <div id="event-details" class="col s12">
       <div id="event_editable">
-        <i class="material-icons right" id="edit-event">edit</i>
+        <i class="material-icons ghetto-badge right" id="edit-event">edit</i>
         <!-- Event Summary Info (not editable) -->
         <h3 id="event_name">{{#if event.private}}<i class="material-icons" style:"font-size: 40px">lock</i>{{/if}}{{event.name}}</h3>
         <hr>
@@ -132,10 +134,10 @@
       </div>
       <hr>
       <div>
-        <p class="bold">Invite link: <br>
+        <p>Invite link: <br>
           <a class="invite-link" href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
         </p>
-        <p><span class="bold">Number attendees:</span>  {{event.attending.length}}</p>
+        <p><span>Number attendees:</span>  {{event.attending.length}}</p>
       </div>
     </div>
 
@@ -148,7 +150,7 @@
           <ul class="collapsible" data-collapsible="accordion">
           {{#each event.cost}}
               <li costId="{{_id}}">
-                <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
+                <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost ghetto-badge">clear</i></span></div>
                 <div class="collapsible-body">
                   <p>Amount: ${{amount}}
                   {{#if description}}
@@ -167,9 +169,7 @@
 
         <script>
           $(document).ready(function(){
-            $('.collapsible').collapsible({
-              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-            });
+            $('.collapsible').collapsible();
           });
           </script>
       </div>
@@ -204,22 +204,22 @@
         <ul>
           {{#each event.attendees}}
             {{#equal attending 1}}
-              <li>
-                <p><span class="bold green-text lighten-1">{{name}} {{email}} <i class="material-icons green-text lighten-1 right">check</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span></p>
               </li>
             {{/equal}}
             {{#equal attending 2}}
-              <li>
-                <p><span class="bold red-text lighten-1">{{email}} <i class="material-icons red-text lighten-1 right">close</i></span></p>
-              </li-
+              <li inviteeid={{_id}}>
+                <p><span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span></p>
+              </li>
             {{/equal}}
             {{#equal attending 0}}
-              <li>
-                <p><span class="bold">{{email}} <i class="material-icons right">more_horiz</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span>{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span></p>
               </li>
             {{/equal}}
           {{else}}
-            <p>No invitees yet.</p>
+            <p>No attendees yet.</p>
           {{/each}}
         </ul>
         <button class="btn btn-default" id="email-invitees">Email invitees</button>
@@ -231,7 +231,6 @@
           <input type="text" id="email-subject">
           <label for="email-subject">Email subject</label>
 
-          <!--TODO: datepicker to send the emails at a specific date -->
           <br>
           <input type="checkbox" id="email-invitation">
           <label for="email-invitation">Use invitation template</label>
@@ -267,7 +266,7 @@
         <ul>
           {{#each event.planners}}
             <li plannerId={{_id}}>
-              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">clear</i></span></p>
+              <p>{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}<span class="badge"><i class="material-icons remove-planner ghetto-badge">clear</i></span></p>
             </li>
           {{else}}
             <p>No other planners yet.</p>
@@ -285,10 +284,7 @@
           <input id="planner-email-confirm" type="email" class="validate">
           <label for="planner-email-confirm">Confirm Email</label>
         </div>
-        <!-- <input id="planner-email" placeholder="Email of planner [required]"> -->
-        <!-- <br> -->
         <button class="waves-effect waves-light btn btn-default"  id="submit-planner">Submit Planner</button>
-        <!-- <br> -->
         <button class="waves-effect waves-light btn btn-default" id="cancel-planner">Cancel</button>
       </div>
     </div>

@@ -17,7 +17,7 @@ var Mailer = (function Mailer() {
   return {
     sendEmail   :   _sendEmail,
     sendEmailAt :   _sendEmailAt
-  }
+  };
 })();
 
 module.exports = Mailer;

@@ -34,7 +34,7 @@ var isAuthorized = function(req, res) {
     utils.sendErrResponse(res, 403, 'Must be logged in to use this feature.');
     return false;
   }
-}
+};
 
 /*
     Grab a event from the store whenever one is referenced with an ID in the
@@ -78,6 +78,23 @@ router.param('cost', function (req, res, next, costId) {
   }
 });
 
+router.param('planner', function(req, res, next, plannerId) {
+  if (plannerId) {
+    req.plannerid = plannerId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
+
+router.param('invitee', function(req, res, next, inviteeId) {
+  if (inviteeId) {
+    req.inviteeid = inviteeId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
 
 // Routes that do not always require authentication
 
@@ -159,13 +176,11 @@ router.post('/:event/attend', function(req, res) {
   } else if (req.body.note.length > 300) {
     utils.sendErrResponse(res, 400, 'Note length cannot be greater than 300.');
   } else {
-    // TODO(erosales): handle private events in the same function
     if (req.body.attending == 'true') {
       Event.markAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          //loadHomePage();
           utils.sendSuccessResponse(res, result);
         }
       });
@@ -174,7 +189,6 @@ router.post('/:event/attend', function(req, res) {
         if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
-          //loadHomePage();
           utils.sendSuccessResponse(res, result);
         }
       });
@@ -247,7 +261,7 @@ router.get('/:event', function(req, res) {
           totalCosts += cost.amount;
         });
         var freeBudget = req.event.budget - totalCosts;
-        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners, 'freeBudget': freeBudget});
+        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners, currentUser:req.user.email, 'freeBudget': freeBudget});
       }
     });
   }
@@ -277,34 +291,6 @@ router.post('/', function(req, res) {
         utils.sendSuccessResponse(res, event);
       });
     }
-});
-
-/*
-  POST /events/:event/categories/:category/todos/:todo/assign
-  Request body:
-    - planner_email: the planner to assign to the todo
-  Response:
-    - success: true if the server succeeded in assigning the planner to the todo
-    - err: on failure, an error message
-*/
-router.post('/:event/categories/:category/todos/:todo/assign', function(req, res){
-  if (! isAuthorized(req, res)) {
-    // Error response has already sent in isAuthorized.
-    return false;
-  }
-  if (!req.body.planner_email) {
-    utils.sendErrResponse(res, 400, 'Planner email required.');
-  } else if (!validator.isEmail(req.body.planner_email)) {
-    utils.sendErrResponse(res, 400, 'Expected planner email address.');
-  } else {
-    Event.assignTodo(req.event._id, req.category._id, req.todo._id, req.body.planner_email, function(err){
-      if (err) {
-        utils.sendErrResponse(err, 500, err);
-      }else{
-        utils.sendSuccessResponse(res, true);
-      }
-    });
-  }
 });
 
 /*
@@ -386,7 +372,6 @@ router.post('/:event/categories', function (req, res) {
   } else if (req.body.name.length > 100) {
     utils.sendErrResponse(res, 400, 'Category name length cannot be greater than 100.');
   } else {
-    //console.log(req);
     // Just add the category to the event.
     Event.addCategory(req.event._id, req.body.name, function(err, id) {
       if (err) {
@@ -399,14 +384,14 @@ router.post('/:event/categories', function (req, res) {
 });
 
 /*
-    POST /events/:event/invite
+    POST /events/:event/invitees
     Request parameters:
      - event ID: the unique ID of the event we're going to change
     Response:
      - success: true if server succeeded in adding information to the Event
      - err: on failure, an error message
 */
-router.post('/:event/invite', function (req, res) {
+router.post('/:event/invitees', function (req, res) {
   if (! isAuthorized(req, res)) {
     // Error response has already sent in isAuthorized.
     return false;
@@ -459,13 +444,7 @@ router.post('/:event/categories/:category/todos', function (req, res) {
 
 });
 
-var mailerCallback = function(err, info) {
-  if (err) {
-    console.log(err);
-  } else {
-    console.log('Email sent.');
-  }
-};
+var mailerCallback = function(err, info) {};
 
 /*
     Send email from user to user, and bcc all planners + invitees or attendees
@@ -521,7 +500,7 @@ router.post('/:event/email', function(req, res) {
               });
         }
       });
-    }
+    };
 
 
   if (! isAuthorized(req, res)) {
@@ -603,7 +582,10 @@ router.put('/:event/categories/:category', function(req, res) {
           check: given todo will be checked
           uncheck: given todo will be unchecked
           edit: given todo will have updated information
+          assign: given todo will be assigned or unassigned to a person
      - information: required if status==edit, object containing fields to change
+     - assign: required if status==assign, true = assigning todo; false = un-assigning todo
+     - email: required if status==assign, planner to whom to assign todo
     Response:
      - success: true if server succeeded in marking todo
      - err: on failure, an error message
@@ -613,8 +595,8 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     // Error response has already sent in isAuthorized.
     return false;
   }
-  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit')) {
-    utils.sendErrResponse(res, 400, 'Status missing from the URL');
+  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit' && req.body.status != 'assign')) {
+    utils.sendErrResponse(res, 500, 'Status missing from the URL');
   }
   if (req.body.status == 'check') {
     Event.checkTodo(req.event, req.category, req.todo, function(err, success) {
@@ -640,23 +622,28 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
         utils.sendSuccessResponse(res, success);
       }
     });
+  } else if (req.body.status == 'assign') {
+    if (req.body.assign == "assign") {
+      Event.assignTodo(req.event, req.category, req.todo, req.body.email, function(err, success) {
+        if (err) {
+          utils.sendErrResponse(res, 500, err);
+        } else {
+          utils.sendSuccessResponse(res, success);
+        }
+      });
+    } else if (req.body.assign == "remove") {
+      Event.removeAssignee(req.event, req.category, req.todo, function(err, success) {
+        if (err) {
+          utils.sendErrResponse(res, 500, err);
+        } else {
+          utils.sendSuccessResponse(res, success);
+        }
+      });
+    }
   } else {
     utils.sendErrResponse(res, 500, 'Something went wrong');
   }
 });
-
-/*
-PUT
-/events/:event/categories/:category
-*/
-router.put('/:event/categories/:category', function(req, res) {
-  if (! isAuthorized(req, res)) {
-    // Error response has already sent in isAuthorized.
-    return false;
-  }
-
-});
-
 
 // DELETE requests
 
@@ -702,7 +689,40 @@ router.delete('/:event/planners/:planner', function(req, res) {
     return false;
   }
   // Delete Planner
-  utils.sendErrResponse(res, 404, 'Route not configured');
+  Event.deletePlanner(req.event, req.plannerid, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      if (req.plannerid == req.user._id) {
+          utils.sendSuccessResponse(res, {success: true, target: 'home'});
+      } else {
+        utils.sendSuccessResponse(res, {success: true, target: 'events'});
+      }
+    }
+  });
+});
+
+/*
+    DELETE /events/:event/invitees/:invitee
+    Request parameters:
+     - event ID: the unique ID of the event within the logged-in user's collection
+     - planner ID: the unique ID of the invitee who will be removed from the list of invitees
+    Response:
+      - success: true if the server succeeded in deleting the invitee from the Event
+      - err: on failure, an error message
+*/
+router.delete('/:event/invitees/:invitee', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  Event.deleteInvitee(req.event, req.inviteeid, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
 });
 
 /*

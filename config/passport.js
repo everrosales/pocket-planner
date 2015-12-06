@@ -46,8 +46,8 @@ var internalPassport = function(passport) {
         return done(null, false, 'Wrong password.');
       }
       return done(null, user);
-    })
-  }))
+    });
+  }));
 };
 
 module.exports = internalPassport;

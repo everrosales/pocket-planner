@@ -2,10 +2,11 @@
   <div class="navbar-fixed">
     <nav>
       <div class="nav-wrapper blue-grey">
-        <a href="/" class="brand-logo">Pocket Planner{{#if title}} | <span class="event-title-header">{{title}}</span>{{/if}}</a>
+        <a href="/" class="brand-logo">Pocket Planner{{#if title}}<span class="hide-on-small-only">
+         | <span class="event-title-header">{{title}}</span></span>{{/if}}</a>
 
         <a href="#" data-activates="mobile-header" class="button-collapse"><i class="material-icons">menu</i></a>
-        <ul class="right hide-on-small-only">
+        <ul class="right hide-on-med-and-down">
 
           {{#if currentUser}}
             <li><a id="home-page-link" class="waves-effect waves-light">Home</a></li>
@@ -75,22 +76,22 @@
         <form id="signup-form" class="col s12">
           <div class="row">
             <div class="input-field col s6">
-              <input name="username" type="email" class="validate" required>
-              <label for="username">Email</label>
+              <input name="username" type="email" class="validate" id="username_s" required>
+              <label for="username_s">Email</label>
             </div>
 
             <div class="input-field col s6">
-              <input name="confirmusername" type="email" class="validate" required>
+              <input name="confirmusername" type="email" class="validate" id="confirmusername" required>
               <label for="confirmusername">Confirm Email</label>
             </div>
           </div>
           <div class="row">
             <div class="input-field col s6">
-              <input name="password" type="password" class="validate" required>
-              <label for="password">Password</label>
+              <input name="password" type="password" class="validate" id="password_s" required>
+              <label for="password_s">Password</label>
             </div>
             <div class="input-field col s6">
-              <input name="confirmpassword" type="password" class="validate" required>
+              <input name="confirmpassword" type="password" class="validate" id="confirmpassword" required>
               <label for="confirmpassword">Confirm Password</label>
             </div>
           </div>
