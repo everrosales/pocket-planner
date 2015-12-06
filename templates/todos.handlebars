@@ -117,6 +117,39 @@
         <div class="input-field col s12">
           <input type="text" name="edit-event-loc" id="edit-event-loc" class="validate" value="{{event.location}}">
           <label class="active" for="edit-event-loc">Location</label>
+          <div id="map-container" style="display:none">
+
+            <div id="map_canvas"></div>
+            <script>
+             $(function(){
+               $("#edit-event-loc").on("click", function(){
+                 $("#map_canvas").trigger("geocode");
+               })
+
+               var options = {
+                 map: "#map_canvas",
+                 location: $("#edit-event-loc").val()
+               };
+
+               $("#edit-event-loc").geocomplete(options)
+                 .bind("geocode:result", function(event, result){
+                   console.log("Result: " + result.formatted_address);
+                 })
+                 .bind("geocode:error", function(event, status){
+                   console.log("ERROR: " + status);
+                 })
+                 .bind("geocode:multiple", function(event, results){
+                   console.log("Multiple: " + results.length + " results found");
+                 });
+
+             });
+             var map = document.getElementById("map_canvas");
+             google.maps.event.trigger(map, 'resize');
+             google.maps.event.addListenerOnce(map, 'idle', function() {
+                google.maps.event.trigger(map, 'resize');
+            });
+           </script>
+          </div>
         </div>
         <div class="input-field col s12">
           <textarea id="edit-event-desc" class="materialize-textarea">{{event.description}}</textarea>
@@ -296,4 +329,6 @@
     </script>
   </div>
 </div>
+
+
 </div>
