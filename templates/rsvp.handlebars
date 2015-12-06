@@ -3,11 +3,11 @@
   <div class="container grey lighten-3">
     <div id="rsvp-summary-card" class="card large">
       <div id="rsvp-summary-image" class="card-image teal">
-        <span class="card-title">event details</span>
+        <span class="card-title">{{name}}</span>
       </div>
       <div id="rsvp-summary-content" class="card-content">
           <div class="row">
-            <h2>{{name}}</h2>
+            <!-- <h2>Event Details</h2> -->
             <blockquote id="rsvp-summary-details">
               Host: {{hostEmail}} <br>
               Start: {{ start}} @ {{ start_time}} <br>
@@ -21,7 +21,7 @@
             </div>
           {{/if}}
         <form id="attendee-status" action="#">
-          <h3>Are you going?</h3>
+          <h5>Are you going?</h5>
           <div class="row">
             <div class="input-field col s6">
               <input name="email" type="email" class="validate">
