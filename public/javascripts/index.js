@@ -69,29 +69,29 @@ var loadTodosPage = function(event_id) {
 
 
     response.content.event.end = response.content.event.end.toLocaleDateString();
-    response.content.event.categories.forEach(function(c){
-      c.todos.forEach(function(t){
-        t.deadline = new Date(t.deadline);
-        t.deadline = t.deadline.toLocaleDateString();
+    response.content.event.categories.forEach(function(category){
+      category.todos.forEach(function(todo){
+        todo.deadline = new Date(todo.deadline);
+        todo.deadline = todo.deadline.toLocaleDateString();
       });
     });
-    response.content.event.categories.forEach(function(c) {
-      c.todos.sort(function(todo1, todo2) {
+    response.content.event.categories.forEach(function(category) {
+      category.todos.sort(function(todo1, todo2) {
         if (todo1.name < todo2.name) {
           return -1;
         } else {
           return 1;
         }
       });
-      c.todos.sort(function(todo1, todo2) {
-        if (response.content.self == todo1.assignee) {
-          if (response.content.self == todo2.assignee) {
+      category.todos.sort(function(todo1, todo2) {
+        if (response.content.currentUser == todo1.assignee) {
+          if (response.content.currentUser == todo2.assignee) {
             return todo2.priority - todo1.priority; //highest priority (10) to no priority (0)
           } else {
             return -1; //todo1 assigned to me so higher than todo2
           }
         } else {
-          if (response.content.self == todo2.assignee) {
+          if (response.content.currentUser == todo2.assignee) {
             return 1; //todo2 assigned to me so higher than todo1
           } else {
             return todo2.priority - todo1.priority;
@@ -109,37 +109,37 @@ var loadTodosPage = function(event_id) {
       }
     });
 
-    response.content.event.attendees.sort(function(a1, a2) {
-      if (a1.attending == 1) {
-        if (a2.attending == 1) {
-          if (a1.email < a2.email) {
+    response.content.event.attendees.sort(function(attendee1, attendee2) {
+      if (attendee1.attending == 1) {
+        if (attendee2.attending == 1) {
+          if (attendee1.email < attendee2.email) {
             return -1;
           } else {
             return 1;
           }
         } else {
-          return -1; //attending go on top so a1 is first
+          return -1; //attending go on top so attendee1 is first
         }
-      } else if (a1.attending === 0) {
-        if (a2.attending == 1) {
+      } else if (attendee1.attending === 0) {
+        if (attendee2.attending == 1) {
           return 1;
-        } else if (a2.attending === 0) {
-          if (a1.email < a2.email) {
+        } else if (attendee2.attending === 0) {
+          if (attendee1.email < attendee2.email) {
             return -1;
           } else {
             return 1;
           }
         } else {
-          return -1; //a2 not attending so a1 comes first
+          return -1; //attendee2 not attending so attendee1 comes first
         }
-      } else { //a1 not attending
-        if (a2.attending == 2) {
-          if (a1.email < a2.email) {
+      } else { //attendee1 not attending
+        if (attendee2.attending == 2) {
+          if (attendee1.email < attendee2.email) {
             return -1;
           } else {
             return 1;
           }
-        } else { //a2 either attending or invited so comes first
+        } else { //attendee2 either attending or invited so comes first
           return 1;
         }
       }

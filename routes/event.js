@@ -240,7 +240,7 @@ router.get('/:event', function(req, res) {
           totalCosts += cost.amount;
         });
         var freeBudget = req.event.budget - totalCosts;
-        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners, self:req.user._id, 'freeBudget': freeBudget});
+        utils.sendSuccessResponse(res, {event:req.event, planners:new_planners, currentUser:req.user._id, 'freeBudget': freeBudget});
       }
     });
   }
