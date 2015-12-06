@@ -586,7 +586,7 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
     // Error response has already sent in isAuthorized.
     return false;
   }
-  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit')) {
+  if (!req.body.status || (req.body.status != 'check' && req.body.status != 'uncheck' && req.body.status != 'edit' && req.body.status != 'assign')) {
     utils.sendErrResponse(res, 500, 'Status missing from the URL');
   }
   if (req.body.status == 'check') {
@@ -618,6 +618,30 @@ router.put('/:event/categories/:category/todos/:todo', function(req, res) {
   }
 });
 
+/*
+    PUT /events/:event/categories/:category/todos/:todo/assign
+    Request parameters:
+     - event ID: the unique ID of the event we're going to modify
+     - category: the category that we are going to modify
+     - todo: todo which is going to be assigned
+     - email: the email of the planner to which this todo will be assigned
+    Response:
+     - success: true if server succeeded in assigning Todo
+     - err: on failure, an error message
+*/
+router.put('/:event/categories/:category/todos/:todo/assign', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  Event.assignTodo(req.event, req.category, req.todo, req.body.email, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
+});
 /*
 PUT
 /events/:event/categories/:category
@@ -723,6 +747,30 @@ router.delete('/:event/categories/:category/todos/:todo', function (req, res) {
         utils.sendSuccessResponse(res, success);
       }
     });
+});
+
+/*
+    DELETE /events/:event/categories/:category/todos/:todo/assignee
+    Request parameters:
+     - event ID: the unique ID of the event we're going to modify
+     - category: the unique id of the category we're modifying
+     - todo: the unique id of the todo we're un-assigning
+    Response:
+     - success: true if the server succeeded in un-assigning the Todo
+     - err: on failure, an error message
+*/
+router.delete('/:event/categories/:category/todos/:todo/assignee', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  Event.removeAssignee(req.event, req.category, req.todo, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
 });
 
 /*

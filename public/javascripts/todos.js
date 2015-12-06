@@ -219,7 +219,60 @@
     }
   });
 
+  //open assign todo form
+  $(document).on("click", ".assign-person", function() {
+    $(this).hide();
+    var edit_form = $(this).parent().parent().find(".add-assignee-form");
+    edit_form.show();
+  });
 
+  //submit assign todo form
+  $(document).on("click", ".submit-add-assignee", function() {
+    event_id = $("#event-panel").attr("eventId");
+    var cat_id = $(this).parent().parent().parent().parent().attr("categoryId");
+
+    var todo_id = $(this).parent().parent().attr("todoId");
+
+    var edit_form = $(this).parent();
+    var assignee_email = edit_form.find(".add-assignee-email").val();
+    if (!assignee_email) {
+      Materialize.toast("Must enter assignee's email", 2000);
+      return;
+    }
+    $.ajax({
+      url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id+"/assign",
+      type: 'PUT',
+      data: {email: assignee_email}
+    }).done(function(response){
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err.msg, 2000);
+    });
+  });
+
+  //cancel assign todo form
+  $(document).on("click", ".cancel-add-assignee", function() {
+    event_id = $("#event-panel").attr("eventId");
+    loadTodosPage(event_id);
+  });
+
+  //remove assignee
+  $(document).on("click", ".delete-assignee", function() {
+    event_id = $("#event-panel").attr("eventId");
+    var cat_id = $(this).parent().parent().parent().parent().parent().attr("categoryId");
+    var todo_id = $(this).parent().parent().parent().attr("todoId");
+
+    $.ajax({
+      url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id+"/assignee",
+      type: 'DELETE'
+    }).done(function(response) {
+      loadTodosPage(event_id);
+    }).fail(function(responseObject) {
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err.msg, 2000);
+    });
+  });
 /*
 * Event panel functions.
 *   -Open form for editing all event info.
@@ -388,6 +441,6 @@
   });
 
   //Adding assignee function
-  
+
 
 })();

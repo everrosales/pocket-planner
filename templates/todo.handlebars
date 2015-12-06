@@ -11,26 +11,35 @@
       {{#if deadline}}
       <small>Deadline: {{deadline}}</small>
       {{/if}}
+      {{#if assignee}}
+      <div class="chip right">
+        {{assignee}}
+        <i class="material-icons delete-assignee">close</i>
+      </div>
+      {{else}}
+      <i class="assign-person material-icons small ghetto-badge right">person_add</i>
+      {{/if}}
       {{#if priority}}
       <br><small>Priority (1-10): {{priority}}</small>
       {{/if}}
       <br>
-      <button class="todo-add-assignee btn btn-default">Add Assignee</button>
     </div>
-    <div class="add-assignee-form" style="display:none">
-      <label class="active" for="add-assignee-name">Assignee email</label>
-      <input class="add-assignee-name" type="text" name="add-assignee-name">
+    <div class="add-assignee-form input-field" style="display:none">
+      <input class="add-assignee-email" type="text" id="add-assignee-email">
+      <label for="add-assignee-email">Assignee email</label>
+      <button class="waves-effect waves-light btn btn-default submit-add-assignee">Add</button>
+      <button class="waves-effect waves-light btn btn-default cancel-add-assignee">Cancel</button>
     </div>
     <div class="edit-todo-form" style="display:none">
 
       <label class="active" for="edit-todo-name">Todo Name</label>
-      <input class="edit-todo-name" name="edit-todo-name" value="{{name}}" type="text">
+      <input class="edit-todo-name" id="edit-todo-name" value="{{name}}" type="text">
 
       <label class="active" for="edit-todo-deadline">Deadline</label>
-      <input class="edit-todo-deadline" type="text" name="edit-todo-deadline" value={{#if deadline}}{{deadline}}{{/if}}>
+      <input class="edit-todo-deadline" type="text" id="edit-todo-deadline" value={{#if deadline}}{{deadline}}{{/if}}>
 
       <label class="active" for="edit-todo-priority">Priority (1-10)</label>
-      <input class="edit-todo-priority" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
+      <input class="edit-todo-priority" id="edit-todo-priority" type="number" max="10" min="1" value={{#if priority}}{{priority}}{{/if}}>
 
       <br>
       <button class="waves-effect waves-light btn btn-default submit-edit-todo">Submit</button>
