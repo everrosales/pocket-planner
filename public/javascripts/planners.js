@@ -10,17 +10,20 @@
 
   //Remove planner when clicking the "remove" button next to the planner name.
   $(document).on("click", ".remove-planner", function(){
+
     event_id = $('#event-panel').attr("eventId");
     var planner_id = $(this).parent().parent().parent().attr("plannerId");
-    console.log(planner_id);
     $.ajax({
       url: 'events/'+event_id+'/planners/'+planner_id,
       type: 'DELETE'
     }).done(function(response){
       window.location.href = "#event-planners";
-      loadTodosPage(event_id);
+      if (response.content.target == 'home') {
+        loadHomePage();
+      } else {
+        loadTodosPage(event_id);
+      }
     }).fail(function(responseObject){
-      console.log("failed");
       var response = $.parseJSON(responseObject.responseText);
       Materialize.toast(response.err, 2000);
     });
@@ -43,13 +46,19 @@
   $(document).on("click", "#submit-planner", function(){
     event_id = $("#event-panel").attr("eventId");
     var email = $("#planner-email").val();
+    if (!email) {
+      Materialize.toast("You must enter an email.", 2000);
+      return;
+    }
+    if (email != $("#planner-email-confirm").val()) {
+      Materialize.toast("Emails must match.", 2000);
+      return;
+    }
     $.post("/events/"+event_id+"/planners", {planner_email:email}).done(function(response){
       window.location.href = "#event-planners";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
-      console.log(responseObject);
       var response = $.parseJSON(responseObject.responseText);
-      console.log(response);
       if (response.err.msg) {
         response.err = response.err.msg;
       }

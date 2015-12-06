@@ -24,8 +24,6 @@
             Materialize.toast('Logged in as ' + currentUser, 4000);
             window.location.reload();
         }).fail(function(responseObject) {
-            console.log(responseObject);
-            console.log(responseObject.responseText);
             $('#login-submit')[0].classList.remove('disabled');
             $('#login-cancel')[0].classList.remove('disabled');
             var response = $.parseJSON(responseObject.responseText);

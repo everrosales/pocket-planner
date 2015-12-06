@@ -19,7 +19,6 @@
       window.location.href = "#event-costs";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
-      console.log("failed");
       var response = $.parseJSON(responseObject.responseText);
       Materialize.toast(response.err, 2000);
     });
@@ -52,7 +51,6 @@
       window.location.href = "#event-costs";
       loadTodosPage(event_id);
     }).fail(function(responseObject){
-      console.log(responseObject);
       var response = $.parseJSON(responseObject.responseText);
       Materialize.toast(response.err, 2000);
     });
