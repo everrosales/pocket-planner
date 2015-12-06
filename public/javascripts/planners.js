@@ -11,7 +11,8 @@
   //Remove planner when clicking the "remove" button next to the planner name.
   $(document).on("click", ".remove-planner", function(){
     event_id = $('#event-panel').attr("eventId");
-    var planner_id = $(this).parent().parent().attr("plannerId");
+    var planner_id = $(this).parent().parent().parent().attr("plannerId");
+    console.log(planner_id);
     $.ajax({
       url: 'events/'+event_id+'/planners/'+planner_id,
       type: 'DELETE'

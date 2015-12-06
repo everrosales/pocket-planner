@@ -77,6 +77,23 @@ router.param('cost', function (req, res, next, costId) {
   }
 });
 
+router.param('planner', function(req, res, next, plannerId) {
+  if (plannerId) {
+    req.plannerid = plannerId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
+
+router.param('invitee', function(req, res, next, inviteeId) {
+  if (inviteeId) {
+    req.inviteeid = inviteeId;
+    next();
+  } else {
+    utils.sendErrResponse(res, 404, 'Resource not found.');
+  }
+});
 
 // Routes that do not always require authentication
 
@@ -675,7 +692,36 @@ router.delete('/:event/planners/:planner', function(req, res) {
     return false;
   }
   // Delete Planner
-  utils.sendErrResponse(res, 404, 'Route not configured');
+  Event.deletePlanner(req.event, req.plannerid, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
+});
+
+/*
+    DELETE /events/:event/invitees/:invitee
+    Request parameters:
+     - event ID: the unique ID of the event within the logged-in user's collection
+     - planner ID: the unique ID of the invitee who will be removed from the list of invitees
+    Response:
+      - success: true if the server succeeded in deleting the invitee from the Event
+      - err: on failure, an error message
+*/
+router.delete('/:event/invitees/:invitee', function(req, res) {
+  if (! isAuthorized(req, res)) {
+    // Error response has already sent in isAuthorized.
+    return false;
+  }
+  Event.deleteInvitee(req.event, req.inviteeid, function(err, success) {
+    if (err) {
+      utils.sendErrResponse(res, 500, err);
+    } else {
+      utils.sendSuccessResponse(res, success);
+    }
+  });
 });
 
 /*
