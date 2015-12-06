@@ -1,6 +1,3 @@
-var loadAttendDialogue = function(event_id) {
-};
-
 $(document).on('click', '.attend-event-container', function(){
   event_id = ($(this).attr('eventId'));
   //go to edit that event
