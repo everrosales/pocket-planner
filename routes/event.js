@@ -273,7 +273,7 @@ router.get('/:event', function(req, res) {
 router.post('/', function(req, res) {
     // Create a new event
     if (!req.body.email || !req.body.name || !req.body.start_date || !req.body.end_date) {
-      utils.sendErrResponse(res, 400, 'Email, name, and time required.');
+      utils.sendErrResponse(res, 400, 'event name, start date, and end date required.');
     }else{
       var is_private;
       Event.createNewEvent(req.body.email, req.body.name, req.body.start_date, req.body.end_date, req.body.is_private, function(err, event) {
