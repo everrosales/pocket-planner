@@ -80,7 +80,7 @@
       if (!new_category_name) {
         Materialize.toast('To-Do List must have a name.', 2000);
       } else if (new_category_name.length > 100) {
-        Materialize.toast('To-Do List name can be at most 100 characters long.');
+        Materialize.toast('To-Do List name can be at most 100 characters long.', 2000);
       } else {
         $.ajax({
           url: "/events/"+event_id+"/categories/"+cat_id,
