@@ -44,7 +44,7 @@ var zero_pad = function(str){
 
 var loadTodosPage = function(event_id) {
 
-  $.get('/events/' + event_id).done(function(response){
+  $.get('/events/' + event_id).done(function(response) {
     console.log(response.content.event);
 
     response.content.event.start = new Date(response.content.event.start);
@@ -69,13 +69,82 @@ var loadTodosPage = function(event_id) {
 
 
     response.content.event.end = response.content.event.end.toLocaleDateString();
-    response.content.event.categories.forEach(function(c){
-      c.todos.forEach(function(t){
-        t.deadline = new Date(t.deadline);
-        t.deadline = t.deadline.toLocaleDateString();
+    response.content.event.categories.forEach(function(category){
+      category.todos.forEach(function(todo){
+        todo.deadline = new Date(todo.deadline);
+        todo.deadline = todo.deadline.toLocaleDateString();
       });
     });
+    response.content.event.categories.forEach(function(category) {
+      category.todos.sort(function(todo1, todo2) {
+        if (todo1.name < todo2.name) {
+          return -1;
+        } else {
+          return 1;
+        }
+      });
+      category.todos.sort(function(todo1, todo2) {
+        if (response.content.currentUser == todo1.assignee) {
+          if (response.content.currentUser == todo2.assignee) {
+            return todo2.priority - todo1.priority; //highest priority (10) to no priority (0)
+          } else {
+            return -1; //todo1 assigned to me so higher than todo2
+          }
+        } else {
+          if (response.content.currentUser == todo2.assignee) {
+            return 1; //todo2 assigned to me so higher than todo1
+          } else {
+            return todo2.priority - todo1.priority;
+          }
+        }
+      });
+    });
+
     response.content.event.planners = response.content.planners;
+    response.content.event.planners.sort(function(email1, email2) {
+      if (email1 < email2) {
+        return -1;
+      } else {
+        return 1;
+      }
+    });
+
+    response.content.event.attendees.sort(function(attendee1, attendee2) {
+      if (attendee1.attending == 1) {
+        if (attendee2.attending == 1) {
+          if (attendee1.email < attendee2.email) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else {
+          return -1; //attending go on top so attendee1 is first
+        }
+      } else if (attendee1.attending === 0) {
+        if (attendee2.attending == 1) {
+          return 1;
+        } else if (attendee2.attending === 0) {
+          if (attendee1.email < attendee2.email) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else {
+          return -1; //attendee2 not attending so attendee1 comes first
+        }
+      } else { //attendee1 not attending
+        if (attendee2.attending == 2) {
+          if (attendee1.email < attendee2.email) {
+            return -1;
+          } else {
+            return 1;
+          }
+        } else { //attendee2 either attending or invited so comes first
+          return 1;
+        }
+      }
+    });
+
     response.content.event.freeBudget = response.content.freeBudget;
 
     response.content.event.attending = response.content.event.attendees.filter(function(e){
