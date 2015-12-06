@@ -113,9 +113,9 @@ templates['events'] = template({"1":function(container,depth0,helpers,partials,d
 templates['header'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "<div class=\"hide-on-small-only\">\n         | <span class=\"event-title-header\">"
+  return "<span class=\"hide-on-small-only\">\n         | <span class=\"event-title-header\">"
     + container.escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"title","hash":{},"data":data}) : helper)))
-    + "</span></div>";
+    + "</span></span>";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
 
@@ -577,9 +577,9 @@ templates['templates/events'] = template({"1":function(container,depth0,helpers,
 templates['templates/header'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "<div class=\"hide-on-small-only\">\n         | <span class=\"event-title-header\">"
+  return "<span class=\"hide-on-small-only\">\n         | <span class=\"event-title-header\">"
     + container.escapeExpression(((helper = (helper = helpers.title || (depth0 != null ? depth0.title : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"title","hash":{},"data":data}) : helper)))
-    + "</span></div>";
+    + "</span></span>";
 },"3":function(container,depth0,helpers,partials,data) {
     var stack1, helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing;
 
