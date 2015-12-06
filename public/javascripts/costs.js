@@ -33,14 +33,14 @@
 
   //Cancel adding cost.
   $(document).on("click", "#cancel-cost", function(){
-    event_id = $(this).parent().attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
     window.location.href = "#event-costs";
     loadTodosPage(event_id);
   });
 
   //Submit add cost form.
   $(document).on("click", "#submit-cost", function(){
-    event_id = $(this).parent().attr("eventId");
+    event_id = $("#event-panel").attr("eventId");
     var name = $("#cost-name").val();
     var amount = $("#cost-amount").val();
     if (amount < 0) {

@@ -681,6 +681,60 @@ describe('Event', function() {
     });
   });
 
+  describe('#deleteInvite', function() {
+    it('should return a no event error if event doesn\'t exist', function(done) {
+      Event.deleteInvitee(0, 0, function(err, result) {
+        assert.deepEqual(err.msg, "No such event.");
+        done();
+      });
+    });
+    it('should return a no invitee error if invitee doesn\'t exist', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), false, function(err, n_event) {
+          Event.deleteInvitee(n_event._id, 0, function(err, result) {
+            assert.deepEqual(err.msg, "No such invitee.");
+            done();
+          });
+        });
+      });
+    });
+    it('should return true if invitee deleted successfully', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, ever) {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), false, function(err, n_event) {
+            Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, n_event) {
+              console.log(n_event);
+              console.log(n_event.attendees[0]._id);
+              Event.deleteInvitee(n_event._id, n_event.attendees[0]._id, function(err, result) {
+                assert.deepEqual(err, null);
+                assert.deepEqual(result, true);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+    it('should change the result of future getEvent calls', function(done) {
+      User.createNewUser('erosolar@mit.edu', 'blah', 'erosolar', function() {
+        User.createNewUser('erosales@mit.edu', 'blah2', 'erosales', function(err, ever) {
+          Event.createNewEvent('erosolar@mit.edu', 'blah', new Date(1995, 7, 6, 10, 39, 0), new Date(1995, 7, 7, 10, 39, 0), false, function(err, n_event) {
+            Event.addInvite(n_event._id, 'erosales@mit.edu', function(err, n_event) {
+              Event.deleteInvitee(n_event._id, n_event.attendees[0]._id, function(err, result) {
+                Event.findById(n_event._id, function(err, result) {
+                  assert.deepEqual(err, null);
+                  assert.deepEqual(result.attendees.length, 0);
+                  done();
+                });
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+
   describe('#markAttending', function() {
     it('should return a no event error if event doesn\'t exist', function(done) {
       Event.markAttending(0, 'erosales@mit.edu', 'ever', 'blahhhhhhh', function(err, result) {

@@ -132,10 +132,10 @@
       </div>
       <hr>
       <div>
-        <p class="bold">Invite link: <br>
+        <p>Invite link: <br>
           <a class="invite-link" href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
         </p>
-        <p><span class="bold">Number attendees:</span>  {{event.attending.length}}</p>
+        <p><span>Number attendees:</span>  {{event.attending.length}}</p>
       </div>
     </div>
 
@@ -143,23 +143,28 @@
       <!-- Costs for the event -->
       <div id="cost-list" eventId={{event._id}}>
         <h3>Costs</h3>
-        Budget: ${{event.budget}} (Current total: ${{ event.freeBudget }})
-        <ul class="collapsible" data-collapsible="accordion">
-        {{#each event.cost}}
-            <li costId="{{_id}}">
-              <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
-              <div class="collapsible-body">
-                <p>Amount: ${{amount}}
-                {{#if description}}
-                  <br>Description: {{description}}
-                {{/if}}
-                </p>
-              </div>
-            </li>
+        Budget: ${{event.budget}} (Budget remaining: ${{ event.freeBudget }})
+        {{#if event.cost}}
+          <ul class="collapsible" data-collapsible="accordion">
+          {{#each event.cost}}
+              <li costId="{{_id}}">
+                <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost">clear</i></span></div>
+                <div class="collapsible-body">
+                  <p>Amount: ${{amount}}
+                  {{#if description}}
+                    <br><p>Description: {{description}}
+                  {{/if}}
+                  </p>
+                </div>
+              </li>
+          {{/each}}
+          </ul>
+
         {{else}}
-          <p>No costs yet.</p>
-        {{/each}}
-        </ul>
+          <p><em>No costs yet.</em></p>
+        {{/if}}
+
+
         <script>
           $(document).ready(function(){
             $('.collapsible').collapsible({
@@ -167,24 +172,29 @@
             });
           });
           </script>
-        <button class="btn btn-default" id="add-cost">Add Cost</button>
       </div>
+      <button class="btn btn-default" id="add-cost">Add Cost</button>
+
       <div id="add-cost-form" style="display:none" eventId={{event._id}}>
-        <h4>New Cost</h4>
-        <div class="input-field col s6">
-          <input id="cost-name" type="text" class="validate">
-          <label for="cost-name">Name</label>
+          <h4>New Cost</h4>
+          <div class="input-field col s6">
+            <input id="cost-name" type="text" class="validate">
+            <label for="cost-name">Name</label>
+          </div>
+          <div class="input-field col s6">
+            <input id="cost-amount" type="number" class="validate">
+            <label for="cost-amount">Amount (in $)</label>
+          </div>
+          <div class="input-field col s12">
+            <input id="cost-desc" type="text" class="validate">
+            <label for="cost-desc">Description</label>
+          </div>
+        <br>
+        <div class="col s12">
+          <button class="waves-effect waves-light btn btn-default"  id="submit-cost">Submit Cost</button>
+          <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
         </div>
-        <div class="input-field col s6">
-          <input id="cost-amount" type="number" class="validate">
-          <label for="cost-amount">Amount (in $)</label>
-        </div>
-        <div class="input-field col s12">
-          <input id="cost-desc" type="text" class="validate">
-          <label for="cost-desc">Description</label>
-        </div>
-        <button class="waves-effect waves-light btn btn-default"  id="submit-cost">Submit Cost</button>
-        <button class=" waves-effect waves-light btn btn-default" id="cancel-cost">Cancel</button>
+
       </div>
     </div>
     <div id="event-attendees" class="col s12">
@@ -194,18 +204,18 @@
         <ul>
           {{#each event.attendees}}
             {{#equal attending 1}}
-              <li>
-                <p><span class="bold green-text lighten-1">{{name}} {{email}} <i class="material-icons green-text lighten-1 right">check</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span></p>
               </li>
             {{/equal}}
             {{#equal attending 2}}
-              <li>
-                <p><span class="bold red-text lighten-1">{{email}} <i class="material-icons red-text lighten-1 right">close</i></span></p>
-              </li-
+              <li inviteeid={{_id}}>
+                <p><span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span></p>
+              </li>
             {{/equal}}
             {{#equal attending 0}}
-              <li>
-                <p><span class="bold">{{email}} <i class="material-icons right">more_horiz</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span>{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span></p>
               </li>
             {{/equal}}
           {{else}}
@@ -257,7 +267,14 @@
         <ul>
           {{#each event.planners}}
             <li plannerId={{_id}}>
-              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">clear</i></span></p>
+              <p>
+                <span>
+                  {{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}
+                </span>
+                <span class="badge">
+                  <i class="material-icons remove-planner">clear</i>
+                </span>
+              </p>
             </li>
           {{else}}
             <p>No other planners yet.</p>
