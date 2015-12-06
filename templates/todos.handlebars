@@ -2,7 +2,7 @@
 <div id="event-row-container" class="row">
 <div id="category-container" class="col l8 m6 s12" eventId={{event._id}}>
   {{#each event.categories}}
-    <div class="container col s12 m6 l4">
+    <div class="container col s12 m12 l4">
       <div class="todo-container card-panel" categoryId={{_id}}>
         <div class="inner-todo-container">
 
@@ -44,7 +44,7 @@
     <p><em>No todo lists yet!</em></p>
   {{/each}}
 
-  <div class="container col s12 m6 l4">
+  <div class="container col s12 m12 l4">
     <div id="new-todo-list-card" class="card-panel">
       <h4>New Todo List</h4>
       <button class="btn btn-default" id="new_category">+ Add List</button>
