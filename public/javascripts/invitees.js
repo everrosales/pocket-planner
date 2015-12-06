@@ -7,13 +7,31 @@
   *   -Submit form to add Invitee
   */
 
-  //Open form to add planner.
+  //remove invitee
+  $(document).on("click", ".remove-invitee", function(){
+    event_id = $('#event-panel').attr("eventId");
+    var invitee_id = $(this).parent().parent().parent().attr("inviteeid");
+    console.log($(this).parent().parent().parent().attr("inviteeid"));
+    $.ajax({
+      url: 'events/'+event_id+'/invitees/'+invitee_id,
+      type: 'DELETE'
+    }).done(function(response){
+      window.location.href = "#event-attendees";
+      loadTodosPage(event_id);
+    }).fail(function(responseObject){
+      console.log("failed");
+      var response = $.parseJSON(responseObject.responseText);
+      Materialize.toast(response.err, 2000);
+    });
+  });
+
+  //Open form to add invitee.
   $(document).on("click", "#add-invitee", function(){
     $("#add-invitee").hide();
     $("#add-invitee-form").show();
   });
 
-  //Cancel adding planner.
+  //Cancel adding invitee.
   $(document).on("click", "#cancel-invitee", function(){
     event_id = $("#event-panel").attr("eventId");
     window.location.href = "#event-attendees";

@@ -165,10 +165,10 @@
       </div>
       <hr>
       <div>
-        <p class="bold">Invite link: <br>
+        <p>Invite link: <br>
           <a class="invite-link" href=/events/{{event._id}}/attend>pocketplanner.herokuapp.com/events/{{event._id}}/attend</a>
         </p>
-        <p><span class="bold">Number attendees:</span>  {{event.attending.length}}</p>
+        <p><span>Number attendees:</span>  {{event.attending.length}}</p>
       </div>
     </div>
 
@@ -237,18 +237,18 @@
         <ul>
           {{#each event.attendees}}
             {{#equal attending 1}}
-              <li>
-                <p><span class="bold green-text lighten-1">{{name}} {{email}} <i class="material-icons green-text lighten-1 right">check</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span></p>
               </li>
             {{/equal}}
             {{#equal attending 2}}
-              <li>
-                <p><span class="bold red-text lighten-1">{{email}} <i class="material-icons red-text lighten-1 right">close</i></span></p>
-              </li-
+              <li inviteeid={{_id}}>
+                <p><span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span></p>
+              </li>
             {{/equal}}
             {{#equal attending 0}}
-              <li>
-                <p><span class="bold">{{email}} <i class="material-icons right">more_horiz</i></span></p>
+              <li inviteeid={{_id}}>
+                <p><span>{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span></p>
               </li>
             {{/equal}}
           {{else}}
@@ -300,7 +300,14 @@
         <ul>
           {{#each event.planners}}
             <li plannerId={{_id}}>
-              <p><span class="bold">{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}</span><span class="badge"><i class="material-icons remove-planner">clear</i></span></p>
+              <p>
+                <span>
+                  {{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}
+                </span>
+                <span class="badge">
+                  <i class="material-icons remove-planner">clear</i>
+                </span>
+              </p>
             </li>
           {{else}}
             <p>No other planners yet.</p>
