@@ -10,7 +10,10 @@
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onClose: function(){
+        var event_start = new Date($('#start_date').val());
+        console.log(event_start);
         $('#end_date').pickadate('picker').set('min', $('#start_date').val());
+        $('#end_date').pickadate('picker').set('select', [event_start.getFullYear(), event_start.getMonth(), event_start.getDate()]);
       }
     });
 

@@ -228,7 +228,7 @@ var loadAttendEvents = function() {
     });
     loadPage('attendfeed', {
       my_events: results,
-      title: "Currfent Events",
+      title: "Current Events",
       currentUser: currentUser
 
     });
