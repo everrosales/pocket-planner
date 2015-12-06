@@ -109,3 +109,16 @@ div .tabs .indicator {
 #new-todo-list-card {
   padding: 15px;
 }
+
+.slider.fullscreen.background-slider {
+  z-index: 0;
+}
+
+.banner-container {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  top: 20%;
+  background-color: rgba(0, 0, 0, 0.75);
+  width: 100%;
+  position: absolute;
+}

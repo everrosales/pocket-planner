@@ -1,35 +1,43 @@
 <div id="homepage">
     {{> header currentUser=currentUser}}
-    <div>
-      <div class="slider background-slider hide-on-small-only">
-        <ul class="slides">
-          <li>
-            <img class="responsive-img" src="/imgs/concert.jpg">
-          </li>
-          <li>
-            <img class="responsive-img" src="/imgs/fight.jpg">
-          </li>
-          <li>
-            <img class="responsive-img" src="/imgs/fireworks.jpg">
-          </li>
-          <li>
-            <img class="responsive-img" src="/imgs/timessquare.jpg">
-          </li>
-        </ul>
-      </div>
-      <script>
-        // Used to intialize the slider
-        $(document).ready(function(){
-          $('.slider').slider({
-            full_width: true,
-            indicators: false,
-            interval: 3000,
-            height: 300
-          });
+    <div class="slider fullscreen background-slider">
+      <ul class="slides">
+        <li>
+          <img class="responsive-img" src="/imgs/ps3controller.jpg">
+        </li>
+        <li>
+          <img class="responsive-img" src="/imgs/bar.jpeg">
+        </li>
+        <li>
+          <img class="responsive-img" src="/imgs/concert.jpg">
+        </li>
+        <li>
+          <img class="responsive-img" src="/imgs/fireworks.jpg">
+        </li>
+        <li>
+          <img class="responsive-img" src="/imgs/timessquare.jpg">
+        </li>
+        <li>
+          <img class="responsive-img" src="/imgs/fight.jpg">
+        </li>
+        <li>
+          <img class="responsive-img" src="/imgs/dinner.jpeg">
+        </li>
+      </ul>
+    </div>
+    <script>
+      // Used to intialize the slider
+      $(document).ready(function(){
+        $('.slider').slider({
+          full_width: true,
+          indicators: false,
+          interval: 3000
         });
-      </script>
+      });
+    </script>
+    <div class="banner-container">
       <div class="container">
-        <h1 class="center">Pocket Planner</h1>
+        <h1 class="center white-text">Pocket Planner</h1>
         <!-- <p>To create an event login</p> -->
         <div class="section">
           <div class="row">
@@ -64,6 +72,4 @@
         </div>
       </div>
     </div>
-
-
 </div>
