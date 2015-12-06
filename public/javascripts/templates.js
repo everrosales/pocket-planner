@@ -321,29 +321,23 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
 },"15":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li inviteeid="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n                <p><span class=\"green-text lighten-1\">"
+  return "              <li>\n                <p><span class=\"bold green-text lighten-1\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
 },"17":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper;
 
-  return "              <li inviteeid="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n                <p><span class=\"red-text lighten-1\">"
-    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
+  return "              <li>\n                <p><span class=\"bold red-text lighten-1\">"
+    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
+    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li-\n";
 },"19":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper;
 
-  return "              <li inviteeid="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n                <p><span>"
-    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
+  return "              <li>\n                <p><span class=\"bold\">"
+    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
+    + " <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     return "            <p>No invitees yet.</p>\n";
 },"23":function(container,depth0,helpers,partials,data) {
@@ -351,9 +345,9 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
 
   return "            <li plannerId="
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n              <p>\n                <span>\n                  "
+    + ">\n              <p><span class=\"bold\">"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(24, data, 0),"inverse":container.program(26, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n                </span>\n                <span class=\"badge\">\n                  <i class=\"material-icons remove-planner\">clear</i>\n                </span>\n              </p>\n            </li>\n";
+    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">clear</i></span></p>\n            </li>\n";
 },"24":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -411,11 +405,11 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
     + "\">\n          <label class=\"active\" for=\"edit-event-budget\">Budget</label>\n        </div>\n        <div>\n          <input type=\"checkbox\" id=\"edit-private\" "
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1["private"] : stack1),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "><label for=\"edit-private\">Make this event private</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-edit-event\">Submit</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n      </div>\n      <hr>\n      <div>\n        <p>Invite link: <br>\n          <a class=\"invite-link\" href=/events/"
+    + "><label for=\"edit-private\">Make this event private</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-edit-event\">Submit</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n      </div>\n      <hr>\n      <div>\n        <p class=\"bold\">Invite link: <br>\n          <a class=\"invite-link\" href=/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + "/attend</a>\n        </p>\n        <p><span>Number attendees:</span>  "
+    + "/attend</a>\n        </p>\n        <p><span class=\"bold\">Number attendees:</span>  "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attending : stack1)) != null ? stack1.length : stack1), depth0))
     + "</p>\n      </div>\n    </div>\n\n    <div id=\"event-costs\" class=\"col s12\">\n      <!-- Costs for the event -->\n      <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
@@ -764,29 +758,23 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
 },"15":function(container,depth0,helpers,partials,data) {
     var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
 
-  return "              <li inviteeid="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n                <p><span class=\"green-text lighten-1\">"
+  return "              <li>\n                <p><span class=\"bold green-text lighten-1\">"
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
+    + " <i class=\"material-icons green-text lighten-1 right\">check</i></span></p>\n              </li>\n";
 },"17":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper;
 
-  return "              <li inviteeid="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n                <p><span class=\"red-text lighten-1\">"
-    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li>\n";
+  return "              <li>\n                <p><span class=\"bold red-text lighten-1\">"
+    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
+    + " <i class=\"material-icons red-text lighten-1 right\">close</i></span></p>\n              </li-\n";
 },"19":function(container,depth0,helpers,partials,data) {
-    var helper, alias1=depth0 != null ? depth0 : {}, alias2=helpers.helperMissing, alias3="function", alias4=container.escapeExpression;
+    var helper;
 
-  return "              <li inviteeid="
-    + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n                <p><span>"
-    + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
+  return "              <li>\n                <p><span class=\"bold\">"
+    + container.escapeExpression(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"email","hash":{},"data":data}) : helper)))
+    + " <i class=\"material-icons right\">more_horiz</i></span></p>\n              </li>\n";
 },"21":function(container,depth0,helpers,partials,data) {
     return "            <p>No invitees yet.</p>\n";
 },"23":function(container,depth0,helpers,partials,data) {
@@ -794,9 +782,9 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
 
   return "            <li plannerId="
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
-    + ">\n              <p>\n                <span>\n                  "
+    + ">\n              <p><span class=\"bold\">"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(24, data, 0),"inverse":container.program(26, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n                </span>\n                <span class=\"badge\">\n                  <i class=\"material-icons remove-planner\">clear</i>\n                </span>\n              </p>\n            </li>\n";
+    + "</span><span class=\"badge\"><i class=\"material-icons remove-planner\">clear</i></span></p>\n            </li>\n";
 },"24":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -854,11 +842,11 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.budget : stack1), depth0))
     + "\">\n          <label class=\"active\" for=\"edit-event-budget\">Budget</label>\n        </div>\n        <div>\n          <input type=\"checkbox\" id=\"edit-private\" "
     + ((stack1 = helpers["if"].call(alias3,((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1["private"] : stack1),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
-    + "><label for=\"edit-private\">Make this event private</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-edit-event\">Submit</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n      </div>\n      <hr>\n      <div>\n        <p>Invite link: <br>\n          <a class=\"invite-link\" href=/events/"
+    + "><label for=\"edit-private\">Make this event private</label>\n        </div>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"submit-edit-event\">Submit</button>\n        <button class=\"waves-effect waves-light btn btn-default\" id=\"cancel-edit-event\">Cancel</button>\n      </div>\n      <hr>\n      <div>\n        <p class=\"bold\">Invite link: <br>\n          <a class=\"invite-link\" href=/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
     + "/attend>pocketplanner.herokuapp.com/events/"
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
-    + "/attend</a>\n        </p>\n        <p><span>Number attendees:</span>  "
+    + "/attend</a>\n        </p>\n        <p><span class=\"bold\">Number attendees:</span>  "
     + alias2(alias1(((stack1 = ((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1.attending : stack1)) != null ? stack1.length : stack1), depth0))
     + "</p>\n      </div>\n    </div>\n\n    <div id=\"event-costs\" class=\"col s12\">\n      <!-- Costs for the event -->\n      <div id=\"cost-list\" eventId="
     + alias2(alias1(((stack1 = (depth0 != null ? depth0.event : depth0)) != null ? stack1._id : stack1), depth0))
