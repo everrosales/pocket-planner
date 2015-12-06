@@ -35,10 +35,6 @@ nav > div.nav-wrapper {
   color: #ccc;
 }
 
-/*#event_panel{
-  border: 1px solid #ddd;
-  height: 100vh;
-}*/
 #rsvp-summary-content {
   max-height: none;
 }
@@ -66,17 +62,6 @@ nav > div.nav-wrapper {
   cursor:pointer;
 }
 
-/*.todo-container{
-  border: 1px solid #ddd;
-  margin: 10px;
-  border-radius: 10px;
-
-}
-
-.inner-todo-container{
-  padding: 5px;
-}*/
-
 .todo-container.card-panel {
   padding: 10px;
 }
@@ -88,10 +73,6 @@ div .tabs .indicator {
 
 .event-title-header {
   font-size: 1.64rem;
-}
-
-#event-panel, #event-row-container, #event-row-container {
-  /*height: 100%;*/
 }
 
 #event-row-container {

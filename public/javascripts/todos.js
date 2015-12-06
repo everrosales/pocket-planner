@@ -1,5 +1,5 @@
 (function () {
-  var event_id = undefined;
+  var event_id;
 
   /*
   *Adding todos functions.
@@ -20,7 +20,7 @@
       min: new Date(),
       onStart: function(){
         var event_start = new Date($("#edit-start-date").val());
-        this.set('select', [event_start.getFullYear(), event_start.getMonth(), event_start.getDate()])
+        this.set('select', [event_start.getFullYear(), event_start.getMonth(), event_start.getDate()]);
       }
     });
   });
@@ -30,11 +30,9 @@
   $(document).on('click', '#add-todo', function(){
     var categoryId = $(this).parent().parent().parent().attr('categoryId');
     event_id = $('#event-panel').attr("eventId");
-    // var error_div = $(this).parent().find('.error');
     var form = $(this).parent();
     var todo_name = form.find('.todo-name').val();
     var deadline = (form.find('.deadline').val());
-    console.log(deadline);
     var priority = form.find(".priority").val();
 
     //check that it has name and deadline
@@ -58,10 +56,8 @@
         $.post('events/'+event_id+'/categories/'+categoryId+'/todos', info).done(function(response){
           loadTodosPage(event_id);
         }).fail(function(responseObject){
-          console.log(responseObject);
           var response = $.parseJSON(responseObject.responseText);
           Materialize.toast(response.err, 2000);
-          // error_div.text(response.err);
         });
       }
 
@@ -120,7 +116,7 @@
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onStart: function(){
-        this.set('select', [cur_deadline.getFullYear(), cur_deadline.getMonth(), cur_deadline.getDate()])
+        this.set('select', [cur_deadline.getFullYear(), cur_deadline.getMonth(), cur_deadline.getDate()]);
       }
     });
 
@@ -147,10 +143,9 @@
     var todo_deadline = new Date(edit_form.find(".edit-todo-deadline").val());
 
     var todo_priority = edit_form.find(".edit-todo-priority").val();
-    console.log(todo_priority);
 
     if (!todo_name || !todo_deadline){
-      Materialize.toast("Todo must have a name and deadline.", 2000)
+      Materialize.toast("Todo must have a name and deadline.", 2000);
     }else{
       var info = {name: todo_name, deadline: todo_deadline};
 
@@ -169,7 +164,6 @@
         }).done(function(response){
           loadTodosPage(event_id);
         }).fail(function(responseObject){
-          console.log("failed");
           var response = $.parseJSON(responseObject.responseText);
           Materialize.toast(response.err, 2000);
         });
@@ -198,9 +192,7 @@
         type: 'PUT',
         data: {status: 'check'}
       }).done(function(response){
-        console.log("success");
       }).fail(function(responseObject){
-        console.log("failed");
         var response = $.parseJSON(responseObject.responseText);
         Materialize.toast(response.err, 2000);
       });
@@ -210,9 +202,7 @@
         type: 'PUT',
         data: {status: 'uncheck'}
       }).done(function(response){
-        console.log("success");
       }).fail(function(responseObject){
-        console.log("failed");
         var response = $.parseJSON(responseObject.responseText);
         Materialize.toast(response.err, 2000);
       });
@@ -240,9 +230,9 @@
       return;
     }
     $.ajax({
-      url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id+"/assign",
+      url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
       type: 'PUT',
-      data: {email: assignee_email}
+      data: {status: "assign", assign: "assign", email: assignee_email}
     }).done(function(response){
       loadTodosPage(event_id);
     }).fail(function(responseObject){
@@ -264,8 +254,9 @@
     var todo_id = $(this).parent().parent().parent().attr("todoId");
 
     $.ajax({
-      url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id+"/assignee",
-      type: 'DELETE'
+      url: "/events/"+event_id+"/categories/"+cat_id+"/todos/"+todo_id,
+      type: 'PUT',
+      data: {status:'assign', assign:"remove"}
     }).done(function(response) {
       loadTodosPage(event_id);
     }).fail(function(responseObject) {
@@ -284,14 +275,12 @@
   $(document).on('click', '#edit-event', function(){
     event_id = $('#event-panel').attr("eventId");
     var event_name = $('#event_name').text();
-    console.log($('#start-date').text());
     var start_date = new Date($('#start-date').text());
     var end_date = new Date($('#end-date').text());
 
     $("#event_editable").hide();
     $("#event-edit-form").show();
 
-    console.log($('#edit-end-date').val());
     $("#edit-start-date").pickadate({
       min: new Date(),
       max: new Date($('#edit-end-date').val()) || new Date(8640000000000000),
@@ -318,7 +307,7 @@
         $('#edit-start-date').pickadate('picker').set('max', $('#edit-end-date').val());
       },
       onStart: function(){
-        this.set('select', [end_date.getFullYear(), end_date.getMonth(), end_date.getDate()])
+        this.set('select', [end_date.getFullYear(), end_date.getMonth(), end_date.getDate()]);
       }
     });
 
@@ -338,7 +327,6 @@
     var end_date = new Date($("#edit-end-date").val());
 
     var name = $("#event_name_edit").val();
-    console.log($("#event_name_edit").val());
 
     //parse out Dates
     var start_hr_min = ($('#edit-start-time').val()).split(':');
@@ -376,7 +364,6 @@
     var desc = $("#edit-event-desc").val();
     var is_private = $("#edit-private")[0].checked;
     var info = {name:name, start:start_date, end:end_date, location:location, private:is_private, budget:budget, description: desc};
-    console.log(info);
 
     $.ajax({
       url:"/events/"+event_id,
@@ -439,8 +426,4 @@
     });
 
   });
-
-  //Adding assignee function
-
-
 })();

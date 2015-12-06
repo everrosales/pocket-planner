@@ -29,7 +29,6 @@ var internalPassport = function(passport) {
               if (err) {
                 return done(null, false, err);
               }
-              // req.login(newUser);
               req.user = newUser;
               return done(null, newUser);
             });
@@ -52,8 +51,8 @@ var internalPassport = function(passport) {
         return done(null, false, { message: 'Wrong password.'});
       }
       return done(null, user);
-    })
-  }))
+    });
+  }));
 };
 
 module.exports = internalPassport;

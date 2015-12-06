@@ -64,7 +64,6 @@
 <div id="event-panel" class="col l4 m6 s12 z-depth-2" eventId={{event._id}}>
   <div class="row">
     <div class="col s12">
-      <!-- <div class="error"></div> -->
       <ul class="tabs">
         <li class="tab col s4 tab-accent-cyan">
           <a class="active teal-text" href="#event-details">Details</a>
@@ -170,9 +169,7 @@
 
         <script>
           $(document).ready(function(){
-            $('.collapsible').collapsible({
-              // accordion : false // A setting that changes the collapsible behavior to expandable instead of the default accordion style
-            });
+            $('.collapsible').collapsible();
           });
           </script>
       </div>
@@ -234,7 +231,6 @@
           <input type="text" id="email-subject">
           <label for="email-subject">Email subject</label>
 
-          <!--TODO: datepicker to send the emails at a specific date -->
           <br>
           <input type="checkbox" id="email-invitation">
           <label for="email-invitation">Use invitation template</label>
@@ -288,10 +284,7 @@
           <input id="planner-email-confirm" type="email" class="validate">
           <label for="planner-email-confirm">Confirm Email</label>
         </div>
-        <!-- <input id="planner-email" placeholder="Email of planner [required]"> -->
-        <!-- <br> -->
         <button class="waves-effect waves-light btn btn-default"  id="submit-planner">Submit Planner</button>
-        <!-- <br> -->
         <button class="waves-effect waves-light btn btn-default" id="cancel-planner">Cancel</button>
       </div>
     </div>
