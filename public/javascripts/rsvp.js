@@ -31,7 +31,7 @@ var loadRsvpPage = function() {
 $(document).on("click",".rsvp-attend", function(e){
   e.preventDefault();
   var attending = true;
-  if ($(this).val() === 0){
+  if ($(this).val() === "0"){
     attending = false;
   }
   var event_id = $(this).attr("eventId");
