@@ -350,7 +350,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons green-text lighten-1 right\">check</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
+    + " <i class=\"material-icons remove-invitee right clickable-icon\">clear</i> <i class=\"material-icons green-text lighten-1 right clickable\">check</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                      Email: "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
@@ -376,7 +376,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <div class=\"collapsible-header\">\n                  <span class=\"red-text lighten-1\">"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span>\n                </div>\n                <div class=\"collapsible-body\">\n                  <p>\n"
+    + " <i class=\"material-icons remove-invitee right clickable-icon\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span>\n                </div>\n                <div class=\"collapsible-body\">\n                  <p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                    Email: "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
@@ -402,7 +402,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                  <div class=\"collapsible-header\">\n                    <span>"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons right\">more_horiz</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
+    + " <i class=\"material-icons remove-invitee right clickable-icon\">clear</i> <i class=\"material-icons right\">more_horiz</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                      Email: "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
@@ -418,7 +418,7 @@ templates['todos'] = template({"1":function(container,depth0,helpers,partials,da
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n              <p>"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(32, data, 0),"inverse":container.program(34, data, 0),"data":data})) != null ? stack1 : "")
-    + "<span class=\"badge\"><i class=\"material-icons remove-planner ghetto-badge\">clear</i></span></p>\n            </li>\n";
+    + "<span class=\"badge\"><i class=\"material-icons remove-planner ghetto-badge clickable-icon\">clear</i></span></p>\n            </li>\n";
 },"32":function(container,depth0,helpers,partials,data) {
     var helper;
 
@@ -858,7 +858,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias4(((helper = (helper = helpers.name || (depth0 != null ? depth0.name : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"name","hash":{},"data":data}) : helper)))
     + " "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons green-text lighten-1 right\">check</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
+    + " <i class=\"material-icons remove-invitee right clickable-icon\">clear</i> <i class=\"material-icons green-text lighten-1 right clickable\">check</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                      Email: "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
@@ -884,7 +884,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                <div class=\"collapsible-header\">\n                  <span class=\"red-text lighten-1\">"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span>\n                </div>\n                <div class=\"collapsible-body\">\n                  <p>\n"
+    + " <i class=\"material-icons remove-invitee right clickable-icon\">clear</i> <i class=\"material-icons red-text lighten-1 right\">close</i></span>\n                </div>\n                <div class=\"collapsible-body\">\n                  <p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(23, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                    Email: "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
@@ -910,7 +910,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n                  <div class=\"collapsible-header\">\n                    <span>"
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
-    + " <i class=\"material-icons remove-invitee right\">clear</i> <i class=\"material-icons right\">more_horiz</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
+    + " <i class=\"material-icons remove-invitee right clickable-icon\">clear</i> <i class=\"material-icons right\">more_horiz</i></span>\n                  </div>\n                  <div class=\"collapsible-body\">\n                    <p>\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.name : depth0),{"name":"if","hash":{},"fn":container.program(18, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "                      Email: "
     + alias4(((helper = (helper = helpers.email || (depth0 != null ? depth0.email : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"email","hash":{},"data":data}) : helper)))
@@ -926,7 +926,7 @@ templates['templates/todos'] = template({"1":function(container,depth0,helpers,p
     + container.escapeExpression(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === "function" ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
     + ">\n              <p>"
     + ((stack1 = (helpers.equal || (depth0 && depth0.equal) || alias2).call(alias1,(depth0 != null ? depth0.username : depth0),(depth0 != null ? depth0.email : depth0),{"name":"equal","hash":{},"fn":container.program(32, data, 0),"inverse":container.program(34, data, 0),"data":data})) != null ? stack1 : "")
-    + "<span class=\"badge\"><i class=\"material-icons remove-planner ghetto-badge\">clear</i></span></p>\n            </li>\n";
+    + "<span class=\"badge\"><i class=\"material-icons remove-planner ghetto-badge clickable-icon\">clear</i></span></p>\n            </li>\n";
 },"32":function(container,depth0,helpers,partials,data) {
     var helper;
 

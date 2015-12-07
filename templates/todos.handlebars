@@ -241,7 +241,7 @@
               {{#equal attending 1}}
                 <li inviteeid={{_id}}>
                   <div class="collapsible-header">
-                    <span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span>
+                    <span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right clickable-icon">clear</i> <i class="material-icons green-text lighten-1 right clickable">check</i></span>
                   </div>
                   <div class="collapsible-body">
                     <p>
@@ -260,7 +260,7 @@
               {{#equal attending 2}}
               <li inviteeid={{_id}}>
                 <div class="collapsible-header">
-                  <span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span>
+                  <span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right clickable-icon">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span>
                 </div>
                 <div class="collapsible-body">
                   <p>
@@ -279,7 +279,7 @@
               {{#equal attending 0}}
                 <li inviteeid={{_id}}>
                   <div class="collapsible-header">
-                    <span>{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span>
+                    <span>{{email}} <i class="material-icons remove-invitee right clickable-icon">clear</i> <i class="material-icons right">more_horiz</i></span>
                   </div>
                   <div class="collapsible-body">
                     <p>
@@ -344,7 +344,7 @@
         <ul>
           {{#each event.planners}}
             <li plannerId={{_id}}>
-              <p>{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}<span class="badge"><i class="material-icons remove-planner ghetto-badge">clear</i></span></p>
+              <p>{{#equal username email }}{{email}}{{else}}{{username}} {{email}}{{/equal}}<span class="badge"><i class="material-icons remove-planner ghetto-badge clickable-icon">clear</i></span></p>
             </li>
           {{else}}
             <p>No other planners yet.</p>

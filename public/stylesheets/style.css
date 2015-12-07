@@ -27,10 +27,10 @@ nav > div.nav-wrapper {
   z-index: 100001;
 }
 
-.delete-event, .delete-todo, .delete-category, .edit-todo, #edit-event, .edit-category {
+.delete-event, .delete-todo, .delete-category, .edit-todo, #edit-event, .edit-category, .clickable-icon {
   cursor:pointer;
-
 }
+
 .delete-event:hover{
   color: #ccc;
 }
@@ -108,8 +108,8 @@ div .tabs .indicator {
   width: 100%;
   position: absolute;
 }
-/*Google Maps */
 
+/*Google Maps */
 #map_canvas {
         height: 300px;
         width:300px;
