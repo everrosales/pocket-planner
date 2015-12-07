@@ -337,17 +337,34 @@ router.post('/:event/planners', function(req, res) {
     // Error response has already sent in isAuthorized.
     return false;
   }
+  var planners = req.event.planners.map(function(user) {
+    // Type cohersion for the win
+    return user+"";
+  });
   // add another planner to the event
   if (!req.body.planner_email) {
     utils.sendErrResponse(res, 400, 'Planner is required');
   } else if (!validator.isEmail(req.body.planner_email)) {
     utils.sendErrResponse(res, 400, 'Expected planner email address.');
+  } else if (req.body.planner_email == req.user.email) {
+    utils.sendErrResponse(res, 400, 'You can\'t add yourself as a planner.');
   } else {
-    Event.addPlanner(req.event._id, req.body.planner_email, function(err) {
+    User.findByEmail(req.body.planner_email, function(err, user) {
       if (err) {
         utils.sendErrResponse(res, 404, err);
       } else {
-        utils.sendSuccessResponse(res, true);
+        // Type cohersion for the win
+        if (planners.indexOf(user._id + "") < 0) {
+          Event.addPlanner(req.event._id, req.body.planner_email, function(err) {
+            if (err) {
+              utils.sendErrResponse(res, 404, err);
+            } else {
+              utils.sendSuccessResponse(res, true);
+            }
+          });
+        } else {
+          utils.sendErrResponse(res, 400, 'You can\' add the same planner multiple times');
+        }
       }
     });
   }
