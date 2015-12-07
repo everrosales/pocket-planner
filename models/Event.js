@@ -585,7 +585,7 @@ var Event = (function Event() {
       } else {
         var query = event.attendees.filter(function(p) { return p.email === attendee_email; });
         if (query.length < 1) {
-          callback({msg: "No such invitee."});
+          callback({msg: "You can only decline an event that you were invited to."});
         } else {
           var attendee = query[0];
           attendee.attending = 2;

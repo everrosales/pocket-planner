@@ -56,6 +56,7 @@ $(document).on("click",".rsvp-attend", function(e){
     Materialize.toast("Your comments can be at most 300 characters long.", 2000);
     return;
   }
+  console.log(attending);
   $.post("/events/" + event_id + "/attend",  {
       email:email,
       name:name,
@@ -67,6 +68,7 @@ $(document).on("click",".rsvp-attend", function(e){
         window.location.href="/";
       }, 1000);
     }).fail(function(responseObject) {
+      console.log(responseObject);
       var response = $.parseJSON(responseObject.responseText);
       Materialize.toast(response.err, 4000);
     });

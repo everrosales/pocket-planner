@@ -177,7 +177,7 @@ router.post('/:event/attend', function(req, res) {
     utils.sendErrResponse(res, 400, 'Note length cannot be greater than 300.');
   } else {
     if (req.body.attending == 'true') {
-      Event.markAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
+      Event.markAttending(req.event._id, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
           utils.sendErrResponse(res, 500, 'An unknown error occurred.');
         } else {
@@ -185,9 +185,9 @@ router.post('/:event/attend', function(req, res) {
         }
       });
     } else {
-      Event.markNotAttending(req.event, req.body.email, req.body.name, req.body.note, function(err, result) {
+      Event.markNotAttending(req.event._id, req.body.email, req.body.name, req.body.note, function(err, result) {
         if (err) {
-          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+          utils.sendErrResponse(res, 400, err.msg);
         } else {
           utils.sendSuccessResponse(res, result);
         }
