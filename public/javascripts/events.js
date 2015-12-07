@@ -10,7 +10,10 @@
       selectMonths: true, // Creates a dropdown to control month
       selectYears: 15, // Creates a dropdown of 15 years to control year
       onClose: function(){
+        var event_start = new Date($('#start_date').val());
+        console.log(event_start);
         $('#end_date').pickadate('picker').set('min', $('#start_date').val());
+        $('#end_date').pickadate('picker').set('select', [event_start.getFullYear(), event_start.getMonth(), event_start.getDate()]);
       }
     });
 
@@ -50,13 +53,22 @@
       min = parseInt(hr_min[1]);
       if (hour) {
         end_date.setHours(parseInt(hr_min[0]));
+      } else {
+        end_date.setHours(23);
       }
       if (min) {
         end_date.setMinutes(parseInt(hr_min[1]));
+      } else {
+        end_date.setMinutes(59);
       }
 
       if (end_date < start_date) {
         Materialize.toast("End date/time must be after Start date/time.", 2000);
+        $('#add-event-button')[0].classList.remove('disabled');
+        $('#cancel-event-button')[0].classList.remove('disabled');
+        return;
+      } else if (event_name.length > 100) {
+        Materialize.toast("Event names can be at most 100 characters long.", 2000);
         $('#add-event-button')[0].classList.remove('disabled');
         $('#cancel-event-button')[0].classList.remove('disabled');
         return;
@@ -101,7 +113,7 @@
       loadTodosPage(event_id);
     }).fail(function(responseObject){
       var response = $.parseJSON(responseObject.responseText);
-      $('.error').text(response.err);
+      Materialize.toast(response.err, 2000);
     });
   });
 })();

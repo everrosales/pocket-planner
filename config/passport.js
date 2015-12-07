@@ -16,20 +16,17 @@ var internalPassport = function(passport) {
   passport.use('local-signup', new LocalStrategy({
     usernameField : 'username',
     passwordField : 'password',
-    passReqToCallback : true,
-  },
-
-  function(req, email, password, done) {
+    passReqToCallback : true
+  }, function(req, email, password, done) {
       process.nextTick(function() {
         User.findByUsername(email, function(err, user) {
           if (user) {
-            return done(null, false, {message: 'That email is already taken'});
+            return done(null, false, 'A user with that email already exists.');
           } else {
             User.createNewUser(email, password, email, function(err, newUser) {
               if (err) {
-                return done(null, false, err);
+                return done(null, false, err.msg);
               }
-              req.user = newUser;
               return done(null, newUser);
             });
           }
@@ -43,12 +40,10 @@ var internalPassport = function(passport) {
     passReqToCallback : true
   }, function(req, email, password, done) {
     User.findByEmail(email, function(err, user) {
-      if (err) {
-        return done(null, false, err);
-      } else if (!user) {
-        return done(null, false, { message: 'No user found.'});
+      if (!user) {
+        return done(null, false, 'No user found.');
       } else if (!User.validPassword(user, password)) {
-        return done(null, false, { message: 'Wrong password.'});
+        return done(null, false, 'Wrong password.');
       }
       return done(null, user);
     });

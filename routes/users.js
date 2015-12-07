@@ -2,83 +2,78 @@ var express = require('express');
 var router = express.Router();
 var utils = require('../utils/utils');
 var passport = require('passport');
+var validator = require('validator');
 
 var User = require('../models/User');
 
 /*
-    For both login and create user, we want to send an error code if the user
-    is logged in, or if the client did not provide a username and password.
-    This function returns true if an error code was sent; the caller should
-    return immediately in this case.
+  For both login and create user, we want to send an error code if the user
+  is logged in, or if the client did not provide a user email and password.
+  This function returns true if an error code was sent; the caller should
+  return immediately in this case.
 */
 var isLoggedInOrInvalidBody = function(req, res) {
-    if (req.isAuthenticated()) {
-        utils.sendErrResponse(res, 403, "There is already a user logged in.");
-        return true;
-    } else if (!(req.body.username && req.body.password)) {
-        utils.sendErrResponse(res, 400, 'Username or password not provided.');
-        return true;
-    }
-    return false;
-};
-
-var userLoggedIn = function(req, res, next) {
   if (req.isAuthenticated()) {
-    return next();
+    utils.sendErrResponse(res, 403, "There is already a user logged in.");
+    return true;
+  } else if (!(req.body.username && req.body.password)) {
+    utils.sendErrResponse(res, 400, 'Username or password not provided.');
+    return true;
+  } else if (!validator.isEmail(req.body.username)) {
+    utils.sendErrResponse(res, 400, 'Username must be an email address.');
+    return true;
+  } else if (req.body.password.length < 8 || req.body.password.length > 30) {
+    utils.sendErrResponse(res, 400, 'Password length must be within 8~30.');
+    return true;
   }
-  // If someone tries to hit this page without being authenticated redirect to home page
-  res.redirect('/');
+  return false;
 };
 
 /*
-    This function checks to see that the provided username-password combination
-    is valid. for empty username/password, or if the combination is not correct,
-    an error will be returned.
+  This function checks to see that the provided username-password combination
+  is valid. for empty username/password, or if the combination is not correct,
+  an error will be returned.
 
-    A user already logged in is not allowed to call the login API again; an
-    attempt to do so will result in an error code 403.
+  This route may only be called without an existing user logged in. If an
+  existing user is already logged in, it will result in error code 403.
 
-    POST /users/login
-    Request body:
-     - username
-     - password
-    Response:
-     - success: true if login succeeded; false otherwise
-     - content: on success, an object with a single field 'user', the object
-         of the logged in user.
-     - err: on error, an error message
-*/
-router.post('/login', passport.authenticate('local-login', {
-  successRedirect : '/users/loginsuccess',
-  failureRedirect : '/users/loginfail',
-  failureFlash : true,
-}));
-
-/*
-  GET /users/loginsuccess
+  POST /users/login
+  Request body:
+   - username
+   - password
   Response:
-    - success: sets the corresponding session information
+   - success: true if login succeeded; false otherwise
+   - content: on success, an object with a single field 'user', the object
+       of the logged in user.
+   - err: on error, an error message
 */
-router.get('/loginsuccess', userLoggedIn, function(req, res) {
-  // While this looks bad, the userLoggedIn middleware will redirect
-  // if the user is not authenticated
-  if (req.isAuthenticated()) {
-    utils.sendSuccessResponse(res, { user: req.user.username });
-  } else {
-    utils.sendErrResponse(res, 500, "Passport successRedirect error.");
+router.post('/login', function(req, res) {
+  if (isLoggedInOrInvalidBody(req, res)) {
+    return;
   }
-});
-
-router.get('/loginfail', function(req, res) {
-  utils.sendErrResponse(res, 500, 'Login failed');
+  passport.authenticate('local-login', function(err, user, info) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else if (!user) {
+      utils.sendErrResponse(res, 403, info);
+    } else {
+      req.login(user, function(err) {
+        if (err) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+          utils.sendSuccessResponse(res, { user: req.user.username });
+        }
+      });
+    }
+  })(req, res);
 });
 
 /*
-    POST /users/logout
-    Request body: empty
-    Response:
-     - success: true if logout succeeded; false otherwise
-     - err: on error, an error message
+  POST /users/logout
+  Request body: empty
+  Response:
+   - success: true if logout succeeded; false otherwise
+   - err: on error, an error message
 */
 router.post('/logout', function(req, res) {
   if (req.isAuthenticated()) {
@@ -90,55 +85,58 @@ router.post('/logout', function(req, res) {
 });
 
 /*
-    Create a new user in the system.
+  Create a new user in the system. Automatically logs in the user.
 
-    All usernames in the system must be distinct. If a request arrives with a
-    username that already exists, the response will be an error.
+  All usernames in the system must be distinct. If a request arrives with a
+  username that already exists, the response will be an error.
 
-    This route may only be called without an existing user logged in. If an
-    existing user is already logged in, it will result in error code 403.
+  This route may only be called without an existing user logged in. If an
+  existing user is already logged in, it will result in error code 403.
 
-    Does NOT automatically log in the user.
-
-    POST /users
-    Request body:
-     - username
-     - password
-    Response:
-     - success: true if user creation succeeded, false otherwise
-     - err: on error, an error message
+  POST /users
+  Request body:
+   - username
+   - password
+  Response:
+   - success: true if user creation succeeded, false otherwise
+   - err: on error, an error message
 */
-router.post('/', passport.authenticate('local-signup', {
-  successRedirect : '/users/signupsuccess', // Redirect to main page
-  failureRedirect : '/users/signupfail',
-  failureFlash : true,
-}));
-
-// Redirected here to display message saying that signup was successful
-router.get('/signupsuccess', function(req, res) {
-  utils.sendSuccessResponse(res, {user: req.user.username, message: 'Signup success.'});
-});
-
-// Redirect here to display message saying that signup fail
-router.get('/signupfail', function(req, res) {
-  utils.sendErrResponse(res, 500, 'Signup failed');
+router.post('/', function(req, res) {
+  if (isLoggedInOrInvalidBody(req, res)) {
+    return;
+  }
+  passport.authenticate('local-signup', function(err, user, info) {
+    if (err) {
+      utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+    } else if (!user) {
+      utils.sendErrResponse(res, 403, info);
+    } else {
+      req.login(user, function(err) {
+        if (err) {
+          utils.sendErrResponse(res, 500, 'An unknown error occurred.');
+        } else {
+          utils.sendSuccessResponse(res, { user: req.user.username });
+        }
+      });
+    }
+  })(req, res);
 });
 
 /*
-    Determine whether there is a current user logged in
+  Determine whether there is a current user logged in
 
-    Get /users/current
-    No request parameters
-    Response:
-     - success.loggedIn: true if there is a user logged in; false otherwise
-     - success.user: if success.loggedIn, the currently logged in user
+  Get /users/current
+  No request parameters
+  Response:
+   - success.loggedIn: true if there is a user logged in; false otherwise
+   - success.user: if success.loggedIn, the currently logged in user
 */
 router.get('/current', function(req, res) {
-    if (req.isAuthenticated()) {
-        utils.sendSuccessResponse(res, { loggedIn : true, user : req.user.username });
-    } else {
-        utils.sendSuccessResponse(res, { loggedIn : false });
-    }
+  if (req.isAuthenticated()) {
+    utils.sendSuccessResponse(res, { loggedIn : true, user : req.user.username });
+  } else {
+    utils.sendSuccessResponse(res, { loggedIn : false });
+  }
 });
 
 module.exports = router;

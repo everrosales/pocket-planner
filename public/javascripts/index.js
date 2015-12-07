@@ -202,6 +202,7 @@ var loadAttendEvents = function() {
   //get request for events. replace my_events with results
   //
   $.get('/events/public', function(response){
+    console.log("why no print");
     results = [];
     response.content.forEach(function(e){
       results.push(e);
@@ -223,9 +224,10 @@ var loadAttendEvents = function() {
       r.end_time = tmp_time.slice(0,2).join(':') +' '+ am_pm;
       r.end = r.end.toLocaleDateString();
 
+
     });
     loadPage('attendfeed', {
-      my_events: response.content,
+      my_events: results,
       title: "Current Events",
       currentUser: currentUser
 

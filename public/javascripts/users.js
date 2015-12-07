@@ -45,8 +45,18 @@
         $('#signup-submit')[0].classList.add('disabled');
         $('#signup-cancel')[0].classList.add('disabled');
         var formData = helpers.getFormData($('#signup-form')[0]);
-        if (formData.username != formData.confirmusername) {
-          Materialize.toast('Usernames must match', 4000);
+        if (!validator.isEmail(formData.username)) {
+          Materialize.toast('That is not an email address.', 4000);
+          $('#signup-submit')[0].classList.remove('disabled');
+          $('#signup-cancel')[0].classList.remove('disabled');
+          return;
+        } else if (formData.username != formData.confirmusername) {
+          Materialize.toast('Email addresses must match', 4000);
+          $('#signup-submit')[0].classList.remove('disabled');
+          $('#signup-cancel')[0].classList.remove('disabled');
+          return;
+        } else if (formData.password.length < 8 || formData.password.length > 30) {
+          Materialize.toast('Password must be 8~30 characters long', 4000);
           $('#signup-submit')[0].classList.remove('disabled');
           $('#signup-cancel')[0].classList.remove('disabled');
           return;

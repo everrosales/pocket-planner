@@ -27,10 +27,10 @@ nav > div.nav-wrapper {
   z-index: 100001;
 }
 
-.delete-event, .delete-todo, .delete-category, .edit-todo, #edit-event, .edit-category {
+.delete-event, .delete-todo, .delete-category, .edit-todo, #edit-event, .edit-category, .clickable-icon {
   cursor:pointer;
-
 }
+
 .delete-event:hover{
   color: #ccc;
 }
@@ -57,7 +57,7 @@ nav > div.nav-wrapper {
   border-left: 5px solid #009688;
 }
 
-.event-container:hover{
+.event-container:hover, .attend-event:hover{
   background-color:lightgray;
   cursor:pointer;
 }
@@ -107,9 +107,10 @@ div .tabs .indicator {
   background-color: rgba(0, 0, 0, 0.75);
   width: 100%;
   position: absolute;
+}
 
 /*Google Maps */
-#map, #map_canvas {
+#map_canvas {
         height: 300px;
         width:300px;
         z-index: 10001;
