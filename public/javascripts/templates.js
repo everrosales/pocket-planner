@@ -157,19 +157,19 @@ templates['index'] = template({"compiler":[7,">= 4.0.0"],"main":function(contain
 templates['rsvp'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.location || (depth0 != null ? depth0.location : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"location","hash":{},"data":data}) : helper)));
-},"3":function(container,depth0,helpers,partials,data) {
-    return "TBD";
-},"5":function(container,depth0,helpers,partials,data) {
-    var helper;
-
   return "              Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.location || (depth0 != null ? depth0.location : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"location","hash":{},"data":data}) : helper)));
+},"5":function(container,depth0,helpers,partials,data) {
+    return "TBD";
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "              <br>\n              <iframe\n              width=\"800\"\n              height=\"600\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q="
+  return "              <br>\n              <iframe\n              width=\"100%\"\n              height=\"400\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q="
     + container.escapeExpression(((helper = (helper = helpers.queryLocation || (depth0 != null ? depth0.queryLocation : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"queryLocation","hash":{},"data":data}) : helper)))
     + "\" allowfullscreen>\n              </iframe>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -189,10 +189,11 @@ templates['rsvp'] = template({"1":function(container,depth0,helpers,partials,dat
     + alias4(((helper = (helper = helpers.end || (depth0 != null ? depth0.end : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
-    + " <br>\n              Location: "
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n              <br>\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " <br>\n"
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "              <br>\n              Location: "
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
+    + "\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </blockquote>\n          </div>\n\n        <form id=\"attendee-status\" action=\"#\">\n          <h5>Are you going?</h5>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name=\"email\" type=\"email\" class=\"validate\" id=\"email\">\n              <label for=\"email\">Email</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"name\" type=\"text\" class=\"validate\" id=\"name\">\n              <label for=\"name\">Name</label>\n            </div>\n            <div class=\"input-field col s12\">\n              <textarea id=\"rsvp-comments\" name=\"note\" class=\"materialize-textarea\"></textarea>\n              <label for=\"rsvp-comments\">Comments</label>\n            </div>\n          </div>\n        </form>\n      </div>\n      <div class=\"card-action\">\n        <button eventId = \""
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
@@ -616,19 +617,19 @@ templates['templates/index'] = template({"compiler":[7,">= 4.0.0"],"main":functi
 templates['templates/rsvp'] = template({"1":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return container.escapeExpression(((helper = (helper = helpers.location || (depth0 != null ? depth0.location : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"location","hash":{},"data":data}) : helper)));
-},"3":function(container,depth0,helpers,partials,data) {
-    return "TBD";
-},"5":function(container,depth0,helpers,partials,data) {
-    var helper;
-
   return "              Description: "
     + container.escapeExpression(((helper = (helper = helpers.description || (depth0 != null ? depth0.description : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"description","hash":{},"data":data}) : helper)))
     + "\n";
+},"3":function(container,depth0,helpers,partials,data) {
+    var helper;
+
+  return container.escapeExpression(((helper = (helper = helpers.location || (depth0 != null ? depth0.location : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"location","hash":{},"data":data}) : helper)));
+},"5":function(container,depth0,helpers,partials,data) {
+    return "TBD";
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "              <br>\n              <iframe\n              width=\"800\"\n              height=\"600\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q="
+  return "              <br>\n              <iframe\n              width=\"100%\"\n              height=\"400\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q="
     + container.escapeExpression(((helper = (helper = helpers.queryLocation || (depth0 != null ? depth0.queryLocation : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"queryLocation","hash":{},"data":data}) : helper)))
     + "\" allowfullscreen>\n              </iframe>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -648,10 +649,11 @@ templates['templates/rsvp'] = template({"1":function(container,depth0,helpers,pa
     + alias4(((helper = (helper = helpers.end || (depth0 != null ? depth0.end : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end","hash":{},"data":data}) : helper)))
     + " @ "
     + alias4(((helper = (helper = helpers.end_time || (depth0 != null ? depth0.end_time : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"end_time","hash":{},"data":data}) : helper)))
-    + " <br>\n              Location: "
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.program(3, data, 0),"data":data})) != null ? stack1 : "")
-    + "\n              <br>\n"
-    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(5, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + " <br>\n"
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.description : depth0),{"name":"if","hash":{},"fn":container.program(1, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
+    + "              <br>\n              Location: "
+    + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(3, data, 0),"inverse":container.program(5, data, 0),"data":data})) != null ? stack1 : "")
+    + "\n"
     + ((stack1 = helpers["if"].call(alias1,(depth0 != null ? depth0.location : depth0),{"name":"if","hash":{},"fn":container.program(7, data, 0),"inverse":container.noop,"data":data})) != null ? stack1 : "")
     + "            </blockquote>\n          </div>\n\n        <form id=\"attendee-status\" action=\"#\">\n          <h5>Are you going?</h5>\n          <div class=\"row\">\n            <div class=\"input-field col s6\">\n              <input name=\"email\" type=\"email\" class=\"validate\" id=\"email\">\n              <label for=\"email\">Email</label>\n            </div>\n            <div class=\"input-field col s6\">\n              <input name=\"name\" type=\"text\" class=\"validate\" id=\"name\">\n              <label for=\"name\">Name</label>\n            </div>\n            <div class=\"input-field col s12\">\n              <textarea id=\"rsvp-comments\" name=\"note\" class=\"materialize-textarea\"></textarea>\n              <label for=\"rsvp-comments\">Comments</label>\n            </div>\n          </div>\n        </form>\n      </div>\n      <div class=\"card-action\">\n        <button eventId = \""
     + alias4(((helper = (helper = helpers._id || (depth0 != null ? depth0._id : depth0)) != null ? helper : alias2),(typeof helper === alias3 ? helper.call(alias1,{"name":"_id","hash":{},"data":data}) : helper)))
