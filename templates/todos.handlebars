@@ -185,10 +185,11 @@
               <li costId="{{_id}}">
                 <div class="collapsible-header">{{name}} - ${{amount}}<span class="badge"><i class="material-icons remove-cost ghetto-badge">clear</i></span></div>
                 <div class="collapsible-body">
-                  <p>Amount: ${{amount}}
-                  {{#if description}}
-                    <br><p>Description: {{description}}
-                  {{/if}}
+                  <p>
+                    Amount: ${{amount}}
+                    {{#if description}}
+                      <br>Description: {{description}}
+                    {{/if}}
                   </p>
                 </div>
               </li>
@@ -234,27 +235,71 @@
       <!-- invitee administration -->
       <div id="invitee-list" eventId= {{event._id}}>
         <h3>Attendees</h3>
-        <ul>
-          {{#each event.attendees}}
-            {{#equal attending 1}}
+        {{#if event.attendees}}
+          <ul class="collapsible" data-collapsible="accordion">
+            {{#each event.attendees}}
+              {{#equal attending 1}}
+                <li inviteeid={{_id}}>
+                  <div class="collapsible-header">
+                    <span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span>
+                  </div>
+                  <div class="collapsible-body">
+                    <p>
+                      {{#if name}}
+                      Name: {{name}} <br>
+                      {{/if}}
+                      Email: {{email}}
+                      {{#if note}}
+                      <br>
+                      Note: {{note}}
+                      {{/if}}
+                    </p>
+                  </div>
+                </li>
+              {{/equal}}
+              {{#equal attending 2}}
               <li inviteeid={{_id}}>
-                <p><span class="green-text lighten-1">{{name}} {{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons green-text lighten-1 right">check</i></span></p>
+                <div class="collapsible-header">
+                  <span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span>
+                </div>
+                <div class="collapsible-body">
+                  <p>
+                    {{#if name}}
+                    Name: {{name}} <br>
+                    {{/if}}
+                    Email: {{email}}
+                    {{#if note}}
+                    <br>
+                    Note: {{note}}
+                    {{/if}}
+                  </p>
+                </div>
               </li>
-            {{/equal}}
-            {{#equal attending 2}}
-              <li inviteeid={{_id}}>
-                <p><span class="red-text lighten-1">{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons red-text lighten-1 right">close</i></span></p>
-              </li>
-            {{/equal}}
-            {{#equal attending 0}}
-              <li inviteeid={{_id}}>
-                <p><span>{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span></p>
-              </li>
-            {{/equal}}
-          {{else}}
-            <p>No attendees yet.</p>
-          {{/each}}
-        </ul>
+              {{/equal}}
+              {{#equal attending 0}}
+                <li inviteeid={{_id}}>
+                  <div class="collapsible-header">
+                    <span>{{email}} <i class="material-icons remove-invitee right">clear</i> <i class="material-icons right">more_horiz</i></span>
+                  </div>
+                  <div class="collapsible-body">
+                    <p>
+                      {{#if name}}
+                      Name: {{name}} <br>
+                      {{/if}}
+                      Email: {{email}}
+                      {{#if note}}
+                      <br>
+                      Note: {{note}}
+                      {{/if}}
+                    </p>
+                  </div>
+                </li>
+              {{/equal}}
+            {{/each}}
+          </ul>
+        {{else}}
+          <p><em>No attendees yet.</em></p>
+        {{/if}}
         <button class="btn btn-default" id="email-invitees">Email invitees</button>
         <button class="btn btn-default" id="email-attendees">Email attendees</button>
         <button class="btn btn-default" id="add-invitee">Add Invitee</button>

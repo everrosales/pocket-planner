@@ -43,8 +43,10 @@
     if (!email) {
       Materialize.toast("You must enter an email.", 2000);
       return;
-    }
-    if (email != $("#invitee-email-confirm").val()) {
+    } else if (!validator.isEmail(email)) {
+      Materialize.toast("That is not an email address.", 2000);
+      return;
+    } else if (email != $("#invitee-email-confirm").val()) {
       Materialize.toast("Emails must match.", 2000);
       return;
     }
