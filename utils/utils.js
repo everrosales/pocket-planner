@@ -58,6 +58,12 @@ var utils = (function () {
     evt.name = req.event.name;
     evt._id = req.event._id;
 
+    if (evt.location){
+      //var split_loc = evt.location.split(" ");
+      //evt.queryLocation =  split_loc.join("+");
+      evt.queryLocation = encodeURI(evt.location);
+    }
+
     if (req.user) {
       evt.currentUser = req.user.username;
     }

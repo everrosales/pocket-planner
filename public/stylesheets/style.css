@@ -57,7 +57,7 @@ nav > div.nav-wrapper {
   border-left: 5px solid #009688;
 }
 
-.event-container:hover{
+.event-container:hover, .attend-event:hover{
   background-color:lightgray;
   cursor:pointer;
 }
@@ -69,6 +69,10 @@ nav > div.nav-wrapper {
 /* Main Dashboard CSS */
 div .tabs .indicator {
   background-color: #009688;
+}
+
+#event-img{
+  max-width:70px;
 }
 
 .event-title-header {
@@ -91,6 +95,7 @@ div .tabs .indicator {
   padding: 15px;
 }
 
+
 .slider.fullscreen.background-slider {
   z-index: 0;
 }
@@ -102,4 +107,21 @@ div .tabs .indicator {
   background-color: rgba(0, 0, 0, 0.75);
   width: 100%;
   position: absolute;
+}
+/*Google Maps */
+
+#map_canvas {
+        height: 300px;
+        width:300px;
+        z-index: 10001;
+      }
+
+
+.pac-container {
+  font-family: Roboto;
+}
+
+.pac-container{
+  z-index:20000;
+
 }

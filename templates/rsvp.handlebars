@@ -7,19 +7,27 @@
       </div>
       <div id="rsvp-summary-content" class="card-content">
           <div class="row">
-            <!-- <h2>Event Details</h2> -->
             <blockquote id="rsvp-summary-details">
               Host: {{hostEmail}} <br>
               Start: {{ start}} @ {{ start_time}} <br>
               End: {{ end}} @ {{ end_time}} <br>
-              Location: {{#if  location}}{{ location}}{{else}}TBD{{/if}}
+              Location: {{#if location}}{{location}}{{else}}TBD{{/if}}
+              <br>
+              {{#if description}}
+              Description: {{description}}
+              {{/if}}
+              {{#if location}}
+              <br>
+              <iframe
+              width="800"
+              height="600"
+              frameborder="0" style="border:0"
+              src="https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q={{queryLocation}}" allowfullscreen>
+              </iframe>
+              {{/if}}
             </blockquote>
           </div>
-          {{#if description}}
-            <div class="row">
-              {{ description}}
-            </div>
-          {{/if}}
+
         <form id="attendee-status" action="#">
           <h5>Are you going?</h5>
           <div class="row">
