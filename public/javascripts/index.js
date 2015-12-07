@@ -202,7 +202,6 @@ var loadAttendEvents = function() {
   //get request for events. replace my_events with results
   //
   $.get('/events/public', function(response){
-    console.log("why no print");
     results = [];
     response.content.forEach(function(e){
       results.push(e);

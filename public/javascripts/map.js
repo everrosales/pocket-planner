@@ -6,7 +6,6 @@
   $(document).on("click","#edit-event-loc", function(){
     $("#map-container").show();
     var map = document.getElementById("map_canvas");
-    console.log(map);
     google.maps.event.trigger(map, 'resize');
   });
 })();

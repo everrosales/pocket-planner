@@ -40,8 +40,6 @@
         </div>
       </div>
     </div>
-  {{else}}
-    <p><em>No todo lists yet!</em></p>
   {{/each}}
 
   <div class="container col s12 m12 l4">
@@ -131,6 +129,7 @@
                  location: $("#edit-event-loc").val()
                };
 
+               // Console log statements are courtesy of Google Maps API
                $("#edit-event-loc").geocomplete(options)
                  .bind("geocode:result", function(event, result){
                    console.log("Result: " + result.formatted_address);
