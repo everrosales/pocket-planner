@@ -1,0 +1,11 @@
+- Focus on improving UI a lot
+- Organize/Attend tabs or have them take up more space
+- Maybe don’t include your own events in your Attend feed (if you’re logged in)
+- Use Google Maps for location
+- Input times or check All Day
+- add image for Event
+- use different UI for time input
+- assign someone to a Todo
+	- sort Todos by assigned/unassigned/assigned to you
+- default Todo templates
+- option to see your Todos without having to go into an Event
