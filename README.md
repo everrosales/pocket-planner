@@ -1,111 +1,15 @@
-ajliu_erosales_erosolar_kimsin98_final
-======================================
+Pocket Planner
+==============
+Final project for 6.170 (Software Studio)
 Live Site
 ---------
 This site is currently live at [pocketplanner.herokuapp.com](http://pocketplanner.herokuapp.com/).
 
-Files Structure
----------------
-```
-bin/
-  > www
-config/
-  > passport.js
-documents/
-  agenda/
-    > agenda-nov-16.pdf
-  meeting_notes
-  > design_doc.pdf
-  > pocket_planner_presentation.pdf
-  > team_contract.pdf
-  > teamwork_plan.pdf
-models/
-  > Event.js
-  > User.js
-public/
-  javascripts/
-    > handlebars.runtime-vX.js
-    > helpers.js
-    > index.js
-    > templates.js
-    > users.js
-  stylesheets/
-    > style.css
-routes/
-  > attend.js
-  > event.js
-  > index.js
-  > users.js
-templates/
-  > event.handlebars
-  > events.handlebars
-  > header.handlebars
-  > index.handlebars
-  > register.handlebars
-  > signin.handlebars
-  > subscribe.handlebars
-  > todo.handlebars
-  > todos.handlebars
-test/
-  > test.js
-utils/
-  > utils.js
-views/
-  > error.ejs
-  > index.ejs
-> app.js
-> package.json
-```
-
-Routes
-------
-Summary of event.js routes. Routs with a * do not require user authentication.
-```
-GET
-/events                                    // Get all events for a user
-/events/:event                             // Get an event given a eventId
-*/events/:event/attend                     // Get the invitee attendance page
-*/events/:event/details                    // Gets details of an event
-*/events/public                            // Get the list of all public events
-
-POST
-/events                                    // Create an event
-*/events/:event/attend                     // Attend an event
-/events/:event/categories                  // Add a category to an event
-/events/:event/categories/:category/todos  // Add a todo to a category
-/events/:event/costs                       // Add a cost to an event
-/events/:event/email                       // Tell mailer to send emails
-/events/:event/invitees                    // Add an invite to an event
-/events/:event/planners                    // Add a planner to an event
-
-PUT
-/events/:event                             // Add information to an event
-/events/:event/categories/:category        // Change name of a category
-/events/:event/categories/:category/todos/:todo // Edits todo (check/uncheck, change name/deadline/priority, or assign/un-assign to a user)
-
-DELETE
-/events/:event                             // Delete an event
-/events/:event/costs/:cost                  // Delete a cost from an event
-/events/:event/planners/:planner            // Remove a planner from an event
-/events/:event/categories/:category          // Delete a category from an event
-/events/:event/categories/:category/todos/:todo // Delete a todo from a category
-/events/:event/invitees/:invitees          // Delete an invitee from an event
-
-```
-Summary of  user.js routes.
-```
-GET
-/users/loginsuccess     // Redirected here upon successful login (auth checked)
-/users/loginfail        // Redirected here upon failed login
-/users/signupsuccess    // Redirected here upon successful signup
-/users/signupfail       // Redirected here upon failed signup
-/users/current
-
-POST
-/users                  // Create a new user
-/users/login            // Authenticate user
-/users/logout           // Logout user and destroy session
-```
+Details
+-------
+This site was built as a event planner application, designed to help planners
+organize and keep track of the different tasks that they need to do to plan
+an event.
 
 Development
 -----------
@@ -120,14 +24,40 @@ To run in developer mode:
 ~$ npm run-script start-dev
 ```
 
-### Email bot usage
-First import the email bot script using
+### Tools and Frameworks
+#### Handlebars
+This application makes use of client side rendering of handlebar templates to
+provide a more reactive user interface. These templates are located under the
+folder `templates`. These templates must be compiled after they are modified and
+this can be done by either re-running:
 ```
-var mailer = require('../config/mailer.js');
+npm run-script start-dev
 ```
+This will compile the handlebar templates and start the server or by manually.
+Alternatively you can compile the handlebar templates manually by running (from
+the root project directory):
+```
+handlebars templates/.* -f public/javascripts/templates.js
+```
+For more usage details about handlebars go [here](http://handlebarsjs.com/).
 
-Then to send emails just use
+#### Google Maps API
+To properly use the Google Maps plugins that we are using in our app, replace:
 ```
-mailer.sendEmail(recipient, subject, text, callback);
+<iframe
+width="100%"
+height="400"
+frameborder="0" style="border:0"
+src="https://www.google.com/maps/embed/v1/place?key=[YourKeyHere]
+&q={{queryLocation}}" allowfullscreen>
+</iframe>
 ```
-The `callback` will be called with the arguments `callback(err, info)`. For more information on what is contained in `info`, read the corresponding section [here](https://nodemailer.com).
+With your API key in `templates/rsvp.handlebars`.
+#### Container Templates and Email Templates
+The container HTML templates are specified under `views` and these are
+[EJS](http://www.embeddedjs.com/) templates. If you need to link additional
+javascript resources or stylesheets put them in either the `index.ejs` or
+`rsvp.ejs` files accordingly. The templates for emails are found under `views/emails`.
+#### MaterializeCSS
+The frontend framework we used to make the user interface was MaterializeCSS and
+more information about this can be found [here](http://materializecss.com/).

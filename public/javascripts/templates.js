@@ -161,7 +161,7 @@ templates['rsvp'] = template({"1":function(container,depth0,helpers,partials,dat
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "              <br>\n              <iframe\n              width=\"100%\"\n              height=\"400\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=AIzaSyC50AUwFRM4VXOslBUxlzRm3bNM153SP0w&q="
+  return "              <br>\n              <iframe\n              width=\"100%\"\n              height=\"400\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q="
     + container.escapeExpression(((helper = (helper = helpers.queryLocation || (depth0 != null ? depth0.queryLocation : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"queryLocation","hash":{},"data":data}) : helper)))
     + "\" allowfullscreen>\n              </iframe>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
@@ -659,7 +659,7 @@ templates['templates/rsvp'] = template({"1":function(container,depth0,helpers,pa
 },"7":function(container,depth0,helpers,partials,data) {
     var helper;
 
-  return "              <br>\n              <iframe\n              width=\"100%\"\n              height=\"400\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=AIzaSyC50AUwFRM4VXOslBUxlzRm3bNM153SP0w&q="
+  return "              <br>\n              <iframe\n              width=\"100%\"\n              height=\"400\"\n              frameborder=\"0\" style=\"border:0\"\n              src=\"https://www.google.com/maps/embed/v1/place?key=***REMOVED***&q="
     + container.escapeExpression(((helper = (helper = helpers.queryLocation || (depth0 != null ? depth0.queryLocation : depth0)) != null ? helper : helpers.helperMissing),(typeof helper === "function" ? helper.call(depth0 != null ? depth0 : {},{"name":"queryLocation","hash":{},"data":data}) : helper)))
     + "\" allowfullscreen>\n              </iframe>\n";
 },"compiler":[7,">= 4.0.0"],"main":function(container,depth0,helpers,partials,data) {
